@@ -1,0 +1,74 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+.python-version
+.venv/
+venv/
+env/
+ENV/
+pip-wheel-metadata/
+*.egg-info/
+.eggs/
+build/
+dist/
+.pytest_cache/
+.coverage
+.coverage.*
+htmlcov/
+.mypy_cache/
+.pyright/
+.ruff_cache/
+
+# Node.js
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+.npm/
+.yarn/
+.pnpm-store/
+
+# TypeScript
+*.tsbuildinfo
+
+# Frontend build output
+.vite/
+coverage/
+out/
+.next/
+.nuxt/
+.svelte-kit/
+
+# Environment and local configuration
+.env
+.env.*
+!.env.example
+!.env.sample
+
+# Databases and local runtime data
+*.sqlite
+*.sqlite3
+*.db
+*.log
+
+# Docker local overrides and volumes
+docker-compose.override.yml
+docker-compose.local.yml
+
+# Editors and operating systems
+.idea/
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+.DS_Store
+Thumbs.db
+
+.agents/*
+*PLAN*.md
+*plan*.md
