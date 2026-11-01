@@ -1,0 +1,105 @@
+:root {
+  /* Brand palette: authoritative Nordic Vitality values from the project brief. */
+  --color-brand-primary: #173c35;
+  --color-brand-secondary: #27866c;
+  --color-brand-accent: #c5ea78;
+  --color-brand-neutral: #182b26;
+
+  /* Text and surfaces. */
+  --color-text-primary: var(--color-brand-neutral);
+  --color-text-secondary: #414846;
+  --color-text-muted: #414846;
+  --color-bg-page: #f6f8f5;
+  --color-surface: #ffffff;
+  --color-surface-elevated: #ffffff;
+  --color-surface-subtle: #ddf3eb;
+  --color-border: #c1c8c5;
+  --color-border-hover: #717976;
+
+  /* Actions and feedback. Dark action colors maintain readable white labels. */
+  --color-action-primary: #002620;
+  --color-action-primary-hover: var(--color-brand-primary);
+  --color-action-secondary: #006b54;
+  --color-action-secondary-hover: #00513f;
+  --color-action-danger: #ba1a1a;
+  --color-focus: var(--color-brand-primary);
+  --color-success: #289e68;
+  --color-warning: #e59500;
+  --color-error: #ba1a1a;
+  --color-disabled: #e1e6e3;
+  --color-disabled-text: #414846;
+  --color-selected: #e2f9f0;
+  --color-interactive-hover: #e2f9f0;
+
+  /* Semantic foregrounds and status containers support non-color cues. */
+  --color-on-action: #ffffff;
+  --color-on-danger: #ffffff;
+  --color-success-container: #ddf3eb;
+  --color-warning-container: var(--color-surface);
+  --color-error-container: #ffdad6;
+  --color-info: #3b82f6;
+  --color-info-container: #e8fef6;
+
+  --font-family-base: "Manrope", "Segoe UI", sans-serif;
+  --font-weight-regular: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+  --font-weight-extrabold: 800;
+  --letter-spacing-heading: -0.02em;
+  --letter-spacing-label: 0.01em;
+
+  /* 8px rhythm with 4px half-steps for compact controls and labels. */
+  --space-0: 0;
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.25rem;
+  --space-6: 1.5rem;
+  --space-8: 2rem;
+  --space-10: 2.5rem;
+  --space-12: 3rem;
+
+  --radius-sm: 0.25rem;
+  --radius-control: 0.625rem;
+  --radius-md: 0.75rem;
+  --radius-card: 1rem;
+  --radius-lg: 1.5rem;
+  --radius-pill: 9999px;
+
+  /* Low-elevation shadows follow the reference's subtle green-tinted depth. */
+  --shadow-card: 0 4px 20px -2px rgb(23 60 53 / 4%), 0 2px 6px -1px rgb(23 60 53 / 2%);
+  --shadow-card-hover: 0 12px 28px -4px rgb(23 60 53 / 8%), 0 4px 10px -2px rgb(23 60 53 / 3%);
+  --shadow-overlay: 0 20px 48px -12px rgb(12 31 26 / 24%);
+
+  /* Typography scale derived from Nordic Vitality DESIGN.md. */
+  --font-size-caption: 0.75rem;
+  --line-height-caption: 1rem;
+  --font-size-small: 0.875rem;
+  --line-height-small: 1.25rem;
+  --font-size-body: 1rem;
+  --line-height-body: 1.5rem;
+  --font-size-body-large: 1.125rem;
+  --line-height-body-large: 1.75rem;
+  --font-size-title-small: 1.125rem;
+  --line-height-title-small: 1.5rem;
+  --font-size-title-medium: 1.25rem;
+  --line-height-title-medium: 1.75rem;
+  --font-size-title-large: 1.5rem;
+  --line-height-title-large: 2rem;
+  --font-size-page-title: 2.25rem;
+  --line-height-page-title: 2.75rem;
+  --font-size-page-title-mobile: 1.75rem;
+  --line-height-page-title-mobile: 2.25rem;
+  --font-size-display: 3.5rem;
+  --line-height-display: 4rem;
+
+  /* Shell and grid dimensions documented in the design references. */
+  --layout-sidebar-width: 16.25rem;
+  --layout-header-height: 4.5rem;
+  --layout-mobile-nav-height: 3.5rem;
+  --layout-content-max-width: 90rem;
+  --layout-page-gutter: 2rem;
+  --layout-grid-gutter: 1.5rem;
+}

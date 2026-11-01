@@ -1,0 +1,13 @@
+/* The nested rings are decorative and intentionally stay outside utility markup. */
+.layout-glow::before,
+.layout-glow::after {
+  position: absolute;
+  inset: 1.5rem;
+  border: inherit;
+  border-radius: inherit;
+  content: "";
+}
+
+.layout-glow::after {
+  inset: 3rem;
+}

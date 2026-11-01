@@ -23,6 +23,7 @@ function apiError(code: string, status: number, fields = {}) {
 }
 
 beforeEach(() => {
+  window.history.replaceState(null, "", "/login");
   document.cookie = "csrftoken=; Max-Age=0; path=/";
 });
 
@@ -41,7 +42,8 @@ test("guest sees validation before requests", async () => {
   vi.stubGlobal("fetch", fetchMock);
   render(<App />);
   await screen.findByRole("button", { name: "Увійти" });
-  fireEvent.click(screen.getByRole("button", { name: "Реєстрація" }));
+  fireEvent.click(screen.getByRole("link", { name: "Зареєструватися" }));
+  await screen.findByRole("button", { name: "Створити акаунт" });
   fireEvent.change(screen.getByLabelText("Email"), { target: { value: "bad" } });
   fireEvent.change(screen.getByLabelText("Пароль"), { target: { value: "short" } });
   fireEvent.click(screen.getByRole("button", { name: "Створити акаунт" }));
@@ -83,7 +85,8 @@ test("register, login, save alias, and logout use the rotated CSRF cookie", asyn
   vi.stubGlobal("fetch", fetchMock);
   render(<App />);
   await screen.findByRole("button", { name: "Увійти" });
-  fireEvent.click(screen.getByRole("button", { name: "Реєстрація" }));
+  fireEvent.click(screen.getByRole("link", { name: "Зареєструватися" }));
+  await screen.findByRole("button", { name: "Створити акаунт" });
   fireEvent.change(screen.getByLabelText("Email"), { target: { value: account.email } });
   fireEvent.change(screen.getByLabelText("Пароль"), { target: { value: "CorrectHorse2026!" } });
   fireEvent.click(screen.getByRole("button", { name: "Створити акаунт" }));
@@ -91,12 +94,15 @@ test("register, login, save alias, and logout use the rotated CSRF cookie", asyn
   fireEvent.change(screen.getByLabelText("Пароль"), { target: { value: "CorrectHorse2026!" } });
   fireEvent.click(screen.getByRole("button", { name: "Увійти" }));
   await screen.findByText(account.email);
+  fireEvent.click((await screen.findAllByRole("link", { name: "Налаштування" }))[0]);
+  await screen.findByRole("heading", { name: "Налаштування" });
   fireEvent.change(screen.getByLabelText("Псевдонім"), { target: { value: "Fit" } });
   fireEvent.click(screen.getByLabelText("Показувати мене в рейтингу"));
   fireEvent.click(screen.getByRole("button", { name: "Зберегти" }));
   await screen.findByText("Налаштування рейтингу збережено.");
   fireEvent.click(screen.getByRole("button", { name: "Вийти" }));
   await screen.findByText("Ви вийшли з акаунта.");
+  expect(window.location.pathname).toBe("/login");
   expect(csrfHeaders).toEqual([
     "before-login", "before-login", "after-login", "after-login",
   ]);
@@ -122,8 +128,50 @@ test("reload restores the server session and unauthorized settings returns to lo
   }));
   render(<App />);
   await screen.findByText(account.email);
+  fireEvent.click((await screen.findAllByRole("link", { name: "Налаштування" }))[0]);
+  await screen.findByRole("heading", { name: "Налаштування" });
   fireEvent.click(screen.getByRole("button", { name: "Зберегти" }));
   await waitFor(() => expect(screen.getByRole("button", { name: "Увійти" })).toBeInTheDocument());
+  expect(window.location.pathname).toBe("/login");
+});
+
+test("direct settings URL redirects a guest to login", async () => {
+  window.history.replaceState(null, "", "/settings");
+  vi.stubGlobal("fetch", vi.fn(async (input: RequestInfo | URL) => {
+    if (String(input) === "/api/v1/auth/csrf/") {
+      document.cookie = "csrftoken=guest; path=/";
+      return json({ csrf_token: "guest" });
+    }
+    if (String(input) === "/api/v1/me/") return apiError("authentication_required", 401);
+    throw new Error(`Unexpected request ${String(input)}`);
+  }));
+
+  render(<App />);
+
+  await screen.findByRole("button", { name: "Увійти" });
+  expect(window.location.pathname).toBe("/login");
+  expect(screen.queryByRole("heading", { name: "Налаштування" })).not.toBeInTheDocument();
+});
+
+test("session bootstrap network error can be retried", async () => {
+  let csrfAttempts = 0;
+  vi.stubGlobal("fetch", vi.fn(async (input: RequestInfo | URL) => {
+    if (String(input) === "/api/v1/auth/csrf/") {
+      csrfAttempts += 1;
+      if (csrfAttempts === 1) throw new TypeError("disconnected");
+      document.cookie = "csrftoken=recovered; path=/";
+      return json({ csrf_token: "recovered" });
+    }
+    if (String(input) === "/api/v1/me/") return apiError("authentication_required", 401);
+    throw new Error(`Unexpected request ${String(input)}`);
+  }));
+
+  render(<App />);
+
+  await screen.findByText("Не вдалося перевірити сесію. Спробуйте ще раз.");
+  fireEvent.click(screen.getByRole("button", { name: "Спробувати ще раз" }));
+  await screen.findByRole("button", { name: "Увійти" });
+  expect(csrfAttempts).toBe(2);
 });
 
 test("invalid credentials and network failures are visible", async () => {

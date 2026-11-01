@@ -1,65 +1,120 @@
-:root {
-  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-  color: #17312b;
-  background: #f1f5f2;
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
+@import url("https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap");
+@import "tailwindcss";
+@import "./styles/tokens.css";
+
+/* Tailwind v4 utilities alias the canonical Nordic Vitality token layer. */
+@theme inline {
+  --font-sans: var(--font-family-base);
+
+  --color-brand: var(--color-brand-primary);
+  --color-brand-secondary-token: var(--color-brand-secondary);
+  --color-brand-accent-token: var(--color-brand-accent);
+  --color-brand-neutral-token: var(--color-brand-neutral);
+
+  --color-background: var(--color-bg-page);
+  --color-foreground: var(--color-text-primary);
+  --color-card: var(--color-surface);
+  --color-card-foreground: var(--color-text-primary);
+  --color-popover: var(--color-surface-elevated);
+  --color-popover-foreground: var(--color-text-primary);
+  --color-primary: var(--color-action-primary);
+  --color-primary-foreground: var(--color-on-action);
+  --color-secondary: var(--color-action-secondary);
+  --color-secondary-foreground: var(--color-on-action);
+  --color-muted: var(--color-surface-subtle);
+  --color-muted-foreground: var(--color-text-muted);
+  --color-accent: var(--color-brand-accent);
+  --color-accent-foreground: var(--color-brand-neutral);
+  --color-destructive: var(--color-action-danger);
+  --color-destructive-foreground: var(--color-on-danger);
+  --color-outline: var(--color-border);
+  --color-input-border: var(--color-border);
+  --color-ring: var(--color-focus);
+  --color-status-success: var(--color-success);
+  --color-status-warning: var(--color-warning);
+  --color-status-error: var(--color-error);
+  --color-selected-state: var(--color-selected);
+  --color-interactive-hover-state: var(--color-interactive-hover);
+
+  --spacing-space-0: var(--space-0);
+  --spacing-space-1: var(--space-1);
+  --spacing-space-2: var(--space-2);
+  --spacing-space-3: var(--space-3);
+  --spacing-space-4: var(--space-4);
+  --spacing-space-5: var(--space-5);
+  --spacing-space-6: var(--space-6);
+  --spacing-space-8: var(--space-8);
+  --spacing-space-10: var(--space-10);
+  --spacing-space-12: var(--space-12);
+
+  --radius-field: var(--radius-control);
+  --radius-panel: var(--radius-card);
+  --radius-chip: var(--radius-pill);
+  --shadow-panel: var(--shadow-card);
+  --shadow-panel-hover: var(--shadow-card-hover);
+  --shadow-dialog: var(--shadow-overlay);
+
+  --text-caption: var(--font-size-caption);
+  --text-caption--line-height: var(--line-height-caption);
+  --text-small: var(--font-size-small);
+  --text-small--line-height: var(--line-height-small);
+  --text-body: var(--font-size-body);
+  --text-body--line-height: var(--line-height-body);
+  --text-body-large: var(--font-size-body-large);
+  --text-body-large--line-height: var(--line-height-body-large);
+  --text-title-small: var(--font-size-title-small);
+  --text-title-medium: var(--font-size-title-medium);
+  --text-title-large: var(--font-size-title-large);
+  --text-page-title: var(--font-size-page-title);
+  --text-display: var(--font-size-display);
 }
 
-* {
+*,
+*::before,
+*::after {
   box-sizing: border-box;
+}
+
+html {
+  min-width: 320px;
+  min-height: 100%;
+  color-scheme: light;
+  font-family: var(--font-family-base);
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-text-size-adjust: 100%;
 }
 
 body {
   min-width: 320px;
   min-height: 100vh;
   margin: 0;
+  color: var(--color-text-primary);
+  background: var(--color-bg-page);
+  font-family: var(--font-family-base);
+  font-size: var(--font-size-body);
+  line-height: var(--line-height-body);
 }
 
-.shell {
-  display: grid;
-  min-height: 100vh;
-  padding: 24px;
-  place-items: center;
+button,
+input,
+select,
+textarea {
+  font: inherit;
 }
 
-.card {
-  width: min(100%, 520px);
-  padding: 40px;
-  border: 1px solid #d6e3da;
-  border-radius: 16px;
-  background: white;
+:focus-visible {
+  outline: 3px solid var(--color-focus);
+  outline-offset: 2px;
 }
 
-h2 { font-size: 1.1rem; margin-top: 1.5rem; }
-form { display: grid; gap: 0.65rem; margin-top: 1.25rem; }
-label { font-weight: 650; }
-input:not([type="checkbox"]) { width: 100%; padding: 0.7rem; border: 1px solid #aebfb4; border-radius: 8px; font: inherit; }
-input:focus-visible, button:focus-visible { outline: 3px solid #3c8b66; outline-offset: 2px; }
-button { padding: 0.7rem 1rem; border: 0; border-radius: 8px; background: #216a49; color: white; font: inherit; font-weight: 700; cursor: pointer; }
-button:disabled { opacity: 0.6; cursor: wait; }
-.secondary { margin-top: 1rem; background: #e4eee8; color: #17312b; }
-.tabs { display: flex; gap: 0.5rem; margin-top: 1.5rem; }
-.tabs button { flex: 1; background: #e4eee8; color: #17312b; }
-.tabs button[aria-pressed="true"] { background: #216a49; color: white; }
-.check-label { display: flex; align-items: center; gap: 0.6rem; font-weight: 500; }
-.field-error { margin: 0; color: #a32626; font-size: 0.9rem; }
-.message { padding: 0.75rem; border-radius: 8px; background: #eef5f0; }
-
-.eyebrow {
-  margin: 0 0 12px;
-  color: #527467;
-  font-size: 0.85rem;
-  font-weight: 700;
-  letter-spacing: 0.05em;
-  text-transform: uppercase;
-}
-
-h1 {
-  margin: 0 0 12px;
-  font-size: clamp(2rem, 6vw, 3rem);
-}
-
-p {
-  line-height: 1.5;
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 }
