@@ -31,6 +31,21 @@ body {
   background: white;
 }
 
+h2 { font-size: 1.1rem; margin-top: 1.5rem; }
+form { display: grid; gap: 0.65rem; margin-top: 1.25rem; }
+label { font-weight: 650; }
+input:not([type="checkbox"]) { width: 100%; padding: 0.7rem; border: 1px solid #aebfb4; border-radius: 8px; font: inherit; }
+input:focus-visible, button:focus-visible { outline: 3px solid #3c8b66; outline-offset: 2px; }
+button { padding: 0.7rem 1rem; border: 0; border-radius: 8px; background: #216a49; color: white; font: inherit; font-weight: 700; cursor: pointer; }
+button:disabled { opacity: 0.6; cursor: wait; }
+.secondary { margin-top: 1rem; background: #e4eee8; color: #17312b; }
+.tabs { display: flex; gap: 0.5rem; margin-top: 1.5rem; }
+.tabs button { flex: 1; background: #e4eee8; color: #17312b; }
+.tabs button[aria-pressed="true"] { background: #216a49; color: white; }
+.check-label { display: flex; align-items: center; gap: 0.6rem; font-weight: 500; }
+.field-error { margin: 0; color: #a32626; font-size: 0.9rem; }
+.message { padding: 0.75rem; border-radius: 8px; background: #eef5f0; }
+
 .eyebrow {
   margin: 0 0 12px;
   color: #527467;

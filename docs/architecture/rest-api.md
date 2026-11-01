@@ -2,7 +2,7 @@
 
 ## 1. Призначення і статус
 
-Контракт для React/TypeScript ↔ Django REST Framework у модульному моноліті. Джерела: [вимоги](../analysis/requirements.md), [бізнес-правила](../analysis/business-rules.md), [Domain Model](./domain-model.md), [ERD](./erd.md), [додаткові GoF-пропозиції](./additional-gof-proposals.md), [план](../PLAN_VARIANT_4.md) та чотири сторінки [UML Class Diagram](../diagrams/class-diagram.drawio). У разі розбіжності пріоритет мають CONFIRMED вимоги та бізнес-рішення. **Це дизайн, не реалізований API. AR-01–AR-04 підтверджені власником як D-2026-10-31; їхні правила нижче мають статус `CONFIRMED`, а формат маршрутів та інші окремо позначені технічні деталі зберігають власні статуси.** Нижче `CONFIRMED` означає успадковане правило; маршрути, форми JSON і HTTP-політика є `PROPOSED`, якщо їх раніше не погоджено.
+Контракт для React/TypeScript ↔ Django REST Framework у модульному моноліті. Джерела: [вимоги](../analysis/requirements.md), [бізнес-правила](../analysis/business-rules.md), [Domain Model](./domain-model.md), [ERD](./erd.md), [додаткові GoF-пропозиції](./additional-gof-proposals.md), [план](../PLAN_VARIANT_4.md) та чотири сторінки [UML Class Diagram](../diagrams/class-diagram.drawio). У разі розбіжності пріоритет мають CONFIRMED вимоги та бізнес-рішення. **Контракт частково реалізовано: A01–A06 у Phase 1; A07/A08 і доменні операції ще проєктні. AR-01–AR-04 підтверджені власником як D-2026-10-31; їхні правила нижче мають статус `CONFIRMED`, а формат маршрутів та інші окремо позначені технічні деталі зберігають власні статуси.** Нижче `CONFIRMED` означає успадковане правило; маршрути, форми JSON і HTTP-політика є `PROPOSED`, якщо їх раніше не погоджено.
 
 Актори: Guest, автентифікований User, Administrator через Django Group/Permissions, System як внутрішній процес. View/serializer розбирає JSON, перевіряє форму й права, форматує HTTP. Application Service виконує бізнес-операцію, блокування та `transaction.atomic()`; Django ORM і PostgreSQL додають FK/UQ/CHECK захист. Адміністрування спільного каталогу та деактивація акаунта — обмежений Django Admin, а не публічні CRUD-маршрути.
 
@@ -19,7 +19,7 @@ flowchart LR
 
 ## 2. Інвентар маршрутів
 
-Усі шляхи мають префікс `/api/v1/`. `G` = Guest; `U` = власний ресурс автентифікованого User; `A` = Administrator з окремим правом. Методи й шляхи в таблиці точно відповідають §4.
+Інвентар містить **49 операцій**: попередні 47 та A07/A08. Усі шляхи мають префікс `/api/v1/`. `G` = Guest; `U` = власний ресурс автентифікованого User; `A` = Administrator з окремим правом. Методи й шляхи в таблиці точно відповідають §4.
 
 | ID | Модуль | Метод | Шлях після префікса | Призначення | Доступ | FR/BR |
 |---|---|---|---|---|---|---|
@@ -29,6 +29,8 @@ flowchart LR
 | A04 | Auth | POST | `auth/logout/` | Завершення сесії | U | FR-002 |
 | A05 | Auth | GET | `me/` | Власний акаунт | U | FR-003/028 |
 | A06 | Auth | PATCH | `me/` | Псевдонім, opt-in | U | FR-028/035, BR-017 |
+| A07 | Auth | POST | `auth/password-reset/` | Запит листа відновлення | G | FR-042, BR-035 |
+| A08 | Auth | POST | `auth/password-reset/confirm/` | Новий пароль за токеном | G | FR-042, BR-035 |
 | P01 | Profile/Weight | GET | `profile/` | Власний профіль | U | FR-003, BR-001 |
 | P02 | Profile/Weight | POST | `profile/` | Перший профіль і вимір | U | FR-003/004, BR-001 |
 | P03 | Profile/Weight | PATCH | `profile/` | Оновлення профілю | U | FR-003/004, BR-001 |
@@ -102,7 +104,7 @@ flowchart LR
 
 ### 3.1. Автентифікація й доступ
 
-**PROPOSED:** Django session authentication з HTTP-only `sessionid` cookie, `Secure` у HTTPS, `SameSite=Lax`; React і DRF розгорнуті на одному origin. SPA перед unsafe методами бере CSRF cookie через A01 і посилає `X-CSRFToken`; login і register також захищені CSRF. Session зберігається на сервері, frontend не кладе credential у localStorage. Django стандартно перевіряє `is_active` при кожному запиті, тож деактивація блокує й чинну сесію; logout інвалідовує сесію. **PROPOSED:** мінімум 12 символів пароля та строк сесії 7 днів без автоматичного подовження; це технічні налаштування, не бізнес-правила. Cross-origin deployment потребуватиме окремого CORS/CSRF рішення, воно не входить у цей контракт. HTTPS обов'язковий у production.
+**PROPOSED:** Django session authentication з HTTP-only `sessionid` cookie, `Secure` у HTTPS, `SameSite=Lax`; React і DRF розгорнуті на одному origin. SPA перед unsafe методами бере CSRF cookie через A01 і посилає `X-CSRFToken`; login, register і password reset також захищені CSRF. Session зберігається на сервері, frontend не кладе credential у localStorage. Django стандартно перевіряє `is_active` при кожному запиті, тож деактивація блокує й чинну сесію; logout інвалідовує сесію. **PROPOSED:** мінімум 12 символів пароля та строк сесії 7 днів без автоматичного подовження; це технічні налаштування, не бізнес-правила. Cross-origin deployment потребуватиме окремого CORS/CSRF рішення, воно не входить у цей контракт. HTTPS обов'язковий у production.
 
 | Підхід | Оцінка для React web |
 |---|---|
@@ -112,7 +114,7 @@ flowchart LR
 
 [Документація DRF](https://www.django-rest-framework.org/api-guide/authentication/) підтверджує поведінку session/CSRF, відмінність 401/403 та можливість власного `authenticate_header()`. Звичайна DRF `SessionAuthentication` повертає 403 для анонімного запиту; цей **PROPOSED** контракт використовує мінімальну session-auth subclass із `WWW-Authenticate: Session realm="api"`, щоб `NotAuthenticated` і невірні credentials мали 401. **Кожна 401-відповідь включає цей header.** Login/register потребують стандартної Django CSRF-перевірки окремо: DRF session CSRF за замовчуванням застосовується лише до вже автентифікованих запитів. Не покладатися на один лише DRF permission для захисту login від CSRF.
 
-Guest бачить тільки A01–A03 і неархівний каталог C01–C04 (**публічність каталогу PROPOSED**). User бачить тільки власні приватні ресурси. Administrator має ті самі права на власні дані, а R02/R03 — лише за Group/Permission для агрегованих звітів; `is_staff` сам по собі недостатній. Адміністратор не отримує чужий Profile, WeightEntry чи CompletedSession через API. Приватний ID іншого користувача та неіснуючий ID однаково дають 404 після фільтра `user=request.user`; 403 використовується для відомої за роллю забороненої дії, наприклад R02. Всі id з URL перевіряються на власність; вкладений `entry_id` має належати програмі з URL.
+Guest бачить A01–A03/A07–A08 і неархівний каталог C01–C04 (**публічність каталогу PROPOSED**). User бачить тільки власні приватні ресурси. Administrator має ті самі права на власні дані, а R02/R03 — лише за Group/Permission для агрегованих звітів; `is_staff` сам по собі недостатній. Адміністратор не отримує чужий Profile, WeightEntry чи CompletedSession через API. Приватний ID іншого користувача та неіснуючий ID однаково дають 404 після фільтра `user=request.user`; 403 використовується для відомої за роллю забороненої дії, наприклад R02. Всі id з URL перевіряються на власність; вкладений `entry_id` має належати програмі з URL.
 
 ### 3.2. Стандартна помилка
 
@@ -130,7 +132,7 @@ Guest бачить тільки A01–A03 і неархівний каталог
 | Слот уже завершено іншим ключем | 409 `{"error":{"code":"duplicate_completion","message":"Заняття вже завершено.","fields":{},"request_id":"req-7d7"}}` |
 | Конкурентна зміна стану | 409 `{"error":{"code":"concurrent_modification","message":"Стан змінився; оновіть дані.","fields":{},"request_id":"req-7d8"}}` |
 
-Синтаксично зламаний JSON → 400 `invalid_json`; відсутній/хибний CSRF → 403 `csrf_failed`; невалідний login → 401 `invalid_credentials`; дубль email → 409 `email_taken`. Для відсутнього неархівного каталожного ресурсу — 404. Після помилки E01 часткових записів немає.
+Синтаксично зламаний JSON → 400 `invalid_json`; відсутній/хибний CSRF → 403 `csrf_failed`; невалідний login → 401 `invalid_credentials`; дубль email → 409 `email_taken`. Для відсутнього неархівного каталожного ресурсу — 404. Для A08 невалідний, прострочений або використаний токен → 400 `reset_token_invalid_or_expired` у тій самій error envelope; відмінність причин назовні не розкривається. Невалідний новий пароль → 400 `validation_error` з `fields.new_password`. Після помилки E01 часткових записів немає.
 
 ## 4. Детальні контракти
 
@@ -142,7 +144,7 @@ Guest бачить тільки A01–A03 і неархівний каталог
 **Метод/URL:** `GET /api/v1/auth/csrf/`. **Доступ:** Guest/User. **FR:** FR-002. **Вхід:** —. **Успіх:** 200 `{"csrf_token":"a0f7e9c4d2b61805"}` і cookie `csrftoken`; token — ілюстративний. **Помилки:** 429. **Виконання:** Django CSRF middleware, без доменного сервісу; клієнт посилає token у `X-CSRFToken` на unsafe методах.
 
 #### A02. Реєстрація
-**Метод/URL:** `POST /api/v1/auth/register/`. **Доступ:** Guest. **FR:** FR-001/005. **Вхід:** body `email: string`, `password: string`; query —. **Приклад запиту:** `{"email":"olena@example.test","password":"CorrectHorse2026!"}`. **Успіх:** 201 `{"id":41,"email":"olena@example.test","public_alias":null,"leaderboard_opt_in":false}`. **Помилки:** 400 email/password, 409 `email_taken`, 403 CSRF, 429. **Виконання:** Django auth manager нормалізує email, хешує пароль; case-insensitive унікальність `LOWER(email)`; профіль створюють окремо P02. Реєстрація не автентифікує автоматично (**PROPOSED**).
+**Метод/URL:** `POST /api/v1/auth/register/`. **Доступ:** Guest. **FR:** FR-001/005. **Вхід:** body `email: string`, `password: string`; query —. **Приклад запиту:** `{"email":"olena@example.test","password":"CorrectHorse2026!"}`. **Успіх:** 201 `{"id":41,"email":"olena@example.test","public_alias":null,"leaderboard_opt_in":false}`. **Помилки:** 400 email/password, 409 `email_taken`, 403 CSRF, 429. **Виконання:** Django auth manager нормалізує email, хешує пароль; case-insensitive унікальність `LOWER(email)`; профіль створюють окремо P02. Реєстрація не автентифікує автоматично (**PROPOSED**). `first_name`, `last_name`, Profile і `terms_accepted` не входять до request; обов’язкового checkbox у UI немає (D-2026-10-31 (Profile/recovery)).
 
 #### A03. Вхід
 **Метод/URL:** `POST /api/v1/auth/login/`. **Доступ:** Guest. **FR:** FR-002/036; BR-032. **Вхід:** `email`, `password` у body. **Запит:** `{"email":"olena@example.test","password":"CorrectHorse2026!"}`. **Успіх:** 200 `{"id":41,"email":"olena@example.test","public_alias":null,"leaderboard_opt_in":false}` + `sessionid` cookie. **Помилки:** 400, 401 `invalid_credentials` також для деактивованого акаунта без розкриття його стану, 403 CSRF, 429. **Виконання:** Django authenticate/login; не повертати token у JSON.
@@ -156,18 +158,26 @@ Guest бачить тільки A01–A03 і неархівний каталог
 #### A06. Змінити участь у рейтингу
 **Метод/URL:** `PATCH /api/v1/me/`. **Доступ:** U. **FR/BR:** FR-028/035, BR-017/028. **Вхід:** writable `public_alias: string|null` (до 80 символів), `leaderboard_opt_in: boolean`; інші поля заборонені. **Запит:** `{"public_alias":"OlenaFit","leaderboard_opt_in":true}`. **Успіх:** 200 `{"id":41,"email":"olena@example.test","public_alias":"OlenaFit","leaderboard_opt_in":true}`. **Помилки:** 400 порожній alias при opt-in, 401, 403 CSRF. **Виконання:** атомарна перевірка alias + opt-in; вимкнення одразу прибирає User з публічного списку, ledger не змінює. `id,email,is_staff,is_active` read-only.
 
+#### A07. Запросити відновлення пароля
+**Метод/URL:** `POST /api/v1/auth/password-reset/` (**PROPOSED** URL). **Доступ:** Guest; чинна сесія не потрібна. **FR/BR:** FR-042, BR-035. **Вхід:** `{"email":"olena@example.test"}`; невідомі поля заборонено. **Успіх:** 200 `{"message":"Якщо акаунт із такою адресою існує, ми надішлемо інструкції для відновлення пароля."}` — та сама відповідь для відомого, невідомого, неактивного User або User без придатного пароля. **Помилки:** 400 `validation_error` для невалідного формату email, 403 `csrf_failed`, 429 за однаковою політикою throttling. **Виконання:** Django reset mechanism надсилає лист лише придатному User; token/uid не включати до API-відповіді чи application logs. Лист містить посилання на публічний React маршрут `/reset-password/{uid}/{token}`; `uid` — URL-safe кодування ID. Email backend та `PASSWORD_RESET_TIMEOUT` конфігуруються; dev console backend лише для локального середовища без збору його вмісту в application logs, production SMTP/підтримуваний transport — **PROPOSED**, без секретів у коді. Форму листа й адресу frontend origin налаштовують окремо для середовища.
+
+#### A08. Підтвердити відновлення пароля
+**Метод/URL:** `POST /api/v1/auth/password-reset/confirm/` (**PROPOSED** URL). **Доступ:** Guest; вхід не потрібен. **FR/BR:** FR-042, BR-035. **Вхід:** `{"uid":"encoded-user-id","token":"password-reset-token","new_password":"NewSecurePassword123!"}`; назви полів — **PROPOSED** контракт. **Успіх:** 200 `{"message":"Пароль оновлено. Увійдіть із новим паролем."}`; session cookie не видається, frontend переходить до login. **Помилки:** 400 `reset_token_invalid_or_expired` для невалідного, простроченого чи вже використаного токена; 400 `validation_error` з `fields.new_password` для Django password validators; 403 `csrf_failed`; 429 throttling. **Виконання:** перевірити Django `PasswordResetTokenGenerator`/стандартний reset flow та `PASSWORD_RESET_TIMEOUT`, викликати `set_password()` і зберегти User; зміна hash робить старий токен і попередні auth sessions непридатними. Не викликати `login()` чи `update_session_auth_hash()`; жодної нової таблиці токенів.
+
+**Frontend:** login показує «Забули пароль?» → форму A07 й загальне підтвердження. Маршрут `/reset-password/{uid}/{token}` показує форму нового пароля або стан невалідного/простроченого посилання; надсилає A08. Токен тримати лише тимчасово в пам’яті, після читання прибирати з адресного рядка через `history.replaceState`; не записувати в localStorage, аналітику чи application logs. Для сторінки встановити `Referrer-Policy: no-referrer`, не завантажувати сторонні ресурси; access logs маршруту мають редагувати token сегмент (**PROPOSED** операційний захист).
+
 ### 4.2. Профіль і вага
 
 У цьому MVP **PROPOSED** прямий POST/PATCH для `WeightEntry` не відкривати: первинне створення P02 та кожна зміна `weight_kg` через P03 викликають `ProfileService`, який атомарно створює новий датований запис. Концептуальні права C/U own у матриці доступу не зобов'язують публікувати незалежне редагування історії; якщо така операція стане потрібною, слід окремо визначити корекцію поточного значення та історичних snapshots. Існуючі `CompletedSession` від цього не переписуються.
 
 #### P01. Прочитати профіль
-**Метод/URL:** `GET /api/v1/profile/`. **Доступ:** U. **FR/BR:** FR-003, BR-001. **Вхід:** —. **Успіх:** 200 `{"date_of_birth":"1998-05-12","age":28,"weight_kg":"68.4","height_cm":"170.0","gender":"female","fitness_goal":"maintenance","experience_level":"beginner","workouts_per_week":3}`. **Помилки:** 401, 404 `profile_missing` до P02. **Виконання:** `ProfileService` обчислює `age` на поточну локальну дату Kyiv; `age` read-only.
+**Метод/URL:** `GET /api/v1/profile/`. **Доступ:** U. **FR/BR:** FR-003, BR-001/034. **Вхід:** —. **Успіх:** 200 `{"first_name":"","last_name":"","date_of_birth":"1998-05-12","age":28,"weight_kg":"68.4","height_cm":"170.0","gender":"female","fitness_goal":"maintenance","experience_level":"beginner","workouts_per_week":3}`. **Помилки:** 401, 404 `profile_missing` до P02. **Виконання:** `ProfileService` обчислює `age` на поточну локальну дату Kyiv; `age` read-only.
 
 #### P02. Створити перший профіль
-**Метод/URL:** `POST /api/v1/profile/`. **Доступ:** U без профілю. **FR/BR:** FR-003/004, BR-001. **Вхід:** усі сім полів профілю. **Запит:** `{"date_of_birth":"1998-05-12","weight_kg":"68.4","height_cm":"170.0","gender":"female","fitness_goal":"maintenance","experience_level":"beginner","workouts_per_week":3}`. **Успіх:** 201 `{"date_of_birth":"1998-05-12","age":28,"weight_kg":"68.4","height_cm":"170.0","gender":"female","fitness_goal":"maintenance","experience_level":"beginner","workouts_per_week":3}`. **Помилки:** 400 межі віку 19–59, ваги 20.0–500.0, зросту 100.0–250.0, перелічувані значення, точність або частота 1–7; 401; 409 `profile_exists`. **Виконання:** `ProfileService` в одній `atomic()` створює Profile та перший `WeightEntry` з server time; вік оцінює на дату створення Kyiv. `created_at` server-owned.
+**Метод/URL:** `POST /api/v1/profile/`. **Доступ:** U без профілю. **FR/BR:** FR-003/004, BR-001/034. **Вхід:** усі сім фітнес-полів обов’язкові; `first_name` і `last_name` необов’язкові, за відсутності `""` (**PROPOSED** представлення). **Запит:** `{"first_name":"Олена","last_name":"Петренко","date_of_birth":"1998-05-12","weight_kg":"68.4","height_cm":"170.0","gender":"female","fitness_goal":"maintenance","experience_level":"beginner","workouts_per_week":3}`. **Успіх:** 201 `{"first_name":"Олена","last_name":"Петренко","date_of_birth":"1998-05-12","age":28,"weight_kg":"68.4","height_cm":"170.0","gender":"female","fitness_goal":"maintenance","experience_level":"beginner","workouts_per_week":3}`. **Помилки:** 400 межі віку 19–59, ваги 20.0–500.0, зросту 100.0–250.0, перелічувані значення, точність або частота 1–7; 401; 409 `profile_exists`. **Виконання:** `ProfileService` в одній `atomic()` створює Profile та перший `WeightEntry` з server time; вік оцінює на дату створення Kyiv. `created_at` server-owned.
 
 #### P03. Оновити профіль
-**Метод/URL:** `PATCH /api/v1/profile/`. **Доступ:** U. **FR/BR:** FR-003/004, BR-001/009. **Вхід:** будь-яка підмножина семи полів; `age` заборонене. **Запит:** `{"weight_kg":"67.9","workouts_per_week":4}`. **Успіх:** 200 `{"date_of_birth":"1998-05-12","age":28,"weight_kg":"67.9","height_cm":"170.0","gender":"female","fitness_goal":"maintenance","experience_level":"beginner","workouts_per_week":4}`. **Помилки:** 400 валідація, 401, 404 відсутній профіль, 403 CSRF. **Виконання:** `ProfileService` у `atomic()` створює новий `WeightEntry` тільки якщо `weight_kg` реально змінено; дата народження при виправленні перевіряється відносно локальної дати першого `Profile.created_at`, не поточної дати. Минулі результати/kcal незмінні.
+**Метод/URL:** `PATCH /api/v1/profile/`. **Доступ:** U. **FR/BR:** FR-003/004, BR-001/009/034. **Вхід:** будь-яка підмножина семи фітнес-полів і `first_name`/`last_name`; імена можна змінити окремо, включно з очищенням до `""`; `age` заборонене. **Запит:** `{"first_name":"Олена"}` (name-only); `{"weight_kg":"67.9","workouts_per_week":4}` лишається дозволеним. **Успіх:** 200 `{"first_name":"Олена","last_name":"","date_of_birth":"1998-05-12","age":28,"weight_kg":"68.4","height_cm":"170.0","gender":"female","fitness_goal":"maintenance","experience_level":"beginner","workouts_per_week":3}` для name-only запиту. **Помилки:** 400 валідація, 401, 404 відсутній профіль, 403 CSRF. **Виконання:** `ProfileService` у `atomic()` створює новий `WeightEntry` тільки якщо `weight_kg` реально змінено; зміна лише імен його не створює; дата народження при виправленні перевіряється відносно локальної дати першого `Profile.created_at`, не поточної дати. Минулі результати/kcal незмінні.
 
 #### P04. Історія вимірів
 **Метод/URL:** `GET /api/v1/weight-entries/`. **Доступ:** U. **FR/BR:** FR-004/031, BR-001/019. **Query:** `start_date,end_date,page,page_size`; період Kyiv `[start,end)`; порядок `measured_at DESC,id DESC`. **Успіх:** 200 `{"count":2,"next":null,"previous":null,"results":[{"id":302,"measured_at":"2026-10-29T09:00:00Z","weight_kg":"67.9"},{"id":301,"measured_at":"2026-10-01T09:00:00Z","weight_kg":"68.4"}]}`. **Помилки:** 400 фільтр/період, 401. **Виконання:** read-only owner queryset; порожній список має `count:0,results:[]`.
@@ -392,9 +402,9 @@ sequenceDiagram
 - **XSS.** HTTP-only не дозволяє JavaScript прочитати session cookie, але XSS усе ще може виконати дію від імені User на тому самому origin. React має екранувати користувацький текст; не вставляти довільний HTML, застосувати CSP як **PROPOSED** захист розгортання.
 - **Авторизація.** Фільтр `user=request.user` до пошуку приватного ID, додатково object-level permission; вкладені ID звіряють між собою. 404 для чужого/відсутнього, 403 для недостатньої ролі. Мінімальна session-auth subclass з §3.1 повертає 401 із `WWW-Authenticate` для відсутньої сесії (**PROPOSED**).
 - **Mass assignment.** Кожен serializer має явний whitelist writable полів; `id,user_id,status,source_*,snapshots,points,bonus_earned,age,visible_at,read_at` недоступні для довільного запису. Винятки — тільки описані domain actions.
-- **Приватність.** Лише власник читає профіль, вагу, програми, календар, історію, бали, нагороди, участь і reminder. Рейтинг повертає alias, points, rank лише opt-in; `self` видимий тільки самому User. Адмін-звіти агреговані, без drill-down до чужих фактів.
+- **Приватність.** Лише власник читає профіль, вагу, програми, календар, історію, бали, нагороди, участь і reminder. Реальні імена з Profile не стають публічними. Рейтинг повертає alias, points, rank лише opt-in; `self` видимий тільки самому User. Адмін-звіти агреговані, без drill-down до чужих фактів.
 - **Admin.** Group/Permissions без поля role; `is_staff` не дає автоматично права R02/R03. Каталог, Challenge/Achievement і деактивація — обмежений Django Admin. Деактивація FR-036 вимагає окремого права, без загального `change_user`; поточні сесії деактивованого User більше не працюють. Остаточне каскадне видалення FR-041 — після MVP, без REST DELETE.
-- **Валідація й обсяг.** Decimal як рядок, timezone-aware timestamp, суворі enum/діапазони, page_size≤100, whitelist фільтрів, ніяких stack trace/SQL помилок. Rate limiting login/register та E01 — **PROPOSED** технічна політика; конкретні пороги після вимірювання, без нового інфраструктурного сервісу.
+- **Валідація й обсяг.** Decimal як рядок, timezone-aware timestamp, суворі enum/діапазони, page_size≤100, whitelist фільтрів, ніяких stack trace/SQL помилок. Rate limiting login/register/password reset та E01 — **PROPOSED** технічна політика; конкретні пороги після вимірювання, без нового інфраструктурного сервісу.
 - **Повтори.** E01 ключ + fingerprint + DB UQ; відповідь повтору 200 з тим самим фактом. Не сприймати ключ як доказ власності. Server time не входить у body fingerprint; сумнівна/зламана сесія не може читати чужий результат.
 - **Історія.** E03 і M02 тільки читання. Виняткове повне видалення User за BR-032 не є звичайним API-редагуванням фактів.
 
@@ -443,13 +453,17 @@ sequenceDiagram
 | T39 | G09/S02/S04/S05 | Конкурентні планування/перенесення/скасування й архівація draft | За program lock один серіалізований результат: archived draft без persisted planned або 409 no-op | 006/008/009/030 |
 | T40 | G06/E01/E03 | Зміна персонального складу після S02, а потім після committed E01 | Незавершений E01 бачить останній committed склад після lock; E03 старого факту незмінний; гонка має один серіалізований порядок | 009/010/029/033 |
 | T41 | S05→S05→G08/M02 | Active `2/3`, перший S05 скасовує останній planned слот і закриває програму; повторити той самий S05 | Перший і другий S05 → 200 того самого shape; після другого стан слота/reminder та completion snapshot незмінні, нових PointTransaction/нагород/подій немає; G08 показує completed `2/2` | 006/007/015/025/030 |
+| T42 | A02/P01–P03 | Реєстрація лише email/password; створити Profile без імен; змінити тільки ім’я | 201/201/200; P01 повертає `""` для відсутніх імен, name-only PATCH не створює WeightEntry; чужий Profile 404 | 001/034 |
+| T43 | A07 | Відома, невідома, неактивна адреса та непридатний пароль | Для коректного email однаковий 200/body; лист лише придатному активному User; невалідний формат 400; throttling 429 | 035 |
+| T44 | A08 | Дійсний, невалідний, прострочений, використаний токен; слабкий пароль | 200 лише з дійсним token/valid password; інші 400 з error envelope; старий токен непридатний після зміни | 035 |
+| T45 | A07/A08/A03 | Unsafe без/із CSRF; reset за наявної сесії | 403 без CSRF; reset не входить автоматично, старі сесії відхилено; новий пароль працює при A03 | 035 |
 
 ## 9. Рішення, відкриті питання й ризики
 
 ### Confirmed
 
 - Django + DRF, React/TypeScript, PostgreSQL, modular monolith/Service Layer; Strategy, Observer, Template Method (NFR-002/007).
-- Сім полів Profile, історичний WeightEntry, вікова межа нового профілю, відсутня kcal-оцінка після 60 років (BR-001/012/013).
+- Сім фітнес-полів Profile плюс два необов’язкові приватні іменні поля, відновлення пароля за email без обов’язкового checkbox під час реєстрації (D-2026-10-31 (Profile/recovery), BR-034/035); історичний WeightEntry, вікова межа нового профілю, відсутня kcal-оцінка після 60 років (BR-001/012/013).
 - Незалежний UserProgram, `status` + `is_archived`, поточний прогрес, frozen bonus threshold та окремий критерій +50; архівація активної програми й відновлення поза MVP (BR-005–009).
 - Атомарне й ідемпотентне завершення, незмінна історія та ledger, локальний reminder у транзакції зі слотом, opt-in рейтинг, три звіти, обмежений Admin (BR-010/015–020/023–030).
 - D-2026-10-31 підтверджує AR-01–AR-04: закриття після E01/S05, поточний персональний склад після lock, активний стан для нового програмного E01 та `409 planned_sessions_exist` для G09 draft із planned слотами.
@@ -463,6 +477,7 @@ sequenceDiagram
 | Same-origin session cookie + CSRF, без JWT/localStorage; 401 mapping для відсутньої сесії | Менша складність для веб-клієнта, захист cookies; інший origin вимагатиме окремої конфігурації. |
 | Page-number pagination 20/100, whitelist filters/order, Decimal як JSON-рядок, кореляційний `request_id` | Стабільний контракт і точні числа без додаткових таблиць. |
 | Публічний read-only неархівний каталог для Guest | Не розкриває приватні дані; якщо UI вимагатиме входу для бібліотеки, достатньо змінити permission. |
+| A07/A08, React reset URL, Django built-in token/validators, конфігурований timeout/email backend | Реалізують підтверджений recovery flow без нового токенового сховища; точні URL, поля й технічні ліміти — PROPOSED. |
 | P02/P03 як єдині MVP-команди зміни ваги; P04/P05 read-only | Гарантує атомарний Profile + WeightEntry. Незалежну корекцію історії не визначено підтвердженим сценарієм. |
 | PUT G06 повністю замінює особистий склад одного Workout; no-op S04 за тим самим часом | Дає явний контракт упорядкованого складу/історії без нових бізнес-станів. |
 
@@ -484,9 +499,9 @@ sequenceDiagram
 
 | FR | API або інший контракт | BR | Відповідальний шар |
 |---|---|---|---|
-| FR-001 | A02 | 028 | Django auth manager |
+| FR-001 | A02 | 028/034 | Django auth manager |
 | FR-002 | A01/A03/A04 | 028/032 | Django auth/session |
-| FR-003 | A05/P01–P03 | 001 | ProfileService |
+| FR-003 | A05/P01–P03 | 001/034 | ProfileService |
 | FR-004 | P02–P05 | 001/012/019 | ProfileService, StatisticsQueryService |
 | FR-005 | Усі U/A; 401/403/404 | 028 | DRF permissions + Service Layer |
 | FR-006 | C01/C02/C03 | 002 | catalog selector |
@@ -525,8 +540,9 @@ sequenceDiagram
 | FR-039 | M03/H01/H02 read; definitions через Django Admin | 021/022/028 | Admin |
 | FR-040 | R02/R03 | 018/020/028 | ReportQueryService |
 | FR-041 | Після MVP: окремий авторизований механізм; **жодного REST DELETE** | 032 | майбутній AccountDeletionService |
+| FR-042 | A07/A08; React reset route | 035 | `PasswordResetService` у `accounts` (**PROPOSED** тонкий координатор Django auth/reset) |
 
-FR-023/026 — внутрішні ефекти S02/S04/S05, а не окреме створення Notification клієнтом. FR-016 — внутрішнє закриття через E01 або S05, без ручного endpoint. FR-007/037/038/039/036 обслуговуються Django Admin там, де це підтверджено архітектурою; каталог REST залишається read-only. Отже всі FR-001–041 мають API-контракт, внутрішній ефект, Django Admin або явно позначену після-MVP межу.
+FR-023/026 — внутрішні ефекти S02/S04/S05, а не окреме створення Notification клієнтом. FR-016 — внутрішнє закриття через E01 або S05, без ручного endpoint. FR-007/037/038/039/036 обслуговуються Django Admin там, де це підтверджено архітектурою; каталог REST залишається read-only. Отже всі FR-001–042 мають API-контракт, внутрішній ефект, Django Admin або явно позначену після-MVP межу.
 
 ## 11. Контроль узгодженості
 

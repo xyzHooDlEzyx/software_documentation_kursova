@@ -9,8 +9,9 @@ def test_django_project_initializes_without_database() -> None:
     assert settings.DATABASES["default"]["ENGINE"] == "django.db.backends.postgresql"
     assert "django.middleware.csrf.CsrfViewMiddleware" in settings.MIDDLEWARE
     assert settings.REST_FRAMEWORK["DEFAULT_AUTHENTICATION_CLASSES"] == [
-        "rest_framework.authentication.SessionAuthentication"
+        "accounts.authentication.APISessionAuthentication"
     ]
+    assert settings.AUTH_USER_MODEL == "accounts.User"
     assert {"accounts", "catalog", "planning", "execution", "engagement"} <= {
         app.label for app in apps.get_app_configs()
     }

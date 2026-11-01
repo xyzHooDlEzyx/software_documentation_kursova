@@ -18,6 +18,7 @@ ALLOWED_HOSTS = csv_env("DJANGO_ALLOWED_HOSTS")
 CSRF_TRUSTED_ORIGINS = csv_env("DJANGO_CSRF_TRUSTED_ORIGINS")
 
 INSTALLED_APPS = [
+    "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
     "django.contrib.sessions",
@@ -73,13 +74,32 @@ DATABASES = {
 
 REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": [
-        "rest_framework.authentication.SessionAuthentication",
+        "accounts.authentication.APISessionAuthentication",
     ],
     "DEFAULT_PERMISSION_CLASSES": [
         "rest_framework.permissions.IsAuthenticated",
     ],
+    "EXCEPTION_HANDLER": "accounts.errors.exception_handler",
 }
 
+AUTH_USER_MODEL = "accounts.User"
+AUTHENTICATION_BACKENDS = ["accounts.authentication.CaseInsensitiveEmailBackend"]
+# Django checks only the field-level unique flag. The database has
+# UNIQUE(LOWER(email)), and the custom backend uses a case-insensitive lookup.
+SILENCED_SYSTEM_CHECKS = ["auth.W004"]
+_PASSWORD_VALIDATORS = "django.contrib.auth.password_validation."
+AUTH_PASSWORD_VALIDATORS = [
+    {"NAME": _PASSWORD_VALIDATORS + "UserAttributeSimilarityValidator"},
+    {
+        "NAME": _PASSWORD_VALIDATORS + "MinimumLengthValidator",
+        "OPTIONS": {"min_length": 12},
+    },
+    {"NAME": _PASSWORD_VALIDATORS + "CommonPasswordValidator"},
+    {"NAME": _PASSWORD_VALIDATORS + "NumericPasswordValidator"},
+]
+CSRF_FAILURE_VIEW = "accounts.errors.csrf_failure"
+SESSION_COOKIE_AGE = 7 * 24 * 60 * 60
+SESSION_SAVE_EVERY_REQUEST = False
 SESSION_COOKIE_HTTPONLY = True
 CSRF_COOKIE_HTTPONLY = False  # React reads csrftoken for X-CSRFToken.
 SESSION_COOKIE_SAMESITE = "Lax"

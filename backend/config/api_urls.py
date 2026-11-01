@@ -1,3 +1,5 @@
-"""The /api/v1/ routing slot; endpoints arrive in later phases."""
+"""Versioned API routes implemented in the current phase."""
 
-urlpatterns = []
+from django.urls import include, path
+
+urlpatterns = [path("", include("accounts.urls"))]

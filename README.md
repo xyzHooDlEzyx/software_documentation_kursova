@@ -1,6 +1,6 @@
 # Фітнес-трекер — курсова робота, варіант 4
 
-Репозиторій містить документацію архітектури та каркас Phase 0: Django/DRF API, React/TypeScript/Vite frontend і конфігурацію PostgreSQL. Бізнес-моделей, користувацьких сторінок і REST-операцій поки немає. Подальші інкременти описані в [плані реалізації](docs/implementation/implementation-plan.md).
+Репозиторій містить документацію архітектури та Phase 1: кастомний `accounts.User`, Django session authentication, CSRF-захищений REST API A01–A06 і React-екрани реєстрації та входу. Наступні інкременти описані в [плані реалізації](docs/implementation/implementation-plan.md).
 
 ## Передумови та версії
 
@@ -10,9 +10,9 @@
 - Backend: Django 6.0.9, DRF 3.18.3, psycopg 3.3.6; для розробки pytest 9.2.0, pytest-django 4.14.0, Ruff 0.17.3. Версії зафіксовано в `backend/requirements*.txt` і повному dev-lockfile.
 - Frontend: React 19.3.1, Vite 8.3.5, TypeScript 6.0.2; точні прямі й транзитивні версії зафіксовано у `frontend/package-lock.json`.
 
-## Важливо перед першим запуском БД
+## Міграції та кастомний User
 
-**Не запускайте `python manage.py migrate` у Phase 0.** У Phase 1 спочатку буде створено `accounts.User` і встановлено `AUTH_USER_MODEL`; лише після цього дозволена перша міграція. Інакше Django може застосувати auth-міграції зі стандартним User і ускладнити перехід. Phase 0 запускає `check` і smoke-тести без доступу до БД. Admin, seed і користувацькі endpoint також належать наступним фазам.
+`AUTH_USER_MODEL = "accounts.User"` встановлено до першої міграції. Початковий `accounts.0001_initial` створює таблицю `users` з email-ідентичністю; `accounts.0002` уточнює DB `CHECK` для псевдоніма та opt-in без зміни застосованого `0001`. На новій базі запускайте `migrate` лише з цими файлами в коді. Не створюйте стандартний `auth.User` і не скидайте вже заповнену БД для переходу на іншу модель.
 
 ## Локальне налаштування
 
@@ -48,7 +48,7 @@ sudo -u postgres createdb --owner=fitness_app fitness_dev
 docker compose up -d db
 ```
 
-Compose читає `POSTGRES_DB`, `POSTGRES_USER`, `POSTGRES_PASSWORD` і `POSTGRES_PORT` з `.env` та відкриває порт лише на `127.0.0.1`. Docker не потрібен для запуску із наявною PostgreSQL.
+Compose читає `POSTGRES_DB`, `POSTGRES_USER`, `POSTGRES_PASSWORD` і `POSTGRES_PORT` з `.env` та відкриває порт лише на `127.0.0.1`. Якщо Docker Desktop на Linux використовує окремий context, запускайте `docker --context desktop-linux compose up -d db`. Docker не потрібен для запуску із наявною PostgreSQL.
 
 ### Backend
 
@@ -56,10 +56,11 @@ Compose читає `POSTGRES_DB`, `POSTGRES_USER`, `POSTGRES_PASSWORD` і `POSTG
 
 ```bash
 backend/.venv/bin/python backend/manage.py check
+backend/.venv/bin/python backend/manage.py migrate
 backend/.venv/bin/python backend/manage.py runserver localhost:8000
 ```
 
-База має бути доступна для `runserver`, але міграції Phase 0 **не застосовуються**. Префікс `/api/v1/` підготовлено; поки він повертає Django 404, бо endpoint ще не створені. `reporting` є звичайним Python-пакетом; п'ять порожніх Django apps — `accounts`, `catalog`, `planning`, `execution`, `engagement`.
+`reporting` є звичайним Python-пакетом. Доменні таблиці пізніших фаз ще не створено. Технічний superuser створюється через `createsuperuser`; у Django Admin він може призначити існуючому користувачу `is_staff` і групу `Administrator` з правом `accounts.deactivate_user`. Працівник із цим правом бачить лише список акаунтів і дію деактивації, без редагування ролей або приватних профілів.
 
 ### Frontend і dev proxy
 
@@ -69,12 +70,27 @@ backend/.venv/bin/python backend/manage.py runserver localhost:8000
 npm --prefix frontend run dev
 ```
 
-Відкрийте `http://localhost:5173`. Vite пересилає `/api/v1/*` на Django `http://localhost:8000`; браузер звертається лише до origin `:5173`, а frontend API helper використовує відносні шляхи та `credentials: "same-origin"`. `changeOrigin: false` зберігає сумісні Host/Origin для CSRF; `DJANGO_CSRF_TRUSTED_ORIGINS` обмежений конкретним dev origin. Немає permissive CORS або вимкнення CSRF. У локальному HTTP secure-cookie прапорці вимкнені; у production HTTPS увімкнені. Endpoint A01, login/logout і повні cookie/CSRF тести належать Phase 1.
+Відкрийте `http://localhost:5173`. Vite пересилає `/api/v1/*` на Django `http://localhost:8000`; браузер звертається лише до origin `:5173`, а frontend API helper використовує відносні шляхи та `credentials: "same-origin"`. `changeOrigin: false` зберігає сумісні Host/Origin для CSRF. Перед POST/PATCH клієнт бере cookie через A01 і передає поточний `csrftoken` у `X-CSRFToken`; після входу Django ротирує token, а клієнт читає новий cookie для наступної дії. `sessionid` має HttpOnly і не зберігається в React. У production обидва cookie мають Secure та потрібен HTTPS. Вільний CORS не використовується.
 
-## Перевірки Phase 0
+### API Phase 1
+
+| ID | Метод і шлях | Успіх | Доступ |
+|---|---|---:|---|
+| A01 | `GET /api/v1/auth/csrf/` | 200 | Публічний |
+| A02 | `POST /api/v1/auth/register/` | 201 | Публічний, CSRF |
+| A03 | `POST /api/v1/auth/login/` | 200 | Публічний, CSRF |
+| A04 | `POST /api/v1/auth/logout/` | 204 | Сесія, CSRF |
+| A05 | `GET /api/v1/me/` | 200 | Сесія |
+| A06 | `PATCH /api/v1/me/` | 200 | Сесія, CSRF |
+
+Реєстрація не виконує автоматичний вхід і не створює профіль. Мінімальна довжина пароля — 12 символів; застосовуються стандартні Django validators. Сесія триває 7 днів без подовження від кожного запиту. Після деактивації вхід і чинна сесія блокуються. Пароль і хеш не повертаються API. Профіль, тренування й звіти належать наступним фазам.
+
+## Перевірки Phase 1
 
 ```bash
 backend/.venv/bin/python backend/manage.py check
+backend/.venv/bin/python backend/manage.py makemigrations --check --dry-run
+backend/.venv/bin/python backend/manage.py showmigrations
 cd backend
 .venv/bin/python -m pytest
 .venv/bin/ruff check .
@@ -86,4 +102,4 @@ npm test
 npm run build
 ```
 
-Smoke-тест Django не запитує БД і не запускає міграції. Пізніші інтеграційні тести використовуватимуть PostgreSQL, зокрема для транзакцій і `select_for_update()`; SQLite не замінює ці перевірки.
+Backend тести створюють окрему PostgreSQL test-базу, тому роль БД має дозволяти її створення. Для тестів завантажте `.env` перед запуском команд. Жоден тест не використовує SQLite. HTTP-сценарій через Vite origin `:5173` перевірено: A01 → A02 → A03 → A05 → A06 → A04 → 401 для A05. Виробниче розгортання та доменні функції Phase 2+ ще не реалізовані.
