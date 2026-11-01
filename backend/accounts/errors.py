@@ -1,10 +1,12 @@
 import secrets
 
 from django.http import JsonResponse
+from rest_framework import status
 from rest_framework.exceptions import (
     APIException,
     AuthenticationFailed,
     NotAuthenticated,
+    NotFound,
     ParseError,
     PermissionDenied,
     Throttled,
@@ -53,6 +55,18 @@ class ResetTokenInvalidOrExpired(APIException):
     default_code = "reset_token_invalid_or_expired"
 
 
+class ProfileMissing(APIException):
+    status_code = status.HTTP_404_NOT_FOUND
+    default_detail = "Профіль ще не створено."
+    default_code = "profile_missing"
+
+
+class ProfileExists(APIException):
+    status_code = status.HTTP_409_CONFLICT
+    default_detail = "Профіль уже створено."
+    default_code = "profile_exists"
+
+
 def _field_errors(detail):
     if isinstance(detail, dict):
         return {
@@ -73,6 +87,12 @@ def exception_handler(exc, context):
         fields = {name: ["Поле не підтримується."] for name in exc.names}
     elif isinstance(exc, EmailTaken):
         code, message, fields = "email_taken", str(exc.detail), {}
+    elif isinstance(exc, ProfileMissing):
+        code, message, fields = "profile_missing", str(exc.detail), {}
+    elif isinstance(exc, ProfileExists):
+        code, message, fields = "profile_exists", str(exc.detail), {}
+    elif isinstance(exc, NotFound):
+        code, message, fields = "not_found", "Ресурс не знайдено.", {}
     elif isinstance(exc, InvalidCredentials):
         code, message, fields = "invalid_credentials", str(exc.detail), {}
     elif isinstance(exc, ResetTokenInvalidOrExpired):
@@ -96,6 +116,10 @@ def exception_handler(exc, context):
     elif isinstance(exc, ValidationError):
         code, message = "validation_error", "Некоректні дані."
         fields = _field_errors(exc.detail)
+    elif hasattr(exc, "default_code") and exc.default_code:
+        code = str(exc.default_code)
+        message = str(exc.detail) if hasattr(exc, "detail") else str(exc)
+        fields = {}
     else:
         code, message, fields = "request_failed", "Запит не виконано.", {}
     response.data = error_body(code, message, fields)

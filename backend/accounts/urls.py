@@ -7,7 +7,9 @@ from .views import (
     MeView,
     PasswordResetConfirmView,
     PasswordResetRequestView,
+    ProfileView,
     RegisterView,
+    WeightEntryListView,
 )
 
 urlpatterns = [
@@ -26,4 +28,6 @@ urlpatterns = [
         name="auth-password-reset-confirm",
     ),
     path("me/", MeView.as_view(), name="me"),
+    path("profile/", ProfileView.as_view(), name="profile"),
+    path("weight-entries/", WeightEntryListView.as_view(), name="weight-entry-list"),
 ]

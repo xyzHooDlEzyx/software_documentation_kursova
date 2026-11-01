@@ -2,4 +2,8 @@
 
 from django.urls import include, path
 
-urlpatterns = [path("", include("accounts.urls"))]
+urlpatterns = [
+    path("", include("accounts.urls")),
+    path("", include("catalog.urls")),
+    path("", include("planning.urls")),
+]
