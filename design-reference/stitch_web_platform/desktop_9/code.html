@@ -1,0 +1,735 @@
+<!DOCTYPE html><html class="light" lang="uk"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>Фітнес-трекер — Історія ваги</title>
+<link href="https://fonts.googleapis.com" rel="preconnect">
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect">
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "secondary-container": "#9af4d5",
+            "on-background": "#0c1f1a",
+            "outline": "#717976",
+            "surface-container-lowest": "#ffffff",
+            "surface-container": "#ddf3eb",
+            "primary-container": "#173c35",
+            "surface-bright": "#e8fef6",
+            "surface-variant": "#d1e7df",
+            "surface-container-highest": "#d1e7df",
+            "primary-fixed-dim": "#a8cfc4",
+            "on-surface-variant": "#414846",
+            "on-primary": "#ffffff",
+            "on-secondary-container": "#007259",
+            "surface": "#e8fef6",
+            "on-secondary-fixed": "#002118",
+            "on-primary-fixed-variant": "#294d46",
+            "surface-dim": "#c9dfd7",
+            "on-surface": "#0c1f1a",
+            "on-primary-fixed": "#00201b",
+            "on-tertiary-container": "#89ab41",
+            "tertiary-fixed": "#cbf07d",
+            "tertiary-fixed-dim": "#afd364",
+            "tertiary": "#192500",
+            "outline-variant": "#c1c8c5",
+            "secondary-fixed-dim": "#7ed7b9",
+            "secondary-fixed": "#9af4d5",
+            "on-secondary": "#ffffff",
+            "on-tertiary-fixed-variant": "#374e00",
+            "primary": "#002620",
+            "on-primary-container": "#81a69d",
+            "on-error-container": "#93000a",
+            "inverse-surface": "#21342f",
+            "background": "#e8fef6",
+            "error-container": "#ffdad6",
+            "on-secondary-fixed-variant": "#00513f",
+            "primary-fixed": "#c3ebe0",
+            "on-tertiary": "#ffffff",
+            "surface-container-low": "#e2f9f0",
+            "on-tertiary-fixed": "#141f00",
+            "on-error": "#ffffff",
+            "surface-tint": "#41655d",
+            "inverse-on-surface": "#dff6ed",
+            "tertiary-container": "#2a3c00",
+            "error": "#ba1a1a",
+            "inverse-primary": "#a8cfc4",
+            "surface-container-high": "#d7ede5",
+            "secondary": "#006b54"
+          },
+          borderRadius: {
+            DEFAULT: "0.25rem",
+            lg: "0.5rem",
+            xl: "0.75rem",
+            full: "9999px"
+          },
+          spacing: {
+            "space-lg": "1.5rem",
+            "gutter-sm": "1rem",
+            "gutter": "1.5rem",
+            "margin": "2rem",
+            "space-xs": "0.25rem",
+            "space-sm": "0.5rem",
+            "space-md": "1rem",
+            "space-xl": "2rem",
+            "margin-sm": "1rem"
+          },
+          fontFamily: {
+            "stat-counter": ["Manrope"],
+            "label-sm": ["Manrope"],
+            "body-sm": ["Manrope"],
+            "label-md": ["Manrope"],
+            "headline-md": ["Manrope"],
+            "display": ["Manrope"],
+            "body-lg": ["Manrope"],
+            "headline-sm": ["Manrope"],
+            "caption": ["Manrope"],
+            "headline-xl-mobile": ["Manrope"],
+            "headline-lg": ["Manrope"],
+            "body-md": ["Manrope"],
+            "headline-xl": ["Manrope"]
+          },
+          fontSize: {
+            "stat-counter": ["2rem", { lineHeight: "2.25rem", letterSpacing: "-0.03em", fontWeight: "800" }],
+            "label-sm": ["0.75rem", { lineHeight: "1rem", letterSpacing: "0.03em", fontWeight: "600" }],
+            "body-sm": ["0.875rem", { lineHeight: "1.25rem", fontWeight: "400" }],
+            "label-md": ["0.875rem", { lineHeight: "1.25rem", letterSpacing: "0.01em", fontWeight: "600" }],
+            "headline-md": ["1.25rem", { lineHeight: "1.75rem", letterSpacing: "-0.015em", fontWeight: "600" }],
+            "display": ["3.5rem", { lineHeight: "4rem", letterSpacing: "-0.03em", fontWeight: "800" }],
+            "body-lg": ["1.125rem", { lineHeight: "1.75rem", fontWeight: "400" }],
+            "headline-sm": ["1.125rem", { lineHeight: "1.5rem", letterSpacing: "-0.01em", fontWeight: "600" }],
+            "caption": ["0.75rem", { lineHeight: "1rem", letterSpacing: "0.02em", fontWeight: "500" }],
+            "headline-xl-mobile": ["1.75rem", { lineHeight: "2.25rem", letterSpacing: "-0.02em", fontWeight: "700" }],
+            "headline-lg": ["1.5rem", { lineHeight: "2rem", letterSpacing: "-0.02em", fontWeight: "700" }],
+            "body-md": ["1rem", { lineHeight: "1.5rem", fontWeight: "400" }],
+            "headline-xl": ["2.25rem", { lineHeight: "2.75rem", letterSpacing: "-0.025em", fontWeight: "700" }]
+          }
+        }
+      }
+    };
+  </script>
+<style>
+    body {
+      background-color: #F6F8F5;
+      font-family: 'Manrope', sans-serif;
+      color: #0c1f1a;
+      margin: 0;
+      padding: 0;
+    }
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+      display: inline-block;
+      vertical-align: middle;
+      line-height: 1;
+    }
+    .material-symbols-fill {
+      font-variation-settings: 'FILL' 1, 'wght' 500;
+    }
+    .chart-grid-line {
+      stroke: #E6EDE8;
+      stroke-dasharray: 4 4;
+    }
+    .target-line {
+      stroke: #89ab41;
+      stroke-dasharray: 6 6;
+      stroke-width: 2;
+    }
+    .card-shadow {
+      box-shadow: 0 4px 20px -2px rgba(23, 60, 53, 0.04), 0 2px 6px -1px rgba(23, 60, 53, 0.02);
+    }
+    .modal-shadow {
+      box-shadow: 0 24px 48px -8px rgba(23, 60, 53, 0.18);
+    }
+  </style>
+</head>
+<body class="min-h-screen text-on-surface flex bg-[#F6F8F5]">
+<!-- Side Navigation Bar (Shared Component Anchor) -->
+<aside class="fixed top-0 left-0 h-screen w-64 flex flex-col justify-between bg-surface-container-lowest border-r border-outline-variant/40 shadow-sm z-30">
+<div class="p-4 flex flex-col gap-2">
+<!-- Brand Logo / Header -->
+<div class="flex items-center gap-3 px-2 py-3 mb-2">
+<div class="w-10 h-10 rounded-xl bg-primary-container text-tertiary-fixed flex items-center justify-center">
+<span class="material-symbols-outlined text-2xl" data-icon="fitness_center">fitness_center</span>
+</div>
+<div class="flex flex-col">
+<span class="font-headline-md text-headline-md font-bold text-primary tracking-tight">Фітнес-трекер</span>
+<span class="font-caption text-caption text-on-surface-variant text-xs">Особистий кабінет</span>
+</div>
+</div>
+<!-- Quick Action CTA -->
+<button class="w-full bg-surface-container hover:bg-surface-variant text-secondary font-label-md text-label-md py-2.5 px-4 rounded-xl flex items-center justify-center gap-2 transition-colors duration-150 mb-3 active:scale-[0.98]">
+<span class="material-symbols-outlined text-lg" data-icon="add">add</span>
+<span class="">Нове тренування</span>
+</button>
+<!-- Nav Items -->
+<nav class="flex flex-col gap-1 overflow-y-auto max-h-[calc(100vh-270px)] pr-1">
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-on-surface-variant font-medium hover:bg-surface-container-low hover:text-on-surface transition-colors duration-150 font-label-md text-label-md" href="#">
+<span class="material-symbols-outlined text-xl" data-icon="dashboard">dashboard</span>
+<span class="">Головна</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-on-surface-variant font-medium hover:bg-surface-container-low hover:text-on-surface transition-colors duration-150 font-label-md text-label-md" href="#">
+<span class="material-symbols-outlined text-xl" data-icon="person">person</span>
+<span class="">Мій профіль</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-on-surface-variant font-medium hover:bg-surface-container-low hover:text-on-surface transition-colors duration-150 font-label-md text-label-md" href="#">
+<span class="material-symbols-outlined text-xl" data-icon="fitness_center">fitness_center</span>
+<span class="">Вправи</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-on-surface-variant font-medium hover:bg-surface-container-low hover:text-on-surface transition-colors duration-150 font-label-md text-label-md" href="#">
+<span class="material-symbols-outlined text-xl" data-icon="directions_run">directions_run</span>
+<span class="">Тренування</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-on-surface-variant font-medium hover:bg-surface-container-low hover:text-on-surface transition-colors duration-150 font-label-md text-label-md" href="#">
+<span class="material-symbols-outlined text-xl" data-icon="assignment">assignment</span>
+<span class="">Програми</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-on-surface-variant font-medium hover:bg-surface-container-low hover:text-on-surface transition-colors duration-150 font-label-md text-label-md" href="#">
+<span class="material-symbols-outlined text-xl" data-icon="calendar_today">calendar_today</span>
+<span class="">Календар</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-on-surface-variant font-medium hover:bg-surface-container-low hover:text-on-surface transition-colors duration-150 font-label-md text-label-md" href="#">
+<span class="material-symbols-outlined text-xl" data-icon="history">history</span>
+<span class="">Історія тренувань</span>
+</a>
+<!-- Active Tab: Статистика -->
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg bg-surface-container text-secondary font-semibold font-label-md text-label-md shadow-xs" href="#">
+<span class="material-symbols-outlined text-xl text-secondary" data-icon="bar_chart" style="font-variation-settings: 'FILL' 1;">bar_chart</span>
+<span class="">Статистика</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-on-surface-variant font-medium hover:bg-surface-container-low hover:text-on-surface transition-colors duration-150 font-label-md text-label-md" href="#">
+<span class="material-symbols-outlined text-xl" data-icon="emoji_events">emoji_events</span>
+<span class="">Досягнення</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-on-surface-variant font-medium hover:bg-surface-container-low hover:text-on-surface transition-colors duration-150 font-label-md text-label-md" href="#">
+<span class="material-symbols-outlined text-xl" data-icon="military_tech">military_tech</span>
+<span class="">Челенджі</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-on-surface-variant font-medium hover:bg-surface-container-low hover:text-on-surface transition-colors duration-150 font-label-md text-label-md" href="#">
+<span class="material-symbols-outlined text-xl" data-icon="leaderboard">leaderboard</span>
+<span class="">Рейтинг</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-on-surface-variant font-medium hover:bg-surface-container-low hover:text-on-surface transition-colors duration-150 font-label-md text-label-md" href="#">
+<span class="material-symbols-outlined text-xl" data-icon="settings">settings</span>
+<span class="">Налаштування</span>
+</a>
+</nav>
+</div>
+<!-- Sidebar Footer -->
+<div class="p-4 border-t border-outline-variant/30 flex flex-col gap-1">
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-on-surface-variant hover:bg-surface-container-low font-label-md text-label-md" href="#">
+<span class="material-symbols-outlined text-xl" data-icon="help_outline">help_outline</span>
+<span class="">Допомога</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-error hover:bg-error-container/40 font-label-md text-label-md" href="#">
+<span class="material-symbols-outlined text-xl" data-icon="logout">logout</span>
+<span class="">Вийти</span>
+</a>
+</div>
+</aside>
+<!-- Main Container -->
+<div class="ml-64 flex-1 flex flex-col min-w-0">
+<!-- TopNavBar (Shared Component Anchor) -->
+<header class="sticky top-0 z-20 h-18 bg-surface-container-lowest border-b border-outline-variant/30 px-8 flex items-center justify-between shadow-sm">
+<div class="flex items-center gap-8">
+<!-- Search bar on left -->
+<div class="relative w-80">
+<span class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-outline">
+<span class="material-symbols-outlined text-xl" data-icon="search">search</span>
+</span>
+<input class="w-full pl-10 pr-4 py-2 bg-surface-container-low/60 border border-outline-variant/50 rounded-xl text-on-surface placeholder-outline font-body-sm text-body-sm focus:outline-none focus:border-secondary focus:ring-2 focus:ring-secondary/10 transition-all" placeholder="Пошук показників, тренувань..." type="text">
+</div>
+<!-- Navigation Links -->
+<div class="hidden lg:flex items-center gap-6">
+<a class="text-on-surface-variant font-label-md text-label-md hover:text-secondary transition-colors" href="#">Огляд</a>
+<a class="text-secondary font-label-md text-label-md font-bold border-b-2 border-secondary pb-1" href="#">Аналітика</a>
+<a class="text-on-surface-variant font-label-md text-label-md hover:text-secondary transition-colors" href="#">План тижня</a>
+</div>
+</div>
+<!-- Trailing Action Cluster -->
+<div class="flex items-center gap-4">
+<!-- Trailing secondary action (Time/Location indicator) -->
+<div class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-surface-container-low text-secondary font-label-sm text-label-sm font-semibold">
+<span class="material-symbols-outlined text-base" data-icon="schedule">schedule</span>
+<span class="">Київ 08:30</span>
+</div>
+<button class="w-10 h-10 rounded-xl flex items-center justify-center text-on-surface-variant hover:bg-surface-container-low transition-colors" title="Календар">
+<span class="material-symbols-outlined text-xl" data-icon="date_range">date_range</span>
+</button>
+<button class="relative w-10 h-10 rounded-xl flex items-center justify-center text-on-surface-variant hover:bg-surface-container-low transition-colors" title="Сповіщення">
+<span class="material-symbols-outlined text-xl" data-icon="notifications">notifications</span>
+<span class="absolute top-2.5 right-2.5 w-2 h-2 rounded-full bg-secondary"></span>
+</button>
+<div class="h-6 w-px bg-outline-variant/40"></div>
+<!-- Trailing Primary Action -->
+<button class="px-4 py-2 bg-secondary hover:bg-primary-container text-on-secondary font-label-md text-label-md rounded-xl font-semibold shadow-sm transition-all duration-150 active:scale-[0.98] flex items-center gap-2">
+<span class="material-symbols-outlined text-lg" data-icon="fitness_center">fitness_center</span>
+<span class="">Записати тренування</span>
+</button>
+<!-- User Profile Avatar -->
+<div class="flex items-center gap-3 pl-2">
+<div class="w-10 h-10 rounded-full bg-surface-container border border-outline-variant/50 text-primary font-bold text-sm flex items-center justify-center select-none ring-2 ring-secondary/30">ОК</div>
+</div>
+</div>
+</header>
+<!-- Page Content Canvas -->
+<main class="flex-1 p-8 max-w-[1360px] mx-auto w-full flex flex-col gap-6">
+<!-- Breadcrumbs & Page Header -->
+<div class="flex flex-col md:flex-row md:items-end justify-between gap-4">
+<div>
+<div class="flex items-center gap-2 text-outline font-label-sm text-label-sm mb-1.5">
+<a class="hover:text-secondary" href="#">Статистика</a>
+<span class="">/</span>
+<a class="hover:text-secondary" href="#">Тіло та біометрика</a>
+<span class="">/</span>
+<span class="text-on-surface font-semibold">Історія ваги</span>
+</div>
+<h1 class="font-headline-xl text-headline-xl text-primary font-extrabold tracking-tight">Історія ваги</h1>
+<p class="font-body-md text-body-md text-on-surface-variant mt-1">Відстежуйте динаміку змін маси тіла та наближення до поставленої мети.</p>
+</div>
+<!-- Primary Top Action -->
+<div class="flex items-center gap-3"><button class="px-5 py-2.5 bg-[#173C35] hover:bg-[#0f2823] text-surface-container-lowest rounded-xl font-label-md text-label-md font-semibold flex items-center gap-2 shadow-sm transition-all duration-150 active:scale-[0.98]" id="open-weight-modal-btn"><span class="material-symbols-outlined text-xl" data-icon="add">add</span><span class="">+ Оновити вагу</span></button></div>
+</div>
+<!-- 4 Top Metric Cards (Bento Cluster) -->
+<section class="grid grid-cols-1 md:grid-cols-3 gap-5">
+<!-- Card 1: Поточна вага -->
+<div class="bg-surface-container-lowest rounded-2xl p-5 border border-[#E6EDE8] card-shadow flex flex-col justify-between">
+<div class="flex items-center justify-between mb-2">
+<span class="font-label-md text-label-md text-on-surface-variant">Поточна вага</span>
+<span class="w-8 h-8 rounded-lg bg-surface-container flex items-center justify-center text-secondary">
+<span class="material-symbols-outlined text-lg" data-icon="monitor_weight">monitor_weight</span>
+</span>
+</div>
+<div>
+<div class="flex items-baseline gap-2 mb-2">
+<span class="font-stat-counter text-stat-counter text-primary">78.4</span>
+<span class="font-body-md text-body-md text-on-surface-variant font-medium">кг</span>
+</div>
+<div class="flex items-center justify-between pt-2 border-t border-[#E6EDE8]">
+<div class="flex items-center gap-1.5 text-secondary font-label-sm text-label-sm font-semibold">
+<span class="material-symbols-outlined text-sm font-bold" data-icon="trending_down">trending_down</span>
+<span class="">Δ -0.6 кг</span>
+<span class="text-outline font-normal">за 14 днів</span>
+</div>
+<span class="text-caption text-outline">18 кві 2025</span>
+</div>
+</div>
+</div>
+<!-- Card 2: Початкова вага -->
+<div class="bg-surface-container-lowest rounded-2xl p-5 border border-[#E6EDE8] card-shadow flex flex-col justify-between">
+<div class="flex items-center justify-between mb-2">
+<span class="font-label-md text-label-md text-on-surface-variant">Початкова вага</span>
+<span class="w-8 h-8 rounded-lg bg-surface-container-low flex items-center justify-center text-outline">
+<span class="material-symbols-outlined text-lg" data-icon="history">history</span>
+</span>
+</div>
+<div>
+<div class="flex items-baseline gap-2 mb-2">
+<span class="font-stat-counter text-stat-counter text-primary">82.0</span>
+<span class="font-body-md text-body-md text-on-surface-variant font-medium">кг</span>
+</div>
+<div class="flex items-center justify-between pt-2 border-t border-[#E6EDE8]">
+<span class="text-caption text-outline font-medium">Початок фіксації</span>
+<span class="text-caption text-outline">з 01.01.2025</span>
+</div>
+</div>
+</div>
+<!-- Card 3: Загальна зміна -->
+<div class="bg-surface-container-lowest rounded-2xl p-5 border border-[#E6EDE8] card-shadow flex flex-col justify-between">
+<div class="flex items-center justify-between mb-2">
+<span class="font-label-md text-label-md text-on-surface-variant">Загальна зміна</span>
+<span class="w-8 h-8 rounded-lg bg-surface-container flex items-center justify-center text-secondary">
+<span class="material-symbols-outlined text-lg" data-icon="trending_down">trending_down</span>
+</span>
+</div>
+<div>
+<div class="flex items-baseline gap-2 mb-2">
+<span class="font-stat-counter text-stat-counter text-secondary">-3.6</span>
+<span class="font-body-md text-body-md text-on-surface-variant font-medium">кг</span>
+</div>
+<div class="flex items-center justify-between pt-2 border-t border-[#E6EDE8]">
+<div class="flex items-center gap-1.5 font-label-sm text-label-sm text-outline">
+<span class="w-2 h-2 rounded-full bg-secondary"></span>
+<span class="">Динаміка зменшення</span>
+</div>
+<span class="px-2 py-0.5 rounded-full bg-surface-container-low text-secondary font-label-sm text-label-sm font-semibold">-4.4%</span>
+</div>
+</div>
+</div>
+</section>
+<!-- Interactive Chart Card «Динаміка ваги (кг)» -->
+<section class="bg-surface-container-lowest rounded-2xl p-6 border border-[#E6EDE8] card-shadow">
+<div class="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-6 border-b border-[#E6EDE8]">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-xl bg-surface-container flex items-center justify-center text-secondary">
+<span class="material-symbols-outlined text-xl" data-icon="show_chart">show_chart</span>
+</div>
+<div>
+<h2 class="font-headline-md text-headline-md text-primary font-bold">Динаміка ваги (кг)</h2>
+<div class="flex items-center gap-4 text-outline font-caption text-caption mt-0.5"><span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-[#27866C]"></span>Фактична вага</span></div>
+</div>
+</div>
+<!-- Date Range Pills -->
+<div class="flex items-center gap-1 bg-[#F6F8F5] p-1 rounded-xl border border-[#E6EDE8]">
+<button class="px-3.5 py-1.5 rounded-lg bg-[#173C35] text-surface-container-lowest font-label-sm text-label-sm font-semibold shadow-xs">1 місяць</button>
+<button class="px-3.5 py-1.5 rounded-lg text-on-surface-variant hover:text-on-surface font-label-sm text-label-sm font-medium transition-colors">3 місяці</button>
+<button class="px-3.5 py-1.5 rounded-lg text-on-surface-variant hover:text-on-surface font-label-sm text-label-sm font-medium transition-colors">6 місяців</button>
+<button class="px-3.5 py-1.5 rounded-lg text-on-surface-variant hover:text-on-surface font-label-sm text-label-sm font-medium transition-colors">1 рік</button>
+<button class="px-3.5 py-1.5 rounded-lg text-on-surface-variant hover:text-on-surface font-label-sm text-label-sm font-medium transition-colors">Весь час</button>
+</div>
+</div>
+<!-- SVG Vector Area & Line Chart -->
+<div class="relative w-full pt-6">
+<div class="h-72 w-full relative">
+<svg class="w-full h-full overflow-visible" preserveAspectRatio="none" viewBox="0 0 950 240">
+<defs>
+<linearGradient id="weightGradient" x1="0" x2="0" y1="0" y2="1">
+<stop offset="0%" stop-color="#27866C" stop-opacity="0.28"></stop>
+<stop offset="85%" stop-color="#27866C" stop-opacity="0.02"></stop>
+<stop offset="100%" stop-color="#27866C" stop-opacity="0"></stop>
+</linearGradient>
+<filter height="120%" id="shadow" width="120%" x="-10%" y="-10%">
+<feDropShadow dx="0" dy="4" flood-color="#173c35" flood-opacity="0.15" stdDeviation="4"></feDropShadow>
+</filter>
+</defs>
+<!-- Horizontal Grid Lines & Y-Axis Labels -->
+<!-- 82.0 kg -->
+<line class="chart-grid-line" x1="40" x2="940" y1="20" y2="20"></line>
+<text class="fill-[#717976] font-caption text-xs" text-anchor="end" x="30" y="24">82.0</text>
+<!-- 80.5 kg -->
+<line class="chart-grid-line" x1="40" x2="940" y1="70" y2="70"></line>
+<text class="fill-[#717976] font-caption text-xs" text-anchor="end" x="30" y="74">80.5</text>
+<!-- 79.0 kg -->
+<line class="chart-grid-line" x1="40" x2="940" y1="120" y2="120"></line>
+<text class="fill-[#717976] font-caption text-xs" text-anchor="end" x="30" y="124">79.0</text>
+<!-- 77.5 kg -->
+<line class="chart-grid-line" x1="40" x2="940" y1="170" y2="170"></line>
+<text class="fill-[#717976] font-caption text-xs" text-anchor="end" x="30" y="174">77.5</text>
+<!-- 76.5 kg Target Dashed Line -->
+
+
+<!-- Area Fill Under Weight Curve -->
+<!-- Points mapping:
+                   X0: 60 (20 бер, 79.8kg -> Y: 93)
+                   X1: 220 (28 бер, 79.5kg -> Y: 103)
+                   X2: 390 (04 кві, 79.0kg -> Y: 120)
+                   X3: 560 (10 кві, 78.6kg -> Y: 133)
+                   X4: 730 (14 кві, 78.7kg -> Y: 130)
+                   X5: 900 (18 кві, 78.4kg -> Y: 140)
+              -->
+<path d="M 60 93
+                       C 140 96, 170 102, 220 103
+                       C 300 105, 340 118, 390 120
+                       C 470 122, 510 132, 560 133
+                       C 640 134, 680 129, 730 130
+                       C 810 131, 850 138, 900 140
+                       L 900 220 L 60 220 Z" fill="url(#weightGradient)"></path>
+<!-- Smooth Stroke Line -->
+<path d="M 60 93
+                       C 140 96, 170 102, 220 103
+                       C 300 105, 340 118, 390 120
+                       C 470 122, 510 132, 560 133
+                       C 640 134, 680 129, 730 130
+                       C 810 131, 850 138, 900 140" fill="none" stroke="#27866C" stroke-linecap="round" stroke-linejoin="round" stroke-width="3"></path>
+<!-- Target Marker Flag Badge on right -->
+
+<!-- Data Points -->
+<circle class="cursor-pointer hover:r-7 transition-all" cx="60" cy="93" fill="#ffffff" r="5" stroke="#27866C" stroke-width="3"></circle>
+<circle class="cursor-pointer hover:r-7 transition-all" cx="220" cy="103" fill="#ffffff" r="5" stroke="#27866C" stroke-width="3"></circle>
+<circle class="cursor-pointer hover:r-7 transition-all" cx="390" cy="120" fill="#ffffff" r="5" stroke="#27866C" stroke-width="3"></circle>
+<circle class="cursor-pointer hover:r-7 transition-all" cx="560" cy="133" fill="#ffffff" r="5" stroke="#27866C" stroke-width="3"></circle>
+<circle class="cursor-pointer hover:r-7 transition-all" cx="730" cy="130" fill="#ffffff" r="5" stroke="#27866C" stroke-width="3"></circle>
+<!-- Active Highlight Data Point with Pulsing Ring (18 квітня - 78.4 кг) -->
+<circle cx="900" cy="140" fill="#27866C" filter="url(#shadow)" r="8" stroke="#ffffff" stroke-width="3"></circle>
+<circle cx="900" cy="140" fill="none" r="14" stroke="#27866C" stroke-opacity="0.4" stroke-width="1.5"></circle>
+</svg>
+<!-- Floating Active Tooltip for the latest data point -->
+<div class="absolute right-[35px] top-[45px] bg-[#173C35] text-surface-container-lowest py-2 px-3.5 rounded-xl shadow-lg border border-[#27866C]/40 pointer-events-none transform translate-x-[-15%]">
+<div class="font-caption text-xs text-[#a8cfc4] font-medium">18 квітня 2025, 08:15</div>
+<div class="flex items-baseline gap-1 mt-0.5">
+<span class="font-headline-sm text-headline-sm font-bold text-white">78.4</span>
+<span class="font-caption text-xs text-[#cbf07d]">кг (-0.3 кг)</span>
+</div>
+<div class="absolute bottom-[-6px] right-12 w-3 h-3 bg-[#173C35] transform rotate-45 border-r border-b border-[#27866C]/40"></div>
+</div>
+</div>
+<!-- X-Axis Dates Labels -->
+<div class="flex justify-between px-6 pt-3 text-outline font-caption text-caption border-t border-[#E6EDE8]/60">
+<span class="">20 бер</span>
+<span class="">28 бер</span>
+<span class="">04 кві</span>
+<span class="">10 кві</span>
+<span class="">14 кві</span>
+<span class="font-bold text-secondary">18 кві (сьогодні)</span>
+</div>
+</div>
+</section>
+<!-- Table/Timeline Card «Журнал записів ваги» -->
+<section class="bg-surface-container-lowest rounded-2xl border border-[#E6EDE8] card-shadow overflow-hidden">
+<!-- Table Header & Filter Row -->
+<div class="p-6 border-b border-[#E6EDE8] flex flex-col md:flex-row md:items-center justify-between gap-4">
+<div>
+<h2 class="font-headline-md text-headline-md text-primary font-bold">Журнал записів ваги</h2>
+<p class="font-body-sm text-body-sm text-outline mt-0.5">Детальна історія замірів безпосередньо з ваг або ручного введення</p>
+</div>
+<div class="flex items-center gap-3">
+<!-- Filter & Search by date -->
+<div class="relative w-64">
+<span class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-outline">
+<span class="material-symbols-outlined text-lg" data-icon="search">search</span>
+</span>
+<input class="w-full pl-9 pr-3 py-1.5 bg-[#F6F8F5] border border-outline-variant/60 rounded-xl text-on-surface text-body-sm focus:outline-none focus:border-secondary focus:ring-1 focus:ring-secondary" placeholder="Пошук за датою заміру..." type="text">
+</div>
+<!-- Filter Status Button -->
+<button class="px-3 py-1.5 rounded-xl border border-outline-variant/60 hover:bg-[#F6F8F5] text-on-surface font-label-sm text-label-sm font-semibold flex items-center gap-1.5 transition-colors">
+<span class="material-symbols-outlined text-base text-outline" data-icon="filter_list">filter_list</span>
+<span class="">Фільтри</span>
+</button>
+</div>
+</div>
+<!-- Data Table -->
+<div class="hidden p-12 flex-col items-center justify-center text-center gap-3 bg-[#FAFBF9] border-b border-[#E6EDE8]" id="empty-range-state"><div class="w-12 h-12 rounded-full bg-surface-container flex items-center justify-center text-secondary mb-1"><span class="material-symbols-outlined text-2xl">calendar_today</span></div><h4 class="font-headline-sm text-headline-sm text-primary font-bold">За вибраний період немає записів ваги.</h4><p class="font-body-sm text-body-sm text-outline max-w-sm">Спробуйте обрати інший проміжок часу або оновити поточну вагу.</p><button class="mt-2 px-4 py-2 rounded-xl bg-surface-container hover:bg-surface-variant text-secondary font-label-md text-label-md font-semibold transition-colors duration-150">Змінити період</button></div><div class="hidden p-12 flex-col items-center justify-center text-center gap-3 bg-[#FAFBF9] border-b border-[#E6EDE8]" id="empty-profile-state"><div class="w-12 h-12 rounded-full bg-surface-container flex items-center justify-center text-secondary mb-1"><span class="material-symbols-outlined text-2xl">person</span></div><h4 class="font-headline-sm text-headline-sm text-primary font-bold">Створіть профіль, щоб почати відстежувати вагу.</h4><p class="font-body-sm text-body-sm text-outline max-w-sm">Для фіксації замірів та розрахунку цілей заповніть базові дані профілю.</p><button class="mt-2 px-5 py-2.5 rounded-xl bg-primary hover:bg-[#0f2823] text-surface-container-lowest font-label-md text-label-md font-semibold transition-colors duration-150">Створити профіль</button></div><div class="overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="bg-[#FAFBF9] border-b border-[#E6EDE8] text-outline font-label-sm text-label-sm uppercase tracking-wider"><th class="py-3.5 px-6 font-semibold w-1/3">Дата вимірювання</th><th class="py-3.5 px-6 font-semibold w-1/3">Вага (кг)</th><th class="py-3.5 px-6 font-semibold w-1/3 text-right">Зміна від попереднього вимірювання</th></tr>
+</thead>
+<tbody class="divide-y divide-[#E6EDE8] text-body-sm"><!-- Row 1 -->
+<tr class="hover:bg-[#FAFBF9] transition-colors group">
+<td class="py-4 px-6 font-medium text-primary">
+<div class="flex items-center gap-2.5">
+<span class="w-2 h-2 rounded-full bg-secondary"></span>
+<span class="font-semibold">18 квітня 2025</span>
+</div>
+</td>
+<td class="py-4 px-6 font-bold text-primary font-stat-counter text-lg">
+78.4 <span class="text-xs font-normal text-outline font-body-sm">кг</span>
+</td>
+<td class="py-4 px-6 text-right">
+<span class="inline-flex items-center gap-1 text-secondary font-semibold font-label-sm bg-[#DDF3E8] px-2.5 py-1 rounded-md">
+<span class="material-symbols-outlined text-xs" data-icon="south">south</span>
+-0.3 кг
+</span>
+</td>
+</tr>
+<!-- Row 2 -->
+<tr class="hover:bg-[#FAFBF9] transition-colors group">
+<td class="py-4 px-6 font-medium text-primary">
+<div class="flex items-center gap-2.5">
+<span class="w-2 h-2 rounded-full bg-outline-variant"></span>
+<span class="">14 квітня 2025</span>
+</div>
+</td>
+<td class="py-4 px-6 font-bold text-primary font-stat-counter text-lg">
+78.7 <span class="text-xs font-normal text-outline font-body-sm">кг</span>
+</td>
+<td class="py-4 px-6 text-right">
+<span class="inline-flex items-center gap-1 text-amber-700 font-semibold font-label-sm bg-amber-50 px-2.5 py-1 rounded-md">
+<span class="material-symbols-outlined text-xs" data-icon="north">north</span>
++0.1 кг
+</span>
+</td>
+</tr>
+<!-- Row 3 -->
+<tr class="hover:bg-[#FAFBF9] transition-colors group">
+<td class="py-4 px-6 font-medium text-primary">
+<div class="flex items-center gap-2.5">
+<span class="w-2 h-2 rounded-full bg-outline-variant"></span>
+<span class="">10 квітня 2025</span>
+</div>
+</td>
+<td class="py-4 px-6 font-bold text-primary font-stat-counter text-lg">
+78.6 <span class="text-xs font-normal text-outline font-body-sm">кг</span>
+</td>
+<td class="py-4 px-6 text-right">
+<span class="inline-flex items-center gap-1 text-secondary font-semibold font-label-sm bg-[#DDF3E8] px-2.5 py-1 rounded-md">
+<span class="material-symbols-outlined text-xs" data-icon="south">south</span>
+-0.4 кг
+</span>
+</td>
+</tr>
+<!-- Row 4 -->
+<tr class="hover:bg-[#FAFBF9] transition-colors group">
+<td class="py-4 px-6 font-medium text-primary">
+<div class="flex items-center gap-2.5">
+<span class="w-2 h-2 rounded-full bg-outline-variant"></span>
+<span class="">04 квітня 2025</span>
+</div>
+</td>
+<td class="py-4 px-6 font-bold text-primary font-stat-counter text-lg">
+79.0 <span class="text-xs font-normal text-outline font-body-sm">кг</span>
+</td>
+<td class="py-4 px-6 text-right">
+<span class="inline-flex items-center gap-1 text-secondary font-semibold font-label-sm bg-[#DDF3E8] px-2.5 py-1 rounded-md">
+<span class="material-symbols-outlined text-xs" data-icon="south">south</span>
+-0.5 кг
+</span>
+</td>
+</tr>
+<!-- Row 5 -->
+<tr class="hover:bg-[#FAFBF9] transition-colors group">
+<td class="py-4 px-6 font-medium text-primary">
+<div class="flex items-center gap-2.5">
+<span class="w-2 h-2 rounded-full bg-outline-variant"></span>
+<span class="">28 березня 2025</span>
+</div>
+</td>
+<td class="py-4 px-6 font-bold text-primary font-stat-counter text-lg">
+79.5 <span class="text-xs font-normal text-outline font-body-sm">кг</span>
+</td>
+<td class="py-4 px-6 text-right">
+<span class="inline-flex items-center gap-1 text-secondary font-semibold font-label-sm bg-[#DDF3E8] px-2.5 py-1 rounded-md">
+<span class="material-symbols-outlined text-xs" data-icon="south">south</span>
+-0.3 кг
+</span>
+</td>
+</tr>
+<!-- Row 6 -->
+<tr class="hover:bg-[#FAFBF9] transition-colors group">
+<td class="py-4 px-6 font-medium text-primary">
+<div class="flex items-center gap-2.5">
+<span class="w-2 h-2 rounded-full bg-outline-variant"></span>
+<span class="">20 березня 2025</span>
+</div>
+</td>
+<td class="py-4 px-6 font-bold text-primary font-stat-counter text-lg">
+79.8 <span class="text-xs font-normal text-outline font-body-sm">кг</span>
+</td>
+<td class="py-4 px-6 text-right">
+<span class="inline-flex items-center gap-1 text-secondary font-semibold font-label-sm bg-[#DDF3E8] px-2.5 py-1 rounded-md">
+<span class="material-symbols-outlined text-xs" data-icon="south">south</span>
+-0.6 кг
+</span>
+</td>
+</tr></tbody>
+</table>
+</div>
+<!-- Table Footer / Backend Rules Note -->
+<div class="p-4 px-6 bg-[#FAFBF9] border-t border-[#E6EDE8] flex items-center justify-between">
+<div class="flex items-center gap-2 text-outline font-caption text-caption">
+<span class="material-symbols-outlined text-base" data-icon="lock">lock</span>
+<span class="">Записи ваги синхронізуються з хмарним сховищем та захищені від випадкового редагування згідно з регламентом тренера.</span>
+</div>
+<span class="font-caption text-caption text-outline font-medium">Всього записів: 6</span>
+</div>
+</section>
+</main>
+</div>
+<!-- Integrated Interactive Add Weight Modal -->
+<div class="fixed inset-0 z-50 items-center justify-center bg-[#173C35]/50 backdrop-blur-sm transition-opacity duration-200 hidden" id="add-weight-modal">
+<div class="bg-surface-container-lowest rounded-2xl w-full max-w-lg p-7 modal-shadow border border-[#E6EDE8] transform transition-transform duration-200"><!-- Modal Header -->
+<div class="flex items-start justify-between pb-4 border-b border-[#E6EDE8]">
+<div class="flex items-center gap-3">
+<div class="w-11 h-11 rounded-xl bg-surface-container flex items-center justify-center text-secondary">
+<span class="material-symbols-outlined text-2xl" data-icon="scale">scale</span>
+</div>
+<div>
+<h3 class="font-headline-md text-headline-md text-primary font-bold">Оновити поточну вагу</h3>
+<p class="font-body-sm text-body-sm text-outline mt-0.5">Вкажіть нове значення для оновлення поточних показників</p>
+</div>
+</div>
+<button class="w-8 h-8 rounded-lg flex items-center justify-center text-outline hover:bg-[#F6F8F5] hover:text-on-surface transition-colors" id="close-modal-btn">
+<span class="material-symbols-outlined text-xl" data-icon="close">close</span>
+</button>
+</div>
+<!-- Modal Form Body -->
+<form class="pt-5 flex flex-col gap-5" id="weight-form">
+<!-- Read-only Current Weight -->
+<div class="p-4 rounded-xl bg-[#FAFBF9] border border-[#E6EDE8] flex items-center justify-between">
+<div>
+<span class="block font-caption text-caption text-outline">Поточна зафіксована вага</span>
+<div class="flex items-baseline gap-1 mt-0.5">
+<span class="font-headline-md text-headline-md font-bold text-primary">78.4</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant font-medium">кг</span>
+</div>
+</div>
+<span class="px-2.5 py-1 rounded-full bg-surface-container text-secondary font-label-sm text-label-sm font-semibold">18 квітня, 08:15</span>
+</div>
+<!-- Editable New Weight with Stepper -->
+<div>
+<label class="block font-label-md text-label-md text-on-surface mb-2 font-semibold">Нова вага (кг)</label>
+<div class="flex items-center border border-[#D5E0DA] rounded-xl overflow-hidden focus-within:border-secondary focus-within:ring-2 focus-within:ring-secondary/15 transition-all">
+<button class="px-4 py-3 bg-[#FAFBF9] hover:bg-surface-container-low text-secondary font-bold flex items-center justify-center transition-colors" id="decrement-btn" type="button">
+<span class="material-symbols-outlined text-lg" data-icon="remove">remove</span>
+</button>
+<input class="w-full py-2.5 px-3 text-center font-stat-counter text-2xl text-primary border-none focus:ring-0 focus:outline-none" id="weight-input" required="" step="0.1" type="number" value="78.4">
+<button class="px-4 py-3 bg-[#FAFBF9] hover:bg-surface-container-low text-secondary font-bold flex items-center justify-center transition-colors" id="increment-btn" type="button">
+<span class="material-symbols-outlined text-lg" data-icon="add">add</span>
+</button>
+<div class="px-4 py-3 bg-surface-container text-secondary font-label-md text-label-md font-bold border-l border-[#D5E0DA]">
+кг
+</div>
+</div>
+<div class="flex items-center justify-between mt-1.5 px-1">
+<span class="font-caption text-caption text-outline">Крок зміни: 0.1 кг</span>
+<span class="font-caption text-caption text-secondary font-semibold">Синхронізація автоматична</span>
+</div>
+</div>
+<!-- Modal Actions -->
+<div class="flex items-center justify-end gap-3 pt-4 border-t border-[#E6EDE8] mt-2">
+<button class="px-5 py-2.5 rounded-xl border border-[#D5E0DA] hover:bg-[#F6F8F5] text-on-surface font-label-md text-label-md font-semibold transition-colors" id="cancel-modal-btn" type="button">
+Скасувати
+</button>
+<button class="px-6 py-2.5 rounded-xl bg-[#173C35] hover:bg-[#0f2823] text-surface-container-lowest font-label-md text-label-md font-bold shadow-sm transition-all duration-150 active:scale-[0.98] flex items-center gap-2" type="submit">
+<span class="material-symbols-outlined text-lg" data-icon="check">check</span>
+<span class="">Оновити</span>
+</button>
+</div>
+</form></div>
+</div>
+<!-- Lightweight Vanilla JS for Modal & Stepper Interactions -->
+<script>
+    const modal = document.getElementById('add-weight-modal');
+    const openBtn = document.getElementById('open-weight-modal-btn');
+    const closeBtn = document.getElementById('close-modal-btn');
+    const cancelBtn = document.getElementById('cancel-modal-btn');
+    const weightInput = document.getElementById('weight-input');
+    const decBtn = document.getElementById('decrement-btn');
+    const incBtn = document.getElementById('increment-btn');
+    const weightForm = document.getElementById('weight-form');
+
+    function openModal() {
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
+    }
+
+    function closeModal() {
+      modal.classList.add('hidden');
+      modal.classList.remove('flex');
+    }
+
+    openBtn.addEventListener('click', openModal);
+    closeBtn.addEventListener('click', closeModal);
+    cancelBtn.addEventListener('click', closeModal);
+
+    modal.addEventListener('click', (e) => {
+      if (e.target === modal) closeModal();
+    });
+
+    incBtn.addEventListener('click', () => {
+      let val = parseFloat(weightInput.value) || 0;
+      weightInput.value = (val + 0.1).toFixed(1);
+    });
+
+    decBtn.addEventListener('click', () => {
+      let val = parseFloat(weightInput.value) || 0;
+      if (val > 20) {
+        weightInput.value = (val - 0.1).toFixed(1);
+      }
+    });
+
+    weightForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      closeModal();
+    });
+  </script>
+
+
+
+
+
+
+</body></html>

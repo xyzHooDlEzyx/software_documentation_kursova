@@ -1,0 +1,422 @@
+<!DOCTYPE html><html class="h-full" lang="uk"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>Фітнес-трекер — Вхід до особистого кабінету</title>
+<!-- Google Fonts: Manrope -->
+<link href="https://fonts.googleapis.com" rel="preconnect">
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect">
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet">
+<!-- Material Symbols Outlined -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<!-- Tailwind CSS CDN -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Tailwind Configuration verbatim as mandated -->
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "tertiary-fixed-dim": "#afd364",
+            "on-error": "#ffffff",
+            "on-tertiary-fixed-variant": "#374e00",
+            "on-secondary-container": "#007259",
+            "on-primary-fixed-variant": "#294d46",
+            "secondary-fixed-dim": "#7ed7b9",
+            "on-error-container": "#93000a",
+            "on-tertiary": "#ffffff",
+            "surface": "#e8fef6",
+            "on-primary": "#ffffff",
+            "surface-variant": "#d1e7df",
+            "tertiary": "#192500",
+            "inverse-on-surface": "#dff6ed",
+            "on-surface": "#0c1f1a",
+            "on-tertiary-fixed": "#141f00",
+            "tertiary-container": "#2a3c00",
+            "surface-container-low": "#e2f9f0",
+            "surface-container-lowest": "#ffffff",
+            "on-background": "#0c1f1a",
+            "outline": "#717976",
+            "surface-container": "#ddf3eb",
+            "surface-container-high": "#d7ede5",
+            "inverse-primary": "#a8cfc4",
+            "primary-container": "#173c35",
+            "primary-fixed": "#c3ebe0",
+            "error-container": "#ffdad6",
+            "surface-tint": "#41655d",
+            "secondary-container": "#9af4d5",
+            "on-primary-container": "#81a69d",
+            "inverse-surface": "#21342f",
+            "surface-container-highest": "#d1e7df",
+            "surface-dim": "#c9dfd7",
+            "tertiary-fixed": "#cbf07d",
+            "on-surface-variant": "#414846",
+            "background": "#e8fef6",
+            "error": "#ba1a1a",
+            "primary": "#002620",
+            "on-primary-fixed": "#00201b",
+            "on-secondary": "#ffffff",
+            "on-tertiary-container": "#89ab41",
+            "on-secondary-fixed": "#002118",
+            "outline-variant": "#c1c8c5",
+            "on-secondary-fixed-variant": "#00513f",
+            "secondary-fixed": "#9af4d5",
+            "secondary": "#006b54",
+            "primary-fixed-dim": "#a8cfc4",
+            "surface-bright": "#e8fef6"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "full": "9999px"
+          },
+          "spacing": {
+            "space-xs": "0.25rem",
+            "space-sm": "0.5rem",
+            "gutter-sm": "1rem",
+            "space-md": "1rem",
+            "space-xl": "2rem",
+            "margin": "2rem",
+            "space-lg": "1.5rem",
+            "gutter": "1.5rem",
+            "margin-sm": "1rem"
+          },
+          "fontFamily": {
+            "headline-md": ["Manrope"],
+            "body-sm": ["Manrope"],
+            "label-md": ["Manrope"],
+            "display": ["Manrope"],
+            "label-sm": ["Manrope"],
+            "body-md": ["Manrope"],
+            "headline-lg": ["Manrope"],
+            "headline-xl": ["Manrope"],
+            "headline-xl-mobile": ["Manrope"],
+            "stat-counter": ["Manrope"],
+            "body-lg": ["Manrope"],
+            "headline-sm": ["Manrope"],
+            "caption": ["Manrope"]
+          },
+          "fontSize": {
+            "headline-md": ["1.25rem", { "lineHeight": "1.75rem", "letterSpacing": "-0.015em", "fontWeight": "600" }],
+            "body-sm": ["0.875rem", { "lineHeight": "1.25rem", "fontWeight": "400" }],
+            "label-md": ["0.875rem", { "lineHeight": "1.25rem", "letterSpacing": "0.01em", "fontWeight": "600" }],
+            "display": ["3.5rem", { "lineHeight": "4rem", "letterSpacing": "-0.03em", "fontWeight": "800" }],
+            "label-sm": ["0.75rem", { "lineHeight": "1rem", "letterSpacing": "0.03em", "fontWeight": "600" }],
+            "body-md": ["1rem", { "lineHeight": "1.5rem", "fontWeight": "400" }],
+            "headline-lg": ["1.5rem", { "lineHeight": "2rem", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+            "headline-xl": ["2.25rem", { "lineHeight": "2.75rem", "letterSpacing": "-0.025em", "fontWeight": "700" }],
+            "headline-xl-mobile": ["1.75rem", { "lineHeight": "2.25rem", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+            "stat-counter": ["2rem", { "lineHeight": "2.25rem", "letterSpacing": "-0.03em", "fontWeight": "800" }],
+            "body-lg": ["1.125rem", { "lineHeight": "1.75rem", "fontWeight": "400" }],
+            "headline-sm": ["1.125rem", { "lineHeight": "1.5rem", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+            "caption": ["0.75rem", { "lineHeight": "1rem", "letterSpacing": "0.02em", "fontWeight": "500" }]
+          }
+        }
+      }
+    }
+  </script>
+</head>
+<body class="h-full bg-surface-container-low text-on-surface font-body-md antialiased selection:bg-secondary selection:text-on-secondary">
+<!-- Shell Suppression: Login is a Linear/Transactional screen, global SideNav and TopBar are intentionally excluded per UX filter rules -->
+<main class="min-h-screen w-full flex items-center justify-center p-4 lg:p-10">
+<div class="w-full max-w-[1440px] min-h-[820px] rounded-xl overflow-hidden shadow-2xl bg-surface-container-lowest grid grid-cols-1 lg:grid-cols-12 border border-outline-variant/40">
+<!-- LEFT COLUMN: Brand Hero Canvas (Emerald Visual Atmosphere) -->
+<section class="lg:col-span-6 bg-primary-container relative text-on-primary p-8 lg:p-16 flex flex-col justify-between overflow-hidden">
+<!-- Ambient Decorative Glows -->
+<div class="absolute -top-32 -left-32 w-96 h-96 rounded-full bg-secondary opacity-25 blur-3xl pointer-events-none"></div>
+<div class="absolute -bottom-24 -right-24 w-80 h-80 rounded-full bg-tertiary-fixed opacity-15 blur-3xl pointer-events-none"></div>
+<!-- Subtle Pattern Backdrop -->
+<div class="absolute inset-0 opacity-5 pointer-events-none" style="background-image: radial-gradient(#ffffff 1px, transparent 1px); background-size: 24px 24px;"></div>
+<!-- Top Brand Identity Header -->
+<div class="relative z-10">
+<div class="flex items-center gap-3.5">
+<div class="w-12 h-12 rounded-xl bg-tertiary-fixed flex items-center justify-center text-primary-container shadow-md">
+<span class="material-symbols-outlined text-[28px]" style="font-variation-settings: 'FILL' 1;">fitness_center</span>
+</div>
+<div>
+<span class="font-headline-lg text-headline-lg text-surface-bright tracking-tight block leading-none">Фітнес-трекер</span>
+<span class="font-caption text-caption text-on-primary-container tracking-wider block mt-1">Особистий кабінет атлета</span>
+</div>
+</div>
+</div>
+<!-- Center Content: Motivation & Visual Achievement Card -->
+<div class="relative z-10 my-10 space-y-8 max-w-xl">
+<div class="space-y-4">
+<div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-surface-container/10 border border-secondary-fixed/20 backdrop-blur-sm">
+<span class="w-2 h-2 rounded-full bg-tertiary-fixed animate-pulse"></span>
+<span class="font-label-sm text-label-sm text-tertiary-fixed">Сезон 2025 • Сила та витривалість</span>
+</div>
+<h1 class="font-headline-xl text-headline-xl text-surface-bright font-bold leading-tight">
+              Твій персональний простір сили, прогресу та щоденних перемог
+            </h1>
+<p class="font-body-md text-body-md text-surface-variant font-normal leading-relaxed opacity-90">
+              Комплексна платформа для планування тренувань, моніторингу навантажень, аналітики ваги та досягнення пікової фізичної форми. Керуй своїми цілями професійно.
+            </p>
+</div>
+<!-- Micro-Dashboard Preview Bento Widget -->
+<div class="bg-inverse-surface/70 border border-outline-variant/30 backdrop-blur-md rounded-xl p-5 space-y-4 shadow-lg">
+<!-- Achievement Pill -->
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-3">
+<div class="w-9 h-9 rounded-lg bg-surface-container/20 flex items-center justify-center text-tertiary-fixed">
+<span class="material-symbols-outlined text-[20px]" style="font-variation-settings: 'FILL' 1;">emoji_events</span>
+</div>
+<div>
+<div class="font-label-md text-label-md text-surface-bright">Новий рекорд у планці</div>
+<div class="font-caption text-caption text-on-primary-container">4 хв 15 сек • Зона високого навантаження</div>
+</div>
+</div>
+<span class="px-2.5 py-1 rounded-full bg-tertiary-fixed text-primary-container font-label-sm text-label-sm font-bold">
+                +120 балів
+              </span>
+</div>
+<!-- Mini Weekly Tracker Matrix -->
+<div class="pt-3 border-t border-outline-variant/20">
+<div class="flex items-center justify-between text-caption font-caption text-on-primary-container mb-2">
+<span class="">Тижнева активність</span>
+<span class="text-tertiary-fixed font-semibold">5 з 7 днів виконано</span>
+</div>
+<div class="grid grid-cols-7 gap-2">
+<div class="flex flex-col items-center gap-1">
+<div class="w-full h-8 rounded bg-secondary-fixed text-primary font-bold text-center text-caption flex items-center justify-center">✓</div>
+<span class="font-caption text-caption text-surface-variant opacity-75">Пн</span>
+</div>
+<div class="flex flex-col items-center gap-1">
+<div class="w-full h-8 rounded bg-secondary-fixed text-primary font-bold text-center text-caption flex items-center justify-center">✓</div>
+<span class="font-caption text-caption text-surface-variant opacity-75">Вт</span>
+</div>
+<div class="flex flex-col items-center gap-1">
+<div class="w-full h-8 rounded bg-secondary-fixed text-primary font-bold text-center text-caption flex items-center justify-center">✓</div>
+<span class="font-caption text-caption text-surface-variant opacity-75">Ср</span>
+</div>
+<div class="flex flex-col items-center gap-1">
+<div class="w-full h-8 rounded bg-surface-container/20 border border-outline-variant/30 flex items-center justify-center text-caption text-surface-variant opacity-50">-</div>
+<span class="font-caption text-caption text-surface-variant opacity-75">Чт</span>
+</div>
+<div class="flex flex-col items-center gap-1">
+<div class="w-full h-8 rounded bg-secondary-fixed text-primary font-bold text-center text-caption flex items-center justify-center">✓</div>
+<span class="font-caption text-caption text-surface-variant opacity-75">Пт</span>
+</div>
+<div class="flex flex-col items-center gap-1">
+<div class="w-full h-8 rounded bg-tertiary-fixed text-primary-container font-extrabold text-center text-caption flex items-center justify-center">★</div>
+<span class="font-caption text-caption text-surface-variant opacity-75">Сб</span>
+</div>
+<div class="flex flex-col items-center gap-1">
+<div class="w-full h-8 rounded bg-surface-container/20 border border-dashed border-outline-variant/40 flex items-center justify-center text-caption text-on-primary-container">?</div>
+<span class="font-caption text-caption text-surface-variant opacity-75">Нд</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Footer Note: Security & Encryption -->
+<div class="relative z-10 pt-4 border-t border-on-primary-container/20 flex items-center justify-between text-caption font-caption text-on-primary-container">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[16px] text-tertiary-fixed">verified_user</span>
+<span class="">Наскрізне шифрування персональних біометричних даних</span>
+</div>
+<span class="">v3.4.2</span>
+</div>
+</section>
+<!-- RIGHT COLUMN: Authentication Form Card -->
+<section class="lg:col-span-6 bg-surface-container-lowest p-8 lg:p-16 flex flex-col justify-between">
+<!-- Top Auxiliary Row: Language / Support link -->
+<div class="flex items-center justify-end gap-4">
+<div class="flex items-center gap-1.5 text-on-surface-variant font-label-sm text-label-sm bg-surface-container-low px-3 py-1.5 rounded-full border border-outline-variant/30">
+<span class="material-symbols-outlined text-[16px] text-secondary">language</span>
+<span class="">Українська (UA)</span>
+</div>
+<button class="text-on-surface-variant hover:text-secondary transition-colors font-label-sm text-label-sm flex items-center gap-1" title="Довідка" type="button">
+<span class="material-symbols-outlined text-[16px]">help_outline</span>
+<span class="">Підтримка</span>
+</button>
+</div>
+<!-- Center Form Box -->
+<div class="w-full max-w-md mx-auto my-auto py-8">
+<!-- Form Header -->
+<div class="mb-8">
+<h2 class="font-headline-xl text-headline-xl text-on-surface font-extrabold tracking-tight">З поверненням!</h2>
+<p class="font-body-md text-body-md text-on-surface-variant mt-2">Введіть дані вашого облікового запису для входу в особистий кабінет</p>
+</div>
+<!-- Dynamic System State Alert (Interactive Demo Toggle) -->
+<div class="hidden mb-6 p-4 rounded-xl bg-error-container border border-error/30 text-on-error-container text-body-sm font-body-sm items-start gap-3 transition-all duration-200" id="errorAlert">
+<span class="material-symbols-outlined text-error text-[20px] shrink-0 mt-0.5" style="font-variation-settings: 'FILL' 1;">error</span>
+<div class="flex-1">
+<span class="block font-semibold" id="errorMessage">Невірний логін або пароль. Перевірте введені дані.</span>
+<span class="text-caption font-caption opacity-80 block mt-0.5">Переконайтеся, що Caps Lock вимкнено та email вказано правильно.</span>
+</div>
+<button class="text-on-error-container hover:opacity-80 p-0.5 rounded" onclick="closeAlert()" type="button">
+<span class="material-symbols-outlined text-[18px]">close</span>
+</button>
+</div>
+<!-- Quick State Toggle Bar (For evaluating UI specs & error states) -->
+<div class="mb-6 p-2 rounded-lg bg-surface-container-low border border-outline-variant/30 flex items-center justify-between text-caption font-caption text-on-surface-variant">
+<span class="">Стан форми для перегляду:</span>
+<div class="flex items-center gap-1.5">
+<button class="px-2 py-0.5 rounded bg-surface-container-lowest border border-outline-variant text-on-surface font-semibold hover:bg-surface-container" onclick="simulateState('normal')" type="button">Звичайний</button>
+<button class="px-2 py-0.5 rounded bg-surface-container-lowest border border-outline-variant text-error font-semibold hover:bg-surface-container" onclick="simulateState('auth_error')" type="button">Помилка входу</button>
+<button class="px-2 py-0.5 rounded bg-surface-container-lowest border border-outline-variant text-error font-semibold hover:bg-surface-container" onclick="simulateState('network_error')" type="button">Мережа</button>
+</div>
+</div>
+<!-- Login Form -->
+<form class="space-y-5" id="loginForm" onsubmit="handleFormSubmit(event)">
+<!-- Email Field -->
+<div class="space-y-1.5">
+<label class="block font-label-md text-label-md text-on-surface font-semibold" for="email">
+                Електронна пошта <span class="text-error">*</span>
+</label>
+<div class="relative">
+<div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-on-surface-variant">
+<span class="material-symbols-outlined text-[20px]">mail</span>
+</div>
+<input autocomplete="email" class="block w-full pl-11 pr-4 py-3 bg-surface-container-lowest border border-outline-variant rounded-xl text-on-surface placeholder:text-on-surface-variant/60 font-body-md text-body-md focus:border-secondary focus:ring-2 focus:ring-secondary/20 transition-all duration-150 outline-none" id="email" name="email" placeholder="oleksandr@example.com" required="" type="email">
+</div>
+</div>
+<!-- Password Field -->
+<div class="space-y-1.5">
+<div class="flex items-center justify-between">
+<label class="block font-label-md text-label-md text-on-surface font-semibold" for="password">
+                  Пароль <span class="text-error">*</span>
+</label>
+<a class="font-label-sm text-label-sm text-secondary hover:underline font-semibold transition-all" href="#forgot">
+                  Забули пароль?
+                </a>
+</div>
+<div class="relative">
+<div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-on-surface-variant">
+<span class="material-symbols-outlined text-[20px]">lock</span>
+</div>
+<input autocomplete="current-password" class="block w-full pl-11 pr-11 py-3 bg-surface-container-lowest border border-outline-variant rounded-xl text-on-surface placeholder:text-on-surface-variant/60 font-body-md text-body-md focus:border-secondary focus:ring-2 focus:ring-secondary/20 transition-all duration-150 outline-none" id="password" name="password" placeholder="Введіть ваш пароль" required="" type="password">
+<button aria-label="Показати пароль" class="absolute inset-y-0 right-0 pr-3.5 flex items-center text-on-surface-variant hover:text-on-surface transition-colors cursor-pointer" id="togglePasswordBtn" onclick="togglePasswordVisibility()" type="button">
+<span class="material-symbols-outlined text-[20px]" id="passwordEyeIcon">visibility</span>
+</button>
+</div>
+</div>
+<!-- Remember Me Checkbox -->
+
+<!-- Primary Action Button with Loading Spinner State -->
+<div class="pt-3">
+<button class="w-full h-12 rounded-xl bg-primary-container hover:bg-primary text-on-primary font-label-md text-label-md font-bold tracking-wide flex items-center justify-center gap-2.5 shadow-md hover:shadow-lg transition-all duration-150 active:scale-[0.99] focus:outline-none focus:ring-2 focus:ring-tertiary-fixed focus:ring-offset-2" id="submitButton" type="submit">
+<!-- Normal Button Text -->
+<span id="buttonLabel" class="">Увійти</span>
+<!-- Loading State (Hidden by default) -->
+<span class="hidden items-center gap-2" id="buttonSpinner">
+<svg class="animate-spin h-5 w-5 text-on-primary" fill="none" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+<circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+<path class="opacity-75" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" fill="currentColor"></path>
+</svg>
+<span class="">Авторизація...</span>
+</span>
+<span class="material-symbols-outlined text-[18px]" id="buttonArrowIcon">arrow_forward</span>
+</button>
+</div>
+</form>
+<!-- Register Transition Link -->
+<div class="mt-8 text-center pt-6 border-t border-outline-variant/30">
+<p class="font-body-sm text-body-sm text-on-surface-variant">
+              Не маєте акаунта? 
+              <a class="font-semibold text-secondary hover:text-primary transition-colors underline underline-offset-4 ml-1" href="#register">
+                Створити акаунт
+              </a>
+</p>
+</div>
+</div>
+<!-- Bottom Terms & Policy -->
+<div class="flex items-center justify-between text-caption font-caption text-on-surface-variant border-t border-outline-variant/20 pt-4">
+<span class="">© 2025 «Фітнес-трекер». Усі права захищено.</span>
+<div class="flex items-center gap-4">
+<a class="hover:underline" href="#privacy">Політика конфіденційності</a>
+<span class="opacity-40">•</span>
+<a class="hover:underline" href="#terms">Умови користування</a>
+</div>
+</div>
+</section>
+</div>
+</main>
+<!-- Interactive Logic for Password Toggle, Submit Simulation & System States -->
+<script>
+    function togglePasswordVisibility() {
+      const passwordInput = document.getElementById('password');
+      const eyeIcon = document.getElementById('passwordEyeIcon');
+      const toggleBtn = document.getElementById('togglePasswordBtn');
+
+      if (passwordInput.type === 'password') {
+        passwordInput.type = 'text';
+        eyeIcon.textContent = 'visibility_off';
+        toggleBtn.setAttribute('aria-label', 'Приховати пароль');
+      } else {
+        passwordInput.type = 'password';
+        eyeIcon.textContent = 'visibility';
+        toggleBtn.setAttribute('aria-label', 'Показати пароль');
+      }
+    }
+
+    function closeAlert() {
+      const alertBox = document.getElementById('errorAlert');
+      alertBox.classList.add('hidden');
+      alertBox.classList.remove('flex');
+    }
+
+    function simulateState(state) {
+      const alertBox = document.getElementById('errorAlert');
+      const errorMsg = document.getElementById('errorMessage');
+      const emailInput = document.getElementById('email');
+      const passwordInput = document.getElementById('password');
+
+      if (state === 'normal') {
+        closeAlert();
+        emailInput.classList.remove('border-error');
+        passwordInput.classList.remove('border-error');
+      } else if (state === 'auth_error') {
+        errorMsg.textContent = 'Невірний логін або пароль. Перевірте введені дані.';
+        alertBox.classList.remove('hidden');
+        alertBox.classList.add('flex');
+        emailInput.classList.add('border-error');
+        passwordInput.classList.add('border-error');
+      } else if (state === 'network_error') {
+        errorMsg.textContent = "Помилка з'єднання з сервером. Спробуйте пізніше.";
+        alertBox.classList.remove('hidden');
+        alertBox.classList.add('flex');
+        emailInput.classList.remove('border-error');
+        passwordInput.classList.remove('border-error');
+      }
+    }
+
+    function handleFormSubmit(e) {
+      e.preventDefault();
+      const btn = document.getElementById('submitButton');
+      const label = document.getElementById('buttonLabel');
+      const spinner = document.getElementById('buttonSpinner');
+      const arrow = document.getElementById('buttonArrowIcon');
+
+      // Engage loading state
+      btn.disabled = true;
+      label.classList.add('hidden');
+      arrow.classList.add('hidden');
+      spinner.classList.remove('hidden');
+      spinner.classList.add('inline-flex');
+
+      // Simulate API verification
+      setTimeout(() => {
+        btn.disabled = false;
+        label.classList.remove('hidden');
+        arrow.classList.remove('hidden');
+        spinner.classList.add('hidden');
+        spinner.classList.remove('inline-flex');
+
+        const email = document.getElementById('email').value;
+        if (email.includes('error')) {
+          simulateState('auth_error');
+        } else {
+          // Success feedback simulation
+          simulateState('normal');
+          alert('Успішна автентифікація! Ласкаво просимо до особистого кабінету.');
+        }
+      }, 1200);
+    }
+  </script>
+
+
+</body></html>

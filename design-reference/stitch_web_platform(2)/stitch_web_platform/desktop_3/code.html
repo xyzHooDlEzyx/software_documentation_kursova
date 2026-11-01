@@ -1,0 +1,590 @@
+<!DOCTYPE html><html class="h-full bg-surface" lang="uk"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>Рейтинг користувачів — Фітнес-трекер</title>
+<!-- Google Fonts: Manrope -->
+<link href="https://fonts.googleapis.com" rel="preconnect">
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect">
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet">
+<!-- Material Symbols Outlined -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<!-- Tailwind CSS CDN -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Tailwind Configuration verbatim -->
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "surface-bright": "#e8fef6",
+            "on-tertiary-fixed": "#141f00",
+            "tertiary-fixed": "#cbf07d",
+            "secondary-fixed": "#9af4d5",
+            "surface-variant": "#d1e7df",
+            "secondary-fixed-dim": "#7ed7b9",
+            "on-surface": "#0c1f1a",
+            "on-primary": "#ffffff",
+            "on-tertiary-container": "#89ab41",
+            "on-error": "#ffffff",
+            "outline": "#717976",
+            "background": "#e8fef6",
+            "error-container": "#ffdad6",
+            "outline-variant": "#c1c8c5",
+            "on-primary-fixed": "#00201b",
+            "on-tertiary": "#ffffff",
+            "on-error-container": "#93000a",
+            "on-secondary-fixed": "#002118",
+            "surface-container-high": "#d7ede5",
+            "surface-container-low": "#e2f9f0",
+            "secondary": "#006b54",
+            "secondary-container": "#9af4d5",
+            "inverse-surface": "#21342f",
+            "on-background": "#0c1f1a",
+            "on-primary-fixed-variant": "#294d46",
+            "on-primary-container": "#81a69d",
+            "tertiary-container": "#2a3c00",
+            "surface-container-lowest": "#ffffff",
+            "error": "#ba1a1a",
+            "on-tertiary-fixed-variant": "#374e00",
+            "on-secondary-fixed-variant": "#00513f",
+            "primary-fixed-dim": "#a8cfc4",
+            "tertiary": "#192500",
+            "primary": "#002620",
+            "primary-container": "#173c35",
+            "on-secondary-container": "#007259",
+            "surface": "#e8fef6",
+            "inverse-on-surface": "#dff6ed",
+            "tertiary-fixed-dim": "#afd364",
+            "surface-tint": "#41655d",
+            "surface-container-highest": "#d1e7df",
+            "surface-dim": "#c9dfd7",
+            "inverse-primary": "#a8cfc4",
+            "on-secondary": "#ffffff",
+            "surface-container": "#ddf3eb",
+            "primary-fixed": "#c3ebe0",
+            "on-surface-variant": "#414846"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "full": "9999px"
+          },
+          "spacing": {
+            "margin-sm": "1rem",
+            "space-lg": "1.5rem",
+            "space-xs": "0.25rem",
+            "margin": "2rem",
+            "gutter": "1.5rem",
+            "gutter-sm": "1rem",
+            "space-xl": "2rem",
+            "space-md": "1rem",
+            "space-sm": "0.5rem"
+          },
+          "fontFamily": {
+            "headline-lg": ["Manrope"],
+            "caption": ["Manrope"],
+            "headline-md": ["Manrope"],
+            "display": ["Manrope"],
+            "stat-counter": ["Manrope"],
+            "label-sm": ["Manrope"],
+            "body-lg": ["Manrope"],
+            "label-md": ["Manrope"],
+            "headline-sm": ["Manrope"],
+            "body-md": ["Manrope"],
+            "body-sm": ["Manrope"],
+            "headline-xl-mobile": ["Manrope"],
+            "headline-xl": ["Manrope"]
+          },
+          "fontSize": {
+            "headline-lg": ["1.5rem", { "lineHeight": "2rem", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+            "caption": ["0.75rem", { "lineHeight": "1rem", "letterSpacing": "0.02em", "fontWeight": "500" }],
+            "headline-md": ["1.25rem", { "lineHeight": "1.75rem", "letterSpacing": "-0.015em", "fontWeight": "600" }],
+            "display": ["3.5rem", { "lineHeight": "4rem", "letterSpacing": "-0.03em", "fontWeight": "800" }],
+            "stat-counter": ["2rem", { "lineHeight": "2.25rem", "letterSpacing": "-0.03em", "fontWeight": "800" }],
+            "label-sm": ["0.75rem", { "lineHeight": "1rem", "letterSpacing": "0.03em", "fontWeight": "600" }],
+            "body-lg": ["1.125rem", { "lineHeight": "1.75rem", "fontWeight": "400" }],
+            "label-md": ["0.875rem", { "lineHeight": "1.25rem", "letterSpacing": "0.01em", "fontWeight": "600" }],
+            "headline-sm": ["1.125rem", { "lineHeight": "1.5rem", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+            "body-md": ["1rem", { "lineHeight": "1.5rem", "fontWeight": "400" }],
+            "body-sm": ["0.875rem", { "lineHeight": "1.25rem", "fontWeight": "400" }],
+            "headline-xl-mobile": ["1.75rem", { "lineHeight": "2.25rem", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+            "headline-xl": ["2.25rem", { "lineHeight": "2.75rem", "letterSpacing": "-0.025em", "fontWeight": "700" }]
+          }
+        },
+      },
+    }
+  </script>
+</head>
+<body class="h-full bg-surface text-on-surface antialiased font-body-md text-body-md overflow-x-hidden selection:bg-secondary selection:text-on-primary">
+<!-- Desktop App Container -->
+<div class="flex h-screen w-full max-w-[1440px] mx-auto overflow-hidden bg-surface">
+<!-- ==================== SIDEBAR COMPONENT ==================== -->
+<aside class="w-64 h-full flex flex-col justify-between shrink-0 bg-surface-container-lowest border-r border-outline-variant shadow-sm z-30">
+<!-- Top Section: Logo & New Workout CTA -->
+<div class="p-4 pb-2">
+<div class="flex items-center gap-3 px-2 py-3 mb-3">
+<div class="w-10 h-10 rounded-xl bg-primary-container text-tertiary-fixed flex items-center justify-center shadow-sm">
+<span class="material-symbols-outlined text-[24px]">fitness_center</span>
+</div>
+<div class="flex flex-col">
+<span class="font-headline-sm text-headline-sm font-bold text-primary tracking-tight leading-tight">Фітнес-трекер</span>
+<span class="font-caption text-caption text-on-surface-variant">Особистий кабінет</span>
+</div>
+</div>
+<button class="w-full flex items-center justify-center gap-2 py-2.5 px-4 rounded-lg bg-secondary text-on-primary hover:bg-primary-container font-label-md text-label-md transition-colors duration-150 shadow-sm active:scale-[0.98]" type="button">
+<span class="material-symbols-outlined text-[20px]">add</span>
+<span class="">Нове тренування</span>
+</button>
+</div>
+<!-- Navigation Items: 12 Tabs with 'Рейтинг' Active -->
+<div class="flex-1 overflow-y-auto px-4 py-2 space-y-1">
+<!-- 1. Головна -->
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-on-surface-variant font-label-md text-label-md hover:bg-surface-container-low hover:text-on-surface transition-colors duration-150 active:scale-[0.98]" href="#">
+<span class="material-symbols-outlined text-[20px]">dashboard</span>
+<span class="">Головна</span>
+</a>
+<!-- 2. Мій профіль -->
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-on-surface-variant font-label-md text-label-md hover:bg-surface-container-low hover:text-on-surface transition-colors duration-150 active:scale-[0.98]" href="#">
+<span class="material-symbols-outlined text-[20px]">person</span>
+<span class="">Мій профіль</span>
+</a>
+<!-- 3. Вправи -->
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-on-surface-variant font-label-md text-label-md hover:bg-surface-container-low hover:text-on-surface transition-colors duration-150 active:scale-[0.98]" href="#">
+<span class="material-symbols-outlined text-[20px]">fitness_center</span>
+<span class="">Вправи</span>
+</a>
+<!-- 4. Тренування -->
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-on-surface-variant font-label-md text-label-md hover:bg-surface-container-low hover:text-on-surface transition-colors duration-150 active:scale-[0.98]" href="#">
+<span class="material-symbols-outlined text-[20px]">directions_run</span>
+<span class="">Тренування</span>
+</a>
+<!-- 5. Програми -->
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-on-surface-variant font-label-md text-label-md hover:bg-surface-container-low hover:text-on-surface transition-colors duration-150 active:scale-[0.98]" href="#">
+<span class="material-symbols-outlined text-[20px]">assignment</span>
+<span class="">Програми</span>
+</a>
+<!-- 6. Календар -->
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-on-surface-variant font-label-md text-label-md hover:bg-surface-container-low hover:text-on-surface transition-colors duration-150 active:scale-[0.98]" href="#">
+<span class="material-symbols-outlined text-[20px]">calendar_today</span>
+<span class="">Календар</span>
+</a>
+<!-- 7. Історія тренувань -->
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-on-surface-variant font-label-md text-label-md hover:bg-surface-container-low hover:text-on-surface transition-colors duration-150 active:scale-[0.98]" href="#">
+<span class="material-symbols-outlined text-[20px]">history</span>
+<span class="">Історія тренувань</span>
+</a>
+<!-- 8. Статистика -->
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-on-surface-variant font-label-md text-label-md hover:bg-surface-container-low hover:text-on-surface transition-colors duration-150 active:scale-[0.98]" href="#">
+<span class="material-symbols-outlined text-[20px]">bar_chart</span>
+<span class="">Статистика</span>
+</a>
+<!-- 9. Досягнення -->
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-on-surface-variant font-label-md text-label-md hover:bg-surface-container-low hover:text-on-surface transition-colors duration-150 active:scale-[0.98]" href="#">
+<span class="material-symbols-outlined text-[20px]">emoji_events</span>
+<span class="">Досягнення</span>
+</a>
+<!-- 10. Челенджі -->
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-on-surface-variant font-label-md text-label-md hover:bg-surface-container-low hover:text-on-surface transition-colors duration-150 active:scale-[0.98]" href="#">
+<span class="material-symbols-outlined text-[20px]">military_tech</span>
+<span class="">Челенджі</span>
+</a>
+<!-- 11. Рейтинг (ACTIVE ITEM) -->
+<a aria-current="page" class="flex items-center gap-3 px-3 py-2.5 rounded-lg bg-surface-container text-secondary font-headline-sm text-label-md border-l-4 border-secondary shadow-xs transition-colors duration-150" href="#">
+<span class="material-symbols-outlined text-[20px] text-secondary" style="font-variation-settings: 'FILL' 1;">leaderboard</span>
+<span class="font-bold">Рейтинг</span>
+<span class="ml-auto w-2 h-2 rounded-full bg-secondary"></span>
+</a>
+<!-- 12. Налаштування -->
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-on-surface-variant font-label-md text-label-md hover:bg-surface-container-low hover:text-on-surface transition-colors duration-150 active:scale-[0.98]" href="#">
+<span class="material-symbols-outlined text-[20px]">settings</span>
+<span class="">Налаштування</span>
+</a>
+</div>
+<!-- Footer Actions -->
+<div class="p-4 border-t border-outline-variant/40 space-y-1">
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-on-surface-variant font-label-md text-label-md hover:bg-surface-container-low hover:text-on-surface transition-colors duration-150" href="#">
+<span class="material-symbols-outlined text-[20px]">help_outline</span>
+<span class="">Допомога</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-error font-label-md text-label-md hover:bg-error-container/20 transition-colors duration-150" href="#">
+<span class="material-symbols-outlined text-[20px]">logout</span>
+<span class="">Вийти</span>
+</a>
+</div>
+</aside>
+<!-- ==================== MAIN CONTENT WRAPPER ==================== -->
+<div class="flex-1 flex flex-col h-full overflow-hidden">
+<!-- ==================== TOP NAVIGATION BAR ==================== -->
+<header class="h-[72px] shrink-0 bg-surface-container-lowest border-b border-outline-variant px-8 flex items-center justify-between shadow-sm z-20">
+<!-- Left: Search Box -->
+<div class="flex items-center gap-4 w-96">
+<div class="relative w-full">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant text-[20px]">search</span>
+<input class="w-full pl-10 pr-4 py-2 bg-surface rounded-lg border border-outline-variant text-body-sm font-body-sm placeholder:text-on-surface-variant focus:outline-none focus:border-secondary focus:ring-1 focus:ring-secondary transition-all" placeholder="Пошук по додатку..." type="text">
+</div>
+</div>
+<!-- Center / Secondary Nav links from component -->
+<nav class="hidden lg:flex items-center gap-8">
+<a class="font-label-md text-label-md text-on-surface-variant hover:text-secondary transition-colors" href="#">Огляд</a>
+<a class="font-label-md text-label-md text-on-surface-variant hover:text-secondary transition-colors" href="#">Аналітика</a>
+<a class="font-label-md text-label-md text-on-surface-variant hover:text-secondary transition-colors" href="#">План тижня</a>
+</nav>
+<!-- Right: Time, Notification, User Profile -->
+<div class="flex items-center gap-5">
+<!-- Time Badge -->
+<div class="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-surface-container text-primary-container font-label-sm text-label-sm">
+<span class="material-symbols-outlined text-[16px] text-secondary">schedule</span>
+<span class="">Київ 08:30</span>
+</div>
+<!-- Notification Trigger -->
+<button aria-label="Сповіщення" class="p-2 rounded-lg text-on-surface-variant hover:bg-surface-container hover:text-primary transition-colors relative" type="button">
+<span class="material-symbols-outlined text-[22px]">notifications</span>
+<span class="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-secondary"></span>
+</button>
+<div class="h-6 w-px bg-outline-variant/60"></div>
+<!-- User Profile Cluster -->
+<div class="flex items-center gap-3 pl-1">
+<div class="w-10 h-10 rounded-full bg-primary-container text-on-primary flex items-center justify-center font-headline-sm font-bold text-label-md shadow-xs ring-2 ring-surface-variant">
+              ОК
+            </div>
+<div class="flex flex-col text-left">
+<span class="font-headline-sm text-label-md text-primary font-bold leading-tight">Олександр Кравченко</span>
+<span class="font-caption text-caption text-secondary font-semibold">Рівень: Атлет</span>
+</div>
+</div>
+</div>
+</header>
+<!-- ==================== SCROLLABLE CANVAS ==================== -->
+<main class="flex-1 overflow-y-auto p-8 bg-surface space-y-6 pb-12">
+<!-- Page Header & Breadcrumbs -->
+<div class="space-y-1">
+<!-- Breadcrumbs -->
+<div class="flex items-center gap-2 text-on-surface-variant font-label-sm text-label-sm mb-1">
+<a class="hover:text-secondary transition-colors" href="#">Головна</a>
+<span class="text-outline-variant">/</span>
+<span class="text-primary font-bold">Рейтинг</span>
+</div>
+<div class="flex items-baseline justify-between">
+<div>
+<h1 class="font-headline-xl text-headline-xl text-primary font-bold tracking-tight">Рейтинг користувачів</h1>
+<p class="font-body-md text-body-md text-on-surface-variant mt-1">
+                Порівнюйте результати з учасниками, які відкрили свої бали для рейтингу.
+              </p>
+</div>
+</div>
+</div>
+<!-- Two-Column Grid (approx 70% / 30%) -->
+<div class="grid grid-cols-12 gap-gutter items-start">
+<!-- LEFT COLUMN (70% ~ 8 cols on desktop) -->
+<div class="col-span-12 xl:col-span-8 space-y-6">
+<!-- 1. Period Selector Card -->
+<div class="bg-surface-container-lowest border border-outline-variant/60 rounded-xl p-5 shadow-sm space-y-4">
+<!-- Tab Pills -->
+<div class="flex flex-wrap items-center justify-between gap-4 border-b border-outline-variant/40 pb-4">
+<div class="flex items-center p-1 bg-surface-container rounded-lg gap-1">
+<button class="px-4 py-1.5 rounded-md font-label-md text-label-md text-on-surface-variant hover:text-primary transition-all" type="button">
+                    Цей тиждень
+                  </button>
+<button class="px-4 py-1.5 rounded-md font-label-md text-label-md bg-surface-container-lowest text-primary-container shadow-xs font-bold transition-all" type="button">
+                    Цей місяць
+                  </button>
+<button class="px-4 py-1.5 rounded-md font-label-md text-label-md text-on-surface-variant hover:text-primary transition-all" type="button">
+                    Увесь час
+                  </button>
+</div>
+<!-- Date Range Navigator -->
+<div class="flex items-center gap-2 bg-surface-container-low px-3 py-1.5 rounded-lg border border-outline-variant/50">
+<button aria-label="Попередній місяць" class="w-7 h-7 flex items-center justify-center rounded text-on-surface-variant hover:text-primary hover:bg-surface-container transition-colors" type="button">
+<span class="material-symbols-outlined text-[18px]">chevron_left</span>
+</button>
+<span class="font-label-md text-label-md font-bold text-primary px-2">Жовтень 2026</span>
+<button aria-label="Наступний місяць" class="w-7 h-7 flex items-center justify-center rounded text-on-surface-variant hover:text-primary hover:bg-surface-container transition-colors" type="button">
+<span class="material-symbols-outlined text-[18px]">chevron_right</span>
+</button>
+</div>
+</div>
+<!-- Timezone & Period Note -->
+<div class="flex items-center gap-2 text-on-surface-variant font-caption text-caption">
+<span class="material-symbols-outlined text-[16px] text-secondary">info</span>
+<span class="">Часовий пояс: Europe/Kyiv • Період: 1 жовтня — 31 жовтня 2026</span>
+</div>
+</div>
+<!-- 2. Leaderboard Table Card -->
+<div class="bg-surface-container-lowest border border-outline-variant/60 rounded-xl overflow-hidden shadow-sm">
+<!-- Card Header -->
+<div class="p-6 border-b border-outline-variant/40 flex items-center justify-between">
+<div>
+<div class="flex items-center gap-3">
+<h2 class="font-headline-md text-headline-md font-bold text-primary">Таблиця рейтингу</h2>
+<span class="px-2.5 py-0.5 rounded-full bg-surface-container text-secondary font-label-sm text-label-sm font-semibold">
+                      4 учасники
+                    </span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-0.5">
+                    Публічні результати за обраний період
+                  </p>
+</div>
+</div>
+<!-- Strict Privacy Table -->
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="bg-surface-container-low/50 border-b border-outline-variant/40 font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">
+<th class="py-3.5 px-6 w-24">Місце</th>
+<th class="py-3.5 px-6">Учасник</th>
+<th class="py-3.5 px-6 text-right w-40">Бали</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-outline-variant/30 font-body-md text-body-md">
+<!-- Rank 1: Soft lime accent highlight -->
+<tr class="bg-tertiary-fixed/15 hover:bg-tertiary-fixed/25 transition-colors">
+<td class="py-4 px-6">
+<div class="w-8 h-8 rounded-full bg-tertiary-fixed text-tertiary font-stat-counter text-label-md flex items-center justify-center font-bold shadow-xs">
+                          1
+                        </div>
+</td>
+<td class="py-4 px-6">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-primary-container text-tertiary-fixed flex items-center justify-center font-label-md font-bold">
+                            FR
+                          </div>
+<div>
+<div class="font-headline-sm text-label-md font-bold text-primary">FitRunner</div>
+<div class="text-caption font-caption text-on-surface-variant">Учасник рейтингу</div>
+</div>
+</div>
+</td>
+<td class="py-4 px-6 text-right">
+<span class="inline-flex items-center px-3 py-1 rounded-full bg-tertiary-fixed text-tertiary font-headline-sm text-label-md font-extrabold tracking-tight">
+                          73 бали
+                        </span>
+</td>
+</tr>
+<!-- Rank 2: Soft mint accent highlight -->
+<tr class="bg-secondary-container/20 hover:bg-secondary-container/30 transition-colors">
+<td class="py-4 px-6">
+<div class="w-8 h-8 rounded-full bg-secondary-container text-on-secondary-container font-stat-counter text-label-md flex items-center justify-center font-bold shadow-xs">
+                          2
+                        </div>
+</td>
+<td class="py-4 px-6">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-surface-container-high text-secondary flex items-center justify-center font-label-md font-bold">
+                            AF
+                          </div>
+<div>
+<div class="font-headline-sm text-label-md font-bold text-primary">ActiveFox</div>
+<div class="text-caption font-caption text-on-surface-variant">Учасник рейтингу</div>
+</div>
+</div>
+</td>
+<td class="py-4 px-6 text-right">
+<span class="inline-flex items-center px-3 py-1 rounded-full bg-surface-container text-secondary font-headline-sm text-label-md font-bold">
+                          58 балів
+                        </span>
+</td>
+</tr>
+<!-- Rank 3: Subtle neutral tint highlight -->
+<tr class="bg-surface-container-lowest hover:bg-surface-container-low transition-colors">
+<td class="py-4 px-6">
+<div class="w-8 h-8 rounded-full bg-surface-variant text-on-surface-variant font-stat-counter text-label-md flex items-center justify-center font-bold">
+                          3
+                        </div>
+</td>
+<td class="py-4 px-6">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-surface-variant text-on-surface-variant flex items-center justify-center font-label-md font-bold">
+                            GP
+                          </div>
+<div>
+<div class="font-headline-sm text-label-md font-bold text-primary">GymPulse</div>
+<div class="text-caption font-caption text-on-surface-variant">Учасник рейтингу</div>
+</div>
+</div>
+</td>
+<td class="py-4 px-6 text-right">
+<span class="inline-flex items-center px-3 py-1 rounded-full bg-surface-container-low text-on-surface-variant font-headline-sm text-label-md font-semibold">
+                          42 бали
+                        </span>
+</td>
+</tr>
+<!-- Rank 4: Clean white row -->
+<tr class="bg-surface-container-lowest hover:bg-surface-container-low transition-colors">
+<td class="py-4 px-6">
+<div class="w-8 h-8 rounded-full bg-surface-container-high text-on-surface-variant font-stat-counter text-label-md flex items-center justify-center font-bold">
+                          4
+                        </div>
+</td>
+<td class="py-4 px-6">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-surface-variant text-on-surface-variant flex items-center justify-center font-label-md font-bold">
+                            MD
+                          </div>
+<div>
+<div class="font-headline-sm text-label-md font-bold text-primary">MoveDaily</div>
+<div class="text-caption font-caption text-on-surface-variant">Учасник рейтингу</div>
+</div>
+</div>
+</td>
+<td class="py-4 px-6 text-right">
+<span class="inline-flex items-center px-3 py-1 rounded-full bg-surface-container-low text-on-surface-variant font-headline-sm text-label-md font-semibold">
+                          21 бал
+                        </span>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<!-- Pagination Footer -->
+<div class="p-4 px-6 bg-surface-container-low/40 border-t border-outline-variant/40 flex items-center justify-between">
+<span class="font-caption text-caption text-on-surface-variant">
+                  Сторінка 1 із 1 • Показано 4 із 4 учасників
+                </span>
+<div class="flex items-center gap-2">
+<button class="px-3 py-1.5 rounded-lg border border-outline-variant/50 text-outline font-label-sm text-label-sm opacity-50 cursor-not-allowed" disabled="" type="button">
+                    Попередня
+                  </button>
+<button class="px-3 py-1.5 rounded-lg border border-outline-variant/50 text-outline font-label-sm text-label-sm opacity-50 cursor-not-allowed" disabled="" type="button">
+                    Наступна
+                  </button>
+</div>
+</div>
+<!-- Informational Bottom Note -->
+<div class="px-6 py-3 bg-surface-container/30 border-t border-outline-variant/30 flex items-center gap-2 text-on-surface-variant font-caption text-caption">
+<span class="material-symbols-outlined text-[16px] text-secondary">verified_user</span>
+<span class="">Рейтинг формується на основі підтверджених нарахувань балів за вибраний період.</span>
+</div>
+</div>
+</div>
+<!-- RIGHT COLUMN (30% ~ 4 cols on desktop) -->
+<div class="col-span-12 xl:col-span-4 space-y-6">
+<!-- 1. Personal Result Card ('Мій результат') -->
+<div class="bg-surface-container-lowest border border-outline-variant/60 rounded-xl p-6 shadow-sm space-y-4">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-2.5">
+<div class="w-8 h-8 rounded-lg bg-surface-container flex items-center justify-center text-secondary">
+<span class="material-symbols-outlined text-[20px]">stars</span>
+</div>
+<h3 class="font-headline-md text-headline-sm font-bold text-primary">Мій результат</h3>
+</div>
+<span class="px-2 py-0.5 rounded-full bg-surface-container-high text-on-surface-variant font-caption text-caption">Жовтень</span>
+</div>
+<!-- Large Score Counter -->
+<div class="py-2">
+<div class="flex items-baseline gap-2">
+<span class="font-display text-display text-primary-container font-extrabold tracking-tight">38</span>
+<span class="font-headline-lg text-headline-md text-secondary font-bold">балів</span>
+</div>
+<p class="font-caption text-caption text-on-surface-variant mt-1">
+                  Бали, нараховані за жовтень 2026
+                </p>
+</div>
+<!-- Divider -->
+<div class="h-px bg-outline-variant/40"></div>
+<!-- Position Status -->
+<div class="space-y-2">
+<div class="flex items-center justify-between font-label-md text-label-md">
+<span class="text-on-surface-variant">Позиція в списку:</span>
+<span class="font-bold text-on-surface-variant">не відображається</span>
+</div>
+<div class="p-3 rounded-lg bg-surface-container-low border border-outline-variant/40 text-on-surface-variant font-body-sm text-body-sm leading-relaxed">
+                  Ваша участь у публічному рейтингу вимкнена. Ваші бали залишаються приватними.
+                </div>
+</div>
+</div>
+<!-- 2. Participation Status Card ('Участь у рейтингу') -->
+<div class="bg-surface-container-lowest border border-outline-variant/60 rounded-xl p-6 shadow-sm space-y-4">
+<div class="flex items-center justify-between">
+<h3 class="font-headline-md text-headline-sm font-bold text-primary">Участь у рейтингу</h3>
+<span class="px-3 py-1 rounded-full bg-surface-variant text-on-surface-variant font-label-sm text-label-sm font-semibold">
+                  Вимкнено
+                </span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant leading-relaxed">
+                Ваші бали залишаються приватними. Ви можете переглядати рейтинг інших учасників без публікації власного результату.
+              </p>
+<button class="w-full flex items-center justify-center gap-2 py-2.5 px-4 rounded-lg border border-outline-variant bg-surface-container-lowest text-primary hover:bg-surface-container-low font-label-md text-label-md font-semibold transition-all active:scale-[0.98]" onclick="document.getElementById('rankingSettingsModal').classList.remove('hidden')" type="button">
+<span class="material-symbols-outlined text-[18px] text-secondary">tune</span>
+<span class="">Налаштувати участь</span>
+</button>
+</div>
+<!-- 3. Privacy Info Card ('Конфіденційність рейтингу') -->
+<div class="bg-surface-container-lowest border border-outline-variant/60 rounded-xl p-6 shadow-sm space-y-4">
+<div class="flex items-center gap-2.5">
+<div class="w-8 h-8 rounded-lg bg-secondary-container/40 flex items-center justify-center text-secondary">
+<span class="material-symbols-outlined text-[20px]">shield</span>
+</div>
+<h3 class="font-headline-md text-headline-sm font-bold text-primary">Конфіденційність рейтингу</h3>
+</div>
+<div class="space-y-3 font-body-sm text-body-sm text-on-surface-variant leading-relaxed">
+<div class="flex items-start gap-2.5">
+<span class="material-symbols-outlined text-[18px] text-secondary shrink-0 mt-0.5">check_circle</span>
+<p class="">У рейтингу відображаються лише користувачі, які добровільно відкрили свої результати.</p>
+</div>
+<div class="flex items-start gap-2.5">
+<span class="material-symbols-outlined text-[18px] text-secondary shrink-0 mt-0.5">check_circle</span>
+<p class="">Публічно доступні тільки псевдонім, кількість балів і місце в рейтингу.</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+</div>
+</div>
+<!-- ==================== MODAL COMPONENT (Hidden by default) ==================== -->
+<div class="hidden fixed inset-0 z-50 flex items-center justify-center bg-primary/40 backdrop-blur-xs p-4" id="rankingSettingsModal">
+<!-- Modal Card -->
+<div class="w-full max-w-md bg-surface-container-lowest rounded-xl border border-outline-variant shadow-lg overflow-hidden transform transition-all">
+<!-- Modal Header -->
+<div class="p-6 border-b border-outline-variant/40 flex items-center justify-between">
+<div class="flex items-center gap-2.5">
+<span class="material-symbols-outlined text-secondary text-[24px]">tune</span>
+<h3 class="font-headline-md text-headline-md font-bold text-primary">Налаштування рейтингу</h3>
+</div>
+<button aria-label="Закрити модальне вікно" class="p-1 rounded-md text-on-surface-variant hover:bg-surface-container transition-colors" onclick="document.getElementById('rankingSettingsModal').classList.add('hidden')" type="button">
+<span class="material-symbols-outlined text-[20px]">close</span>
+</button>
+</div>
+<!-- Modal Body -->
+<div class="p-6 space-y-5">
+<!-- Field 1: Alias -->
+<div class="space-y-1.5">
+<label class="block font-label-md text-label-md text-primary font-semibold" for="aliasInput">
+            Публічний псевдонім
+          </label>
+<input class="w-full px-3.5 py-2.5 bg-surface-container-lowest rounded-lg border border-outline-variant text-body-md font-body-md text-primary placeholder:text-outline focus:outline-none focus:border-secondary focus:ring-1 focus:ring-secondary transition-all" id="aliasInput" placeholder="Наприклад, ActiveRunner" type="text">
+<p class="font-caption text-caption text-on-surface-variant">Це ім'я побачать інші учасники в загальній таблиці.</p>
+</div>
+<!-- Field 2: Opt-in Toggle -->
+<div class="p-4 rounded-lg bg-surface-container-low border border-outline-variant/40 space-y-2">
+<div class="flex items-center justify-between">
+<span class="font-label-md text-label-md text-primary font-bold">Показувати мене в рейтингу</span>
+<!-- Custom Toggle (OFF) -->
+<label class="relative inline-flex items-center cursor-pointer">
+<input class="sr-only peer" id="optInToggle" type="checkbox">
+<div class="w-11 h-6 bg-outline-variant peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-secondary"></div>
+</label>
+</div>
+<p class="font-caption text-caption text-on-surface-variant leading-snug">
+            Дозволити відображення мого псевдоніма та балів у публічному списку.
+          </p>
+</div>
+</div>
+<!-- Modal Footer -->
+<div class="p-4 px-6 bg-surface-container-low/50 border-t border-outline-variant/40 flex items-center justify-end gap-3">
+<button class="px-4 py-2 rounded-lg border border-outline-variant text-on-surface-variant hover:bg-surface-container font-label-md text-label-md font-semibold transition-colors" onclick="document.getElementById('rankingSettingsModal').classList.add('hidden')" type="button">
+          Скасувати
+        </button>
+<button class="px-5 py-2 rounded-lg bg-secondary text-on-primary hover:bg-primary-container font-label-md text-label-md font-semibold transition-colors shadow-xs active:scale-[0.98]" onclick="document.getElementById('rankingSettingsModal').classList.add('hidden')" type="button">
+          Зберегти налаштування
+        </button>
+</div>
+</div>
+</div>
+
+
+</body></html>

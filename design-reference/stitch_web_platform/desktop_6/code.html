@@ -1,0 +1,389 @@
+<!DOCTYPE html><html class="h-full bg-surface" lang="uk"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>Реєстрація — Фітнес-трекер</title>
+<!-- Google Fonts & Material Symbols -->
+<link href="https://fonts.googleapis.com" rel="preconnect">
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect">
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@100..900&amp;display=swap" rel="stylesheet">
+<!-- Tailwind CSS with CDN -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "tertiary-fixed-dim": "#afd364",
+            "on-error": "#ffffff",
+            "on-tertiary-fixed-variant": "#374e00",
+            "on-secondary-container": "#007259",
+            "on-primary-fixed-variant": "#294d46",
+            "secondary-fixed-dim": "#7ed7b9",
+            "on-error-container": "#93000a",
+            "on-tertiary": "#ffffff",
+            "surface": "#e8fef6",
+            "on-primary": "#ffffff",
+            "surface-variant": "#d1e7df",
+            "tertiary": "#192500",
+            "inverse-on-surface": "#dff6ed",
+            "on-surface": "#0c1f1a",
+            "on-tertiary-fixed": "#141f00",
+            "tertiary-container": "#2a3c00",
+            "surface-container-low": "#e2f9f0",
+            "surface-container-lowest": "#ffffff",
+            "on-background": "#0c1f1a",
+            "outline": "#717976",
+            "surface-container": "#ddf3eb",
+            "surface-container-high": "#d7ede5",
+            "inverse-primary": "#a8cfc4",
+            "primary-container": "#173c35",
+            "primary-fixed": "#c3ebe0",
+            "error-container": "#ffdad6",
+            "surface-tint": "#41655d",
+            "secondary-container": "#9af4d5",
+            "on-primary-container": "#81a69d",
+            "inverse-surface": "#21342f",
+            "surface-container-highest": "#d1e7df",
+            "surface-dim": "#c9dfd7",
+            "tertiary-fixed": "#cbf07d",
+            "on-surface-variant": "#414846",
+            "background": "#e8fef6",
+            "error": "#ba1a1a",
+            "primary": "#002620",
+            "on-primary-fixed": "#00201b",
+            "on-secondary": "#ffffff",
+            "on-tertiary-container": "#89ab41",
+            "on-secondary-fixed": "#002118",
+            "outline-variant": "#c1c8c5",
+            "on-secondary-fixed-variant": "#00513f",
+            "secondary-fixed": "#9af4d5",
+            "secondary": "#006b54",
+            "primary-fixed-dim": "#a8cfc4",
+            "surface-bright": "#e8fef6"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "full": "9999px"
+          },
+          "spacing": {
+            "space-xs": "0.25rem",
+            "space-sm": "0.5rem",
+            "gutter-sm": "1rem",
+            "space-md": "1rem",
+            "space-xl": "2rem",
+            "margin": "2rem",
+            "space-lg": "1.5rem",
+            "gutter": "1.5rem",
+            "margin-sm": "1rem"
+          },
+          "fontFamily": {
+            "headline-md": ["Manrope"],
+            "body-sm": ["Manrope"],
+            "label-md": ["Manrope"],
+            "display": ["Manrope"],
+            "label-sm": ["Manrope"],
+            "body-md": ["Manrope"],
+            "headline-lg": ["Manrope"],
+            "headline-xl": ["Manrope"],
+            "headline-xl-mobile": ["Manrope"],
+            "stat-counter": ["Manrope"],
+            "body-lg": ["Manrope"],
+            "headline-sm": ["Manrope"],
+            "caption": ["Manrope"]
+          },
+          "fontSize": {
+            "headline-md": ["1.25rem", { lineHeight: "1.75rem", letterSpacing: "-0.015em", fontWeight: "600" }],
+            "body-sm": ["0.875rem", { lineHeight: "1.25rem", fontWeight: "400" }],
+            "label-md": ["0.875rem", { lineHeight: "1.25rem", letterSpacing: "0.01em", fontWeight: "600" }],
+            "display": ["3.5rem", { lineHeight: "4rem", letterSpacing: "-0.03em", fontWeight: "800" }],
+            "label-sm": ["0.75rem", { lineHeight: "1rem", letterSpacing: "0.03em", fontWeight: "600" }],
+            "body-md": ["1rem", { lineHeight: "1.5rem", fontWeight: "400" }],
+            "headline-lg": ["1.5rem", { lineHeight: "2rem", letterSpacing: "-0.02em", fontWeight: "700" }],
+            "headline-xl": ["2.25rem", { lineHeight: "2.75rem", letterSpacing: "-0.025em", fontWeight: "700" }],
+            "headline-xl-mobile": ["1.75rem", { lineHeight: "2.25rem", letterSpacing: "-0.02em", fontWeight: "700" }],
+            "stat-counter": ["2rem", { lineHeight: "2.25rem", letterSpacing: "-0.03em", fontWeight: "800" }],
+            "body-lg": ["1.125rem", { lineHeight: "1.75rem", fontWeight: "400" }],
+            "headline-sm": ["1.125rem", { lineHeight: "1.5rem", letterSpacing: "-0.01em", fontWeight: "600" }],
+            "caption": ["0.75rem", { lineHeight: "1rem", letterSpacing: "0.02em", fontWeight: "500" }]
+          }
+        }
+      }
+    }
+  </script>
+<style>
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+      display: inline-block;
+      vertical-align: middle;
+      line-height: 1;
+    }
+    .custom-shadow {
+      box-shadow: 0 4px 20px -2px rgba(23, 60, 53, 0.04), 0 2px 6px -1px rgba(23, 60, 53, 0.02);
+    }
+    .card-elevated {
+      box-shadow: 0 12px 28px -4px rgba(23, 60, 53, 0.08), 0 4px 10px -2px rgba(23, 60, 53, 0.03);
+    }
+  </style>
+</head>
+<body class="min-h-screen bg-surface-container-low text-on-surface antialiased flex flex-col justify-center p-0 md:p-6 lg:p-8">
+<main class="w-full max-w-[1440px] mx-auto min-h-[860px] bg-surface-container-lowest rounded-none md:rounded-xl shadow-xl overflow-hidden grid grid-cols-1 lg:grid-cols-12 border border-outline-variant/30">
+<!-- Ліва колонка: Смарагдовий бренд-блок (#173C35) -->
+<section class="lg:col-span-5 bg-primary-container text-on-primary p-8 lg:p-14 flex flex-col justify-between relative overflow-hidden">
+<!-- Фоновий декоративний елемент -->
+<div class="absolute -right-24 -top-24 w-96 h-96 rounded-full bg-secondary/15 blur-3xl pointer-events-none"></div>
+<div class="absolute -left-20 -bottom-20 w-80 h-80 rounded-full bg-tertiary-fixed-dim/10 blur-2xl pointer-events-none"></div>
+<!-- Верхня секція: Логотип -->
+<div class="relative z-10">
+<div class="flex items-center gap-3">
+<div class="w-11 h-11 rounded-lg bg-secondary flex items-center justify-center text-on-secondary shadow-md">
+<span class="material-symbols-outlined text-[26px]">fitness_center</span>
+</div>
+<div>
+<span class="text-headline-md font-headline-md font-bold tracking-tight text-surface-container-lowest block">Фітнес-трекер</span>
+<span class="text-caption font-caption text-secondary-fixed opacity-90">Особистий кабінет</span>
+</div>
+</div>
+</div>
+<!-- Центральна секція: Мотиваційний текст -->
+<div class="relative z-10 my-10 lg:my-0 space-y-6 max-w-lg">
+<div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-surface-container-lowest/10 border border-surface-container-lowest/15 text-tertiary-fixed text-caption font-caption">
+<span class="material-symbols-outlined text-[16px]">stars</span>
+<span class="">Новий стандарт спортивного контролю</span>
+</div>
+<h1 class="text-headline-xl font-headline-xl text-surface-container-lowest leading-tight">
+          Розпочніть свій шлях до кращої фізичної форми вже сьогодні
+        </h1>
+<p class="text-body-md font-body-md text-surface-variant/90 leading-relaxed">
+          Отримайте персоналізовані тренувальні плани, детальний облік вправ, динаміку ваги та систему мотиваційних досягнень.
+        </p>
+<!-- Міні-віджет прогресу -->
+<div class="bg-surface-container-lowest/10 backdrop-blur-md rounded-xl p-5 border border-surface-container-lowest/15 space-y-4">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-2.5">
+<span class="material-symbols-outlined text-secondary-fixed text-[20px]">trending_up</span>
+<span class="text-label-md font-label-md text-surface-container-lowest">Ціль тижня: Сила &amp; Витривалість</span>
+</div>
+<span class="text-caption font-caption font-bold text-tertiary-fixed">+18% форми</span>
+</div>
+<div class="w-full bg-surface-container-lowest/20 h-2 rounded-full overflow-hidden">
+<div class="bg-tertiary-fixed h-full rounded-full w-4/5"></div>
+</div>
+<div class="grid grid-cols-3 gap-3 pt-1 text-center">
+<div class="bg-surface-container-lowest/5 p-2 rounded-lg">
+<span class="block text-label-sm font-label-sm text-surface-variant">Вправи</span>
+<span class="text-headline-sm font-headline-sm font-bold text-surface-container-lowest">24</span>
+</div>
+<div class="bg-surface-container-lowest/5 p-2 rounded-lg">
+<span class="block text-label-sm font-label-sm text-surface-variant">Калорії</span>
+<span class="text-headline-sm font-headline-sm font-bold text-surface-container-lowest">3 450</span>
+</div>
+<div class="bg-surface-container-lowest/5 p-2 rounded-lg">
+<span class="block text-label-sm font-label-sm text-surface-variant">Активність</span>
+<span class="text-headline-sm font-headline-sm font-bold text-surface-container-lowest">4 год</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Нижня секція: Картка переваг бренду -->
+<div class="relative z-10 pt-4 border-t border-surface-container-lowest/15">
+<div class="flex items-start gap-3">
+<span class="material-symbols-outlined text-secondary-fixed mt-0.5">verified_user</span>
+<p class="text-body-sm font-body-sm text-surface-variant/90 leading-snug">
+            Понад 50 готових програм • Розрахунок навантажень • Повна конфіденційність даних
+          </p>
+</div>
+</div>
+</section>
+<!-- Права колонка: Форма реєстрації -->
+<section class="lg:col-span-7 bg-surface-container-lowest p-8 lg:p-14 flex flex-col justify-center">
+<div class="max-w-[540px] w-full mx-auto space-y-6">
+<!-- Повідомлення про можливу помилку (системний алерт) -->
+<div class="flex items-start gap-3 p-4 rounded-xl bg-error-container text-on-error-container border border-error/20" id="error-banner">
+<span class="material-symbols-outlined text-error text-[20px] mt-0.5">error_outline</span>
+<div class="flex-1">
+<h4 class="text-label-md font-label-md text-error">Помилка реєстрації</h4>
+<p class="text-body-sm font-body-sm text-on-error-container mt-0.5">
+              Користувач із такою адресою електронної пошти вже зареєстрований
+            </p>
+</div>
+<button class="text-on-error-container/60 hover:text-on-error-container" onclick="document.getElementById('error-banner').style.display='none'" type="button">
+<span class="material-symbols-outlined text-[18px]">close</span>
+</button>
+</div>
+<!-- Заголовок форми -->
+<div class="space-y-1.5">
+<h2 class="text-headline-xl font-headline-xl text-on-surface">Створити акаунт</h2>
+<p class="text-body-md font-body-md text-on-surface-variant">Заповніть поля нижче, щоб розпочати тренування</p>
+</div>
+<!-- Форма -->
+<form class="space-y-4" onsubmit="event.preventDefault();">
+<!-- Ім'я та прізвище -->
+
+<!-- Електронна пошта -->
+<div class="space-y-1.5">
+<label class="block text-label-md font-label-md text-on-surface" for="email">
+              Електронна пошта
+            </label>
+<div class="relative rounded-lg">
+<span class="material-symbols-outlined absolute left-3.5 top-1/2 -translate-y-1/2 text-outline text-[20px] pointer-events-none">
+                mail
+              </span>
+<input class="w-full pl-11 pr-4 py-2.5 text-body-md font-body-md text-on-surface bg-surface-container-lowest border border-outline-variant rounded-lg focus:outline-none focus:border-secondary focus:ring-2 focus:ring-secondary/20 transition-all placeholder:text-outline/70" id="email" name="email" placeholder="alex.kravchenko@example.com" required="" type="email">
+</div>
+</div>
+<!-- Пароль -->
+<div class="space-y-1.5">
+<label class="block text-label-md font-label-md text-on-surface" for="password">
+              Пароль
+            </label>
+<div class="relative rounded-lg">
+<span class="material-symbols-outlined absolute left-3.5 top-1/2 -translate-y-1/2 text-outline text-[20px] pointer-events-none">
+                lock
+              </span>
+<input class="w-full pl-11 pr-11 py-2.5 text-body-md font-body-md text-on-surface bg-surface-container-lowest border border-outline-variant rounded-lg focus:outline-none focus:border-secondary focus:ring-2 focus:ring-secondary/20 transition-all placeholder:text-outline/70" id="password" name="password" oninput="validatePassword(this.value)" placeholder="Введіть надійний пароль" required="" type="password">
+<button aria-label="Показати або приховати пароль" class="absolute right-3.5 top-1/2 -translate-y-1/2 text-outline hover:text-on-surface transition-colors" id="togglePassword" onclick="toggleVisibility('password', 'passwordIcon')" type="button">
+<span class="material-symbols-outlined text-[20px]" id="passwordIcon">visibility</span>
+</button>
+</div>
+</div>
+<!-- Індикатор складності пароля та валідаційні критерії -->
+<div class="p-3.5 rounded-lg bg-surface-container-low border border-outline-variant/40 space-y-2.5">
+<div class="flex items-center justify-between text-caption font-caption">
+<span class="text-on-surface-variant font-medium">Рівень надійності пароля:</span>
+<span class="font-bold text-secondary" id="strengthText">Середній</span>
+</div>
+<!-- Прогрес-бар складності -->
+<div class="grid grid-cols-3 gap-1.5 h-1.5">
+<div class="rounded-full bg-secondary h-full transition-colors" id="bar1"></div>
+<div class="rounded-full bg-secondary h-full transition-colors" id="bar2"></div>
+<div class="rounded-full bg-outline-variant h-full transition-colors" id="bar3"></div>
+</div>
+<!-- Список критеріїв -->
+<div class="grid grid-cols-1 sm:grid-cols-3 gap-2 pt-1 text-caption font-caption text-on-surface-variant">
+<div class="flex items-center gap-1.5 text-secondary" id="ruleLength">
+<span class="material-symbols-outlined text-[16px]">check_circle</span>
+<span class="">Мін. 8 символів</span>
+</div>
+<div class="flex items-center gap-1.5 text-secondary" id="ruleNumber">
+<span class="material-symbols-outlined text-[16px]">check_circle</span>
+<span class="">Хоча б одна цифра</span>
+</div>
+<div class="flex items-center gap-1.5 text-outline" id="ruleUpper">
+<span class="material-symbols-outlined text-[16px]">radio_button_unchecked</span>
+<span class="">Велика літера</span>
+</div>
+</div>
+</div>
+<!-- Підтвердження пароля -->
+<div class="space-y-1.5">
+<label class="block text-label-md font-label-md text-on-surface" for="confirmPassword">
+              Підтвердження пароля
+            </label>
+<div class="relative rounded-lg">
+<span class="material-symbols-outlined absolute left-3.5 top-1/2 -translate-y-1/2 text-outline text-[20px] pointer-events-none">
+                verified
+              </span>
+<input class="w-full pl-11 pr-11 py-2.5 text-body-md font-body-md text-on-surface bg-surface-container-lowest border border-outline-variant rounded-lg focus:outline-none focus:border-secondary focus:ring-2 focus:ring-secondary/20 transition-all placeholder:text-outline/70" id="confirmPassword" name="confirmPassword" placeholder="Повторіть ваш пароль" required="" type="password">
+<button aria-label="Показати або приховати підтвердження пароля" class="absolute right-3.5 top-1/2 -translate-y-1/2 text-outline hover:text-on-surface transition-colors" onclick="toggleVisibility('confirmPassword', 'confirmPasswordIcon')" type="button">
+<span class="material-symbols-outlined text-[20px]" id="confirmPasswordIcon">visibility</span>
+</button>
+</div>
+</div>
+<!-- Чекбокс згоди з правилами -->
+
+<!-- Головна кнопка (Primary button) -->
+<div class="pt-3">
+<button class="w-full py-3 px-6 rounded-lg bg-primary-container hover:bg-secondary text-on-primary font-headline-sm text-headline-sm transition-all duration-200 shadow-md hover:shadow-lg active:scale-[0.99] flex items-center justify-center gap-2 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-secondary" type="submit">
+<span class="">Зареєструватися</span>
+<span class="material-symbols-outlined text-[20px]">arrow_forward</span>
+</button>
+</div>
+</form>
+<!-- Посилання внизу: Увійти -->
+<div class="text-center pt-2">
+<p class="text-body-sm font-body-sm text-on-surface-variant">
+            Уже маєте акаунт? 
+            <a class="text-secondary font-headline-sm hover:underline ml-1" href="#login">
+              Увійти
+            </a>
+</p>
+</div>
+</div>
+</section>
+</main>
+<!-- Простий інтерактивний сценарій валідації пароля та видимості полів -->
+<script>
+    function toggleVisibility(inputId, iconId) {
+      const input = document.getElementById(inputId);
+      const icon = document.getElementById(iconId);
+      if (input.type === 'password') {
+        input.type = 'text';
+        icon.textContent = 'visibility_off';
+      } else {
+        input.type = 'password';
+        icon.textContent = 'visibility';
+      }
+    }
+
+    function validatePassword(val) {
+      const hasLength = val.length >= 8;
+      const hasNumber = /\d/.test(val);
+      const hasUpper = /[A-ZА-ЯІЇЄ]/.test(val);
+
+      updateRule('ruleLength', hasLength);
+      updateRule('ruleNumber', hasNumber);
+      updateRule('ruleUpper', hasUpper);
+
+      const score = [hasLength, hasNumber, hasUpper].filter(Boolean).length;
+      const bar1 = document.getElementById('bar1');
+      const bar2 = document.getElementById('bar2');
+      const bar3 = document.getElementById('bar3');
+      const text = document.getElementById('strengthText');
+
+      if (score === 0) {
+        bar1.className = 'rounded-full bg-outline-variant h-full transition-colors';
+        bar2.className = 'rounded-full bg-outline-variant h-full transition-colors';
+        bar3.className = 'rounded-full bg-outline-variant h-full transition-colors';
+        text.textContent = 'Заслабкий';
+        text.className = 'font-bold text-outline';
+      } else if (score === 1) {
+        bar1.className = 'rounded-full bg-error h-full transition-colors';
+        bar2.className = 'rounded-full bg-outline-variant h-full transition-colors';
+        bar3.className = 'rounded-full bg-outline-variant h-full transition-colors';
+        text.textContent = 'Слабкий';
+        text.className = 'font-bold text-error';
+      } else if (score === 2) {
+        bar1.className = 'rounded-full bg-secondary h-full transition-colors';
+        bar2.className = 'rounded-full bg-secondary h-full transition-colors';
+        bar3.className = 'rounded-full bg-outline-variant h-full transition-colors';
+        text.textContent = 'Середній';
+        text.className = 'font-bold text-secondary';
+      } else if (score === 3) {
+        bar1.className = 'rounded-full bg-secondary h-full transition-colors';
+        bar2.className = 'rounded-full bg-secondary h-full transition-colors';
+        bar3.className = 'rounded-full bg-secondary h-full transition-colors';
+        text.textContent = 'Надійний';
+        text.className = 'font-bold text-secondary font-semibold';
+      }
+    }
+
+    function updateRule(elementId, isValid) {
+      const el = document.getElementById(elementId);
+      const icon = el.querySelector('.material-symbols-outlined');
+      if (isValid) {
+        el.className = 'flex items-center gap-1.5 text-secondary';
+        icon.textContent = 'check_circle';
+      } else {
+        el.className = 'flex items-center gap-1.5 text-outline';
+        icon.textContent = 'radio_button_unchecked';
+      }
+    }
+  </script>
+
+
+</body></html>

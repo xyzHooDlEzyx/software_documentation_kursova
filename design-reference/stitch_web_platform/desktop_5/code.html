@@ -1,0 +1,497 @@
+<!DOCTYPE html><html class="light" lang="uk"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>Фітнес-трекер — Каталог тренувань</title>
+<!-- Google Fonts: Manrope -->
+<link href="https://fonts.googleapis.com" rel="preconnect">
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect">
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet">
+<!-- Material Symbols Outlined -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<!-- Tailwind CSS CDN -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Theme Configuration Verbatim -->
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "on-primary-fixed-variant": "#294d46",
+            "on-tertiary-fixed-variant": "#374e00",
+            "surface-dim": "#c9dfd7",
+            "on-tertiary": "#ffffff",
+            "on-surface": "#0c1f1a",
+            "inverse-surface": "#21342f",
+            "on-background": "#0c1f1a",
+            "surface": "#e8fef6",
+            "inverse-primary": "#a8cfc4",
+            "surface-container": "#ddf3eb",
+            "outline": "#717976",
+            "surface-container-low": "#e2f9f0",
+            "primary-fixed": "#c3ebe0",
+            "on-error": "#ffffff",
+            "error-container": "#ffdad6",
+            "secondary-fixed-dim": "#7ed7b9",
+            "on-surface-variant": "#414846",
+            "on-error-container": "#93000a",
+            "surface-tint": "#41655d",
+            "on-primary-fixed": "#00201b",
+            "tertiary-container": "#2a3c00",
+            "outline-variant": "#c1c8c5",
+            "surface-variant": "#d1e7df",
+            "on-secondary-container": "#007259",
+            "primary-fixed-dim": "#a8cfc4",
+            "surface-container-high": "#d7ede5",
+            "primary-container": "#173c35",
+            "surface-bright": "#e8fef6",
+            "on-tertiary-fixed": "#141f00",
+            "on-secondary": "#ffffff",
+            "inverse-on-surface": "#dff6ed",
+            "surface-container-lowest": "#ffffff",
+            "on-secondary-fixed": "#002118",
+            "tertiary-fixed": "#cbf07d",
+            "on-primary-container": "#81a69d",
+            "on-tertiary-container": "#89ab41",
+            "tertiary-fixed-dim": "#afd364",
+            "on-primary": "#ffffff",
+            "error": "#ba1a1a",
+            "secondary": "#006b54",
+            "background": "#e8fef6",
+            "secondary-fixed": "#9af4d5",
+            "secondary-container": "#9af4d5",
+            "primary": "#002620",
+            "tertiary": "#192500",
+            "surface-container-highest": "#d1e7df",
+            "on-secondary-fixed-variant": "#00513f"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "full": "9999px"
+          },
+          "spacing": {
+            "space-lg": "1.5rem",
+            "space-sm": "0.5rem",
+            "space-xs": "0.25rem",
+            "gutter-sm": "1rem",
+            "margin-sm": "1rem",
+            "space-md": "1rem",
+            "margin": "2rem",
+            "space-xl": "2rem",
+            "gutter": "1.5rem"
+          },
+          "fontFamily": {
+            "stat-counter": ["Manrope"],
+            "label-sm": ["Manrope"],
+            "display": ["Manrope"],
+            "headline-xl": ["Manrope"],
+            "headline-lg": ["Manrope"],
+            "caption": ["Manrope"],
+            "headline-xl-mobile": ["Manrope"],
+            "body-sm": ["Manrope"],
+            "headline-md": ["Manrope"],
+            "body-md": ["Manrope"],
+            "label-md": ["Manrope"],
+            "body-lg": ["Manrope"],
+            "headline-sm": ["Manrope"]
+          },
+          "fontSize": {
+            "stat-counter": ["2rem", { "lineHeight": "2.25rem", "letterSpacing": "-0.03em", "fontWeight": "800" }],
+            "label-sm": ["0.75rem", { "lineHeight": "1rem", "letterSpacing": "0.03em", "fontWeight": "600" }],
+            "display": ["3.5rem", { "lineHeight": "4rem", "letterSpacing": "-0.03em", "fontWeight": "800" }],
+            "headline-xl": ["2.25rem", { "lineHeight": "2.75rem", "letterSpacing": "-0.025em", "fontWeight": "700" }],
+            "headline-lg": ["1.5rem", { "lineHeight": "2rem", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+            "caption": ["0.75rem", { "lineHeight": "1rem", "letterSpacing": "0.02em", "fontWeight": "500" }],
+            "headline-xl-mobile": ["1.75rem", { "lineHeight": "2.25rem", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+            "body-sm": ["0.875rem", { "lineHeight": "1.25rem", "fontWeight": "400" }],
+            "headline-md": ["1.25rem", { "lineHeight": "1.75rem", "letterSpacing": "-0.015em", "fontWeight": "600" }],
+            "body-md": ["1rem", { "lineHeight": "1.5rem", "fontWeight": "400" }],
+            "label-md": ["0.875rem", { "lineHeight": "1.25rem", "letterSpacing": "0.01em", "fontWeight": "600" }],
+            "body-lg": ["1.125rem", { "lineHeight": "1.75rem", "fontWeight": "400" }],
+            "headline-sm": ["1.125rem", { "lineHeight": "1.5rem", "letterSpacing": "-0.01em", "fontWeight": "600" }]
+          }
+        },
+      },
+    }
+  </script>
+</head>
+<body class="bg-background text-on-surface antialiased font-body-md flex min-h-screen">
+<!-- ========================================== -->
+<!-- SIDE NAVIGATION                            -->
+<!-- ========================================== -->
+<aside class="fixed top-0 left-0 h-screen w-64 flex flex-col justify-between bg-surface-container-lowest border-r border-outline-variant/40 shadow-sm z-30 select-none">
+<!-- Top Part: Logo, Subtext & CTA -->
+<div class="p-4 flex flex-col gap-3">
+<!-- Brand Header -->
+<div class="flex items-center gap-3 px-2 py-1">
+<div class="w-10 h-10 rounded-xl bg-primary-container flex items-center justify-center text-primary-fixed shadow-sm">
+<span class="material-symbols-outlined text-2xl" data-icon="fitness_center">fitness_center</span>
+</div>
+<div class="flex flex-col">
+<span class="text-headline-md font-headline-md font-bold text-primary tracking-tight">Фітнес-трекер</span>
+<span class="text-caption font-caption text-on-surface-variant">Особистий кабінет</span>
+</div>
+</div>
+<!-- Action Button (CTA) -->
+<button class="w-full mt-2 bg-secondary hover:bg-primary-container text-on-secondary font-label-md text-label-md py-2.5 px-4 rounded-xl flex items-center justify-center gap-2 transition-colors duration-150 shadow-sm active:scale-[0.98]">
+<span class="material-symbols-outlined text-lg" data-icon="add">add</span>
+<span class="">Нове тренування</span>
+</button>
+<!-- Navigation Tabs -->
+<nav class="flex flex-col gap-1 mt-2 overflow-y-auto max-h-[calc(100vh-320px)] pr-1">
+<!-- Tab 1: Головна -->
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-on-surface-variant font-medium hover:bg-surface-container-low hover:text-on-surface transition-colors duration-150 active:scale-[0.98]" href="#">
+<span class="material-symbols-outlined text-xl" data-icon="dashboard">dashboard</span>
+<span class="text-label-md font-label-md">Головна</span>
+</a>
+<!-- Tab 2: Мій профіль -->
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-on-surface-variant font-medium hover:bg-surface-container-low hover:text-on-surface transition-colors duration-150 active:scale-[0.98]" href="#">
+<span class="material-symbols-outlined text-xl" data-icon="person">person</span>
+<span class="text-label-md font-label-md">Мій профіль</span>
+</a>
+<!-- Tab 3: Вправи -->
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-on-surface-variant font-medium hover:bg-surface-container-low hover:text-on-surface transition-colors duration-150 active:scale-[0.98]" href="#">
+<span class="material-symbols-outlined text-xl" data-icon="fitness_center">fitness_center</span>
+<span class="text-label-md font-label-md">Вправи</span>
+</a>
+<!-- Tab 4: Тренування (ACTIVE DESTINATION) -->
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg bg-surface-container text-secondary font-semibold hover:bg-surface-container-low transition-colors duration-150 active:scale-[0.98] shadow-sm" href="#">
+<span class="material-symbols-outlined text-xl text-secondary" data-icon="directions_run" style="font-variation-settings: 'FILL' 1;">directions_run</span>
+<span class="text-label-md font-label-md font-bold">Тренування</span>
+</a>
+<!-- Tab 5: Програми -->
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-on-surface-variant font-medium hover:bg-surface-container-low hover:text-on-surface transition-colors duration-150 active:scale-[0.98]" href="#">
+<span class="material-symbols-outlined text-xl" data-icon="assignment">assignment</span>
+<span class="text-label-md font-label-md">Програми</span>
+</a>
+<!-- Tab 6: Календар -->
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-on-surface-variant font-medium hover:bg-surface-container-low hover:text-on-surface transition-colors duration-150 active:scale-[0.98]" href="#">
+<span class="material-symbols-outlined text-xl" data-icon="calendar_today">calendar_today</span>
+<span class="text-label-md font-label-md">Календар</span>
+</a>
+<!-- Tab 7: Історія тренувань -->
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-on-surface-variant font-medium hover:bg-surface-container-low hover:text-on-surface transition-colors duration-150 active:scale-[0.98]" href="#">
+<span class="material-symbols-outlined text-xl" data-icon="history">history</span>
+<span class="text-label-md font-label-md">Історія тренувань</span>
+</a>
+<!-- Tab 8: Статистика -->
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-on-surface-variant font-medium hover:bg-surface-container-low hover:text-on-surface transition-colors duration-150 active:scale-[0.98]" href="#">
+<span class="material-symbols-outlined text-xl" data-icon="bar_chart">bar_chart</span>
+<span class="text-label-md font-label-md">Статистика</span>
+</a>
+<!-- Tab 9: Досягнення -->
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-on-surface-variant font-medium hover:bg-surface-container-low hover:text-on-surface transition-colors duration-150 active:scale-[0.98]" href="#">
+<span class="material-symbols-outlined text-xl" data-icon="emoji_events">emoji_events</span>
+<span class="text-label-md font-label-md">Досягнення</span>
+</a>
+<!-- Tab 10: Челенджі -->
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-on-surface-variant font-medium hover:bg-surface-container-low hover:text-on-surface transition-colors duration-150 active:scale-[0.98]" href="#">
+<span class="material-symbols-outlined text-xl" data-icon="military_tech">military_tech</span>
+<span class="text-label-md font-label-md">Челенджі</span>
+</a>
+<!-- Tab 11: Рейтинг -->
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-on-surface-variant font-medium hover:bg-surface-container-low hover:text-on-surface transition-colors duration-150 active:scale-[0.98]" href="#">
+<span class="material-symbols-outlined text-xl" data-icon="leaderboard">leaderboard</span>
+<span class="text-label-md font-label-md">Рейтинг</span>
+</a>
+<!-- Tab 12: Налаштування -->
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-on-surface-variant font-medium hover:bg-surface-container-low hover:text-on-surface transition-colors duration-150 active:scale-[0.98]" href="#">
+<span class="material-symbols-outlined text-xl" data-icon="settings">settings</span>
+<span class="text-label-md font-label-md">Налаштування</span>
+</a>
+</nav>
+</div>
+<!-- Footer Part: Help & Logout -->
+<div class="p-4 border-t border-outline-variant/30 flex flex-col gap-1 bg-surface-container-lowest">
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-on-surface-variant font-medium hover:bg-surface-container-low hover:text-on-surface transition-colors duration-150" href="#">
+<span class="material-symbols-outlined text-xl" data-icon="help_outline">help_outline</span>
+<span class="text-label-md font-label-md">Допомога</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-error font-medium hover:bg-error-container/40 transition-colors duration-150" href="#">
+<span class="material-symbols-outlined text-xl" data-icon="logout">logout</span>
+<span class="text-label-md font-label-md">Вийти</span>
+</a>
+</div>
+</aside>
+<!-- ========================================== -->
+<!-- MAIN WORKSPACE CONTAINER                   -->
+<!-- ========================================== -->
+<div class="flex-1 flex flex-col ml-64 min-w-0">
+<!-- TopNavBar: Monogram initials 'ОК' (no photos, no PRO badges) -->
+<header class="sticky top-0 z-20 bg-surface-container-lowest h-18 py-3.5 px-8 flex justify-between items-center shadow-sm">
+<!-- Search Box -->
+<div class="flex items-center gap-6 w-1/3">
+<div class="relative w-full">
+<span class="material-symbols-outlined absolute left-3.5 top-1/2 -translate-y-1/2 text-outline text-xl" data-icon="search">search</span>
+<input class="w-full pl-11 pr-4 py-2 bg-surface-container-low border border-outline-variant/40 rounded-xl text-body-sm font-body-sm text-on-surface placeholder:text-outline focus:outline-none focus:border-secondary focus:ring-2 focus:ring-secondary/20 transition-all duration-150" placeholder="Швидкий пошук у додатку..." type="text">
+</div>
+</div>
+<!-- Quick Nav Links -->
+<div class="hidden lg:flex items-center gap-8">
+<a class="text-on-surface-variant text-label-md font-label-md hover:text-secondary transition-colors duration-150" href="#">Огляд</a>
+<a class="text-on-surface-variant text-label-md font-label-md hover:text-secondary transition-colors duration-150" href="#">Аналітика</a>
+<a class="text-on-surface-variant text-label-md font-label-md hover:text-secondary transition-colors duration-150" href="#">План тижня</a>
+</div>
+<!-- Trailing Cluster -->
+<div class="flex items-center gap-4">
+<!-- City & Time Badge -->
+<div class="hidden md:flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-surface-container text-on-primary-fixed-variant text-label-sm font-label-sm">
+<span class="material-symbols-outlined text-base" data-icon="schedule">schedule</span>
+<span class="">Київ 08:30</span>
+</div>
+<!-- Trailing Icon Actions -->
+<button class="w-10 h-10 rounded-xl flex items-center justify-center text-on-surface-variant hover:bg-surface-container-low transition-colors duration-150 relative" title="Календар дат">
+<span class="material-symbols-outlined text-xl" data-icon="date_range">date_range</span>
+</button>
+<button class="w-10 h-10 rounded-xl flex items-center justify-center text-on-surface-variant hover:bg-surface-container-low transition-colors duration-150 relative" title="Сповіщення">
+<span class="material-symbols-outlined text-xl" data-icon="notifications">notifications</span>
+<span class="absolute top-2 right-2 w-2 h-2 rounded-full bg-secondary"></span>
+</button>
+<!-- Trailing Primary Action -->
+<button class="bg-primary-container hover:bg-primary text-on-primary font-label-md text-label-md py-2 px-4 rounded-xl flex items-center gap-2 shadow-sm transition-all duration-150 active:scale-[0.98]">
+<span class="material-symbols-outlined text-base" data-icon="edit_calendar">edit_calendar</span>
+<span class="">Записати тренування</span>
+</button>
+<div class="h-6 w-px bg-outline-variant/40"></div>
+<!-- User Profile Monogram Initials 'ОК' (no photo, no PRO badge) -->
+<div class="flex items-center gap-3 pl-1">
+<div class="w-10 h-10 rounded-full bg-secondary-container text-secondary flex items-center justify-center font-bold text-sm border border-secondary/30 ring-2 ring-surface-container select-none shrink-0" title="Олександр Кравченко">ОК</div>
+<div class="hidden xl:flex flex-col text-left">
+<span class="text-label-md font-label-md text-on-surface font-semibold">Олександр Кравченко</span>
+</div>
+</div>
+</div>
+</header>
+<!-- ========================================== -->
+<!-- MAIN CONTENT CANVAS                        -->
+<!-- ========================================== -->
+<main class="flex-1 p-8 max-w-[1440px] w-full mx-auto space-y-6">
+<!-- Breadcrumbs & Headline Hierarchy -->
+<section class="space-y-2">
+<nav class="flex items-center gap-2 text-label-sm font-label-sm text-outline">
+<a class="hover:text-secondary transition-colors duration-150" href="#">Головна</a>
+<span class="material-symbols-outlined text-sm" data-icon="chevron_right">chevron_right</span>
+<span class="text-secondary font-bold">Тренування</span>
+</nav>
+<div class="flex flex-col md:flex-row md:items-end justify-between gap-4">
+<div>
+<h1 class="text-headline-xl font-headline-xl text-primary tracking-tight">Каталог тренувань</h1>
+<p class="text-body-md font-body-md text-on-surface-variant max-w-3xl mt-1">
+              Готові тренувальні комплекси за категоріями
+            </p>
+</div>
+<div class="flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-surface-container border border-surface-variant text-on-secondary-container text-label-sm font-label-sm shrink-0"><span class="material-symbols-outlined text-base text-secondary" data-icon="update">update</span>
+<span class="text-on-surface-variant font-medium text-caption">Оновлено сьогодні</span></div>
+</div>
+</section>
+<!-- Search & Category Filters (Django REST API GET /api/v1/workouts/) -->
+<section class="bg-surface-container-lowest border border-outline-variant/40 rounded-2xl p-5 shadow-sm space-y-4">
+<!-- Search Input Bar -->
+<div class="relative w-full">
+<span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-outline text-2xl" data-icon="search">search</span>
+<input class="w-full pl-12 pr-4 py-3 bg-surface border border-outline-variant/50 rounded-xl text-body-md font-body-md text-on-surface placeholder:text-outline focus:outline-none focus:border-secondary focus:ring-2 focus:ring-secondary/20 transition-all duration-150" placeholder="Пошук тренування за назвою..." type="text">
+</div>
+<!-- Supported Category Filter Chips: 'Всі тренування', 'Силові', 'Кардіо', 'Йога' -->
+<div class="flex flex-wrap items-center justify-between gap-3 pt-1">
+<div class="flex flex-wrap items-center gap-2">
+<span class="text-label-sm font-label-sm text-outline mr-1">Категорія:</span>
+<button class="px-4 py-2 rounded-full bg-primary-container text-on-primary font-label-sm text-label-sm shadow-sm transition-all duration-150">
+            Всі тренування
+          </button>
+<button class="px-4 py-2 rounded-full border border-outline-variant/60 bg-surface-container-lowest hover:bg-surface-container-low text-on-surface-variant font-label-sm text-label-sm transition-all duration-150">
+            Силові
+          </button>
+<button class="px-4 py-2 rounded-full border border-outline-variant/60 bg-surface-container-lowest hover:bg-surface-container-low text-on-surface-variant font-label-sm text-label-sm transition-all duration-150">
+            Кардіо
+          </button>
+<button class="px-4 py-2 rounded-full border border-outline-variant/60 bg-surface-container-lowest hover:bg-surface-container-low text-on-surface-variant font-label-sm text-label-sm transition-all duration-150">
+            Йога
+          </button>
+</div>
+<!-- Workout Count Hint -->
+<div class="text-label-sm font-label-sm text-on-surface-variant">
+          Знайдено <strong class="text-secondary font-bold">12</strong> тренувань
+        </div>
+</div>
+</section>
+<!-- ========================================== -->
+<!-- WORKOUT CARDS GRID (Backend fields only: id, name, category, description, exercise_count) -->
+<!-- ========================================== -->
+<section class="grid grid-cols-1 md:grid-cols-2 gap-6">
+<!-- CARD 1: id=1, Силове тренування: Спина та Кор -->
+<article class="bg-surface-container-lowest border border-outline-variant/40 rounded-2xl p-6 shadow-sm hover:shadow-md transition-all duration-200 flex flex-col justify-between group">
+<div class="space-y-4">
+<!-- Category Badge & Exercise Count -->
+<div class="flex items-center justify-between gap-2">
+<span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-surface-container-low text-secondary text-label-sm font-label-sm font-semibold">
+<span class="material-symbols-outlined text-base" data-icon="fitness_center">fitness_center</span>
+            Силові
+          </span>
+<span class="text-label-sm font-label-sm text-on-surface-variant font-semibold flex items-center gap-1">
+<span class="material-symbols-outlined text-base text-secondary" data-icon="format_list_bulleted">format_list_bulleted</span>
+            6 вправ
+          </span>
+</div>
+<!-- Name -->
+<div>
+<h2 class="text-headline-md font-headline-md text-primary group-hover:text-secondary transition-colors">
+            Силове тренування: Спина та Кор
+          </h2>
+</div>
+<!-- Description -->
+<p class="text-body-sm font-body-sm text-on-surface-variant leading-relaxed">
+            Збалансований комплекс для зміцнення постави, ширини спини та стабільності глибоких м'язів живота.
+          </p>
+</div>
+<!-- Bottom Actions -->
+<div class="pt-5 mt-4 border-t border-outline-variant/30 flex items-center justify-between gap-3">
+<button class="text-secondary font-label-md text-label-md hover:text-primary flex items-center gap-1 transition-colors group/link">
+<span class="">Деталі тренування</span>
+<span class="material-symbols-outlined text-lg transition-transform group-hover/link:translate-x-1" data-icon="arrow_forward">arrow_forward</span>
+</button>
+<button class="bg-secondary hover:bg-primary-container text-on-secondary font-label-md text-label-md py-2 px-4 rounded-xl flex items-center gap-1.5 transition-colors active:scale-[0.98] shadow-sm">
+<span class="material-symbols-outlined text-base" data-icon="event">event</span>
+<span class="">Запланувати</span>
+</button>
+</div>
+</article>
+<!-- CARD 2: id=2, Кардіо та витривалість: Спалювання жиру -->
+<article class="bg-surface-container-lowest border border-outline-variant/40 rounded-2xl p-6 shadow-sm hover:shadow-md transition-all duration-200 flex flex-col justify-between group">
+<div class="space-y-4">
+<!-- Category Badge & Exercise Count -->
+<div class="flex items-center justify-between gap-2">
+<span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-surface-container-low text-secondary text-label-sm font-label-sm font-semibold">
+<span class="material-symbols-outlined text-base" data-icon="directions_run">directions_run</span>
+            Кардіо
+          </span>
+<span class="text-label-sm font-label-sm text-on-surface-variant font-semibold flex items-center gap-1">
+<span class="material-symbols-outlined text-base text-secondary" data-icon="format_list_bulleted">format_list_bulleted</span>
+            5 вправ
+          </span>
+</div>
+<!-- Name -->
+<div>
+<h2 class="text-headline-md font-headline-md text-primary group-hover:text-secondary transition-colors">
+            Кардіо та витривалість: Спалювання жиру
+          </h2>
+</div>
+<!-- Description -->
+<p class="text-body-sm font-body-sm text-on-surface-variant leading-relaxed">
+            Високоінтенсивна аеробна сесія для розгону метаболізму та підвищення максимального споживання кисню.
+          </p>
+</div>
+<!-- Bottom Actions -->
+<div class="pt-5 mt-4 border-t border-outline-variant/30 flex items-center justify-between gap-3">
+<button class="text-secondary font-label-md text-label-md hover:text-primary flex items-center gap-1 transition-colors group/link">
+<span class="">Деталі тренування</span>
+<span class="material-symbols-outlined text-lg transition-transform group-hover/link:translate-x-1" data-icon="arrow_forward">arrow_forward</span>
+</button>
+<button class="bg-secondary hover:bg-primary-container text-on-secondary font-label-md text-label-md py-2 px-4 rounded-xl flex items-center gap-1.5 transition-colors active:scale-[0.98] shadow-sm">
+<span class="material-symbols-outlined text-base" data-icon="event">event</span>
+<span class="">Запланувати</span>
+</button>
+</div>
+</article>
+<!-- CARD 3: id=3, Йога для початківців: Відновлення та гнучкість -->
+<article class="bg-surface-container-lowest border border-outline-variant/40 rounded-2xl p-6 shadow-sm hover:shadow-md transition-all duration-200 flex flex-col justify-between group">
+<div class="space-y-4">
+<!-- Category Badge & Exercise Count -->
+<div class="flex items-center justify-between gap-2">
+<span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-surface-container-low text-secondary text-label-sm font-label-sm font-semibold">
+<span class="material-symbols-outlined text-base" data-icon="self_improvement">self_improvement</span>
+            Йога
+          </span>
+<span class="text-label-sm font-label-sm text-on-surface-variant font-semibold flex items-center gap-1">
+<span class="material-symbols-outlined text-base text-secondary" data-icon="format_list_bulleted">format_list_bulleted</span>
+            8 вправ
+          </span>
+</div>
+<!-- Name -->
+<div>
+<h2 class="text-headline-md font-headline-md text-primary group-hover:text-secondary transition-colors">
+            Йога для початківців: Відновлення та гнучкість
+          </h2>
+</div>
+<!-- Description -->
+<p class="text-body-sm font-body-sm text-on-surface-variant leading-relaxed">
+            М'який відновлювальний комплекс для зняття напруги після навантажень та покращення загальної рухливості суглобів.
+          </p>
+</div>
+<!-- Bottom Actions -->
+<div class="pt-5 mt-4 border-t border-outline-variant/30 flex items-center justify-between gap-3">
+<button class="text-secondary font-label-md text-label-md hover:text-primary flex items-center gap-1 transition-colors group/link">
+<span class="">Деталі тренування</span>
+<span class="material-symbols-outlined text-lg transition-transform group-hover/link:translate-x-1" data-icon="arrow_forward">arrow_forward</span>
+</button>
+<button class="bg-secondary hover:bg-primary-container text-on-secondary font-label-md text-label-md py-2 px-4 rounded-xl flex items-center gap-1.5 transition-colors active:scale-[0.98] shadow-sm">
+<span class="material-symbols-outlined text-base" data-icon="event">event</span>
+<span class="">Запланувати</span>
+</button>
+</div>
+</article>
+<!-- CARD 4: id=4, Базове силове тренування: Груди та Трицепс -->
+<article class="bg-surface-container-lowest border border-outline-variant/40 rounded-2xl p-6 shadow-sm hover:shadow-md transition-all duration-200 flex flex-col justify-between group">
+<div class="space-y-4">
+<!-- Category Badge & Exercise Count -->
+<div class="flex items-center justify-between gap-2">
+<span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-surface-container-low text-secondary text-label-sm font-label-sm font-semibold">
+<span class="material-symbols-outlined text-base" data-icon="fitness_center">fitness_center</span>
+            Силові
+          </span>
+<span class="text-label-sm font-label-sm text-on-surface-variant font-semibold flex items-center gap-1">
+<span class="material-symbols-outlined text-base text-secondary" data-icon="format_list_bulleted">format_list_bulleted</span>
+            6 вправ
+          </span>
+</div>
+<!-- Name -->
+<div>
+<h2 class="text-headline-md font-headline-md text-primary group-hover:text-secondary transition-colors">
+            Базове силове тренування: Груди та Трицепс
+          </h2>
+</div>
+<!-- Description -->
+<p class="text-body-sm font-body-sm text-on-surface-variant leading-relaxed">
+            Класичний жимовий комплекс вправ для розвитку м'язів грудей та трицепса з базовими рухами.
+          </p>
+</div>
+<!-- Bottom Actions -->
+<div class="pt-5 mt-4 border-t border-outline-variant/30 flex items-center justify-between gap-3">
+<button class="text-secondary font-label-md text-label-md hover:text-primary flex items-center gap-1 transition-colors group/link">
+<span class="">Деталі тренування</span>
+<span class="material-symbols-outlined text-lg transition-transform group-hover/link:translate-x-1" data-icon="arrow_forward">arrow_forward</span>
+</button>
+<button class="bg-secondary hover:bg-primary-container text-on-secondary font-label-md text-label-md py-2 px-4 rounded-xl flex items-center gap-1.5 transition-colors active:scale-[0.98] shadow-sm">
+<span class="material-symbols-outlined text-base" data-icon="event">event</span>
+<span class="">Запланувати</span>
+</button>
+</div>
+</article>
+</section>
+<!-- ========================================== -->
+<!-- PAGINATION CONTROLS                        -->
+<!-- ========================================== -->
+<section class="bg-surface-container-lowest border border-outline-variant/40 rounded-2xl p-4 shadow-sm flex flex-col sm:flex-row items-center justify-between gap-4">
+<button class="w-full sm:w-auto px-4 py-2 rounded-xl border border-outline-variant/50 bg-surface-container-low text-outline text-label-md font-label-md hover:bg-surface-container hover:text-on-surface transition-colors flex items-center justify-center gap-2 disabled:opacity-50">
+<span class="material-symbols-outlined text-lg" data-icon="chevron_left">chevron_left</span>
+<span class="">Попередня</span>
+</button>
+<div class="flex items-center gap-3">
+<span class="text-body-sm font-body-sm text-on-surface-variant font-medium">Сторінка 1 з 3</span>
+<div class="flex items-center gap-1">
+<button class="w-8 h-8 rounded-lg bg-primary-container text-on-primary text-label-sm font-label-sm font-bold flex items-center justify-center">1</button>
+<button class="w-8 h-8 rounded-lg text-on-surface-variant hover:bg-surface-container-low text-label-sm font-label-sm font-medium flex items-center justify-center transition-colors">2</button>
+<button class="w-8 h-8 rounded-lg text-on-surface-variant hover:bg-surface-container-low text-label-sm font-label-sm font-medium flex items-center justify-center transition-colors">3</button>
+</div>
+</div>
+<button class="w-full sm:w-auto px-4 py-2 rounded-xl bg-surface-container hover:bg-surface-container-high text-secondary text-label-md font-label-md font-semibold transition-colors flex items-center justify-center gap-2">
+<span class="">Наступна</span>
+<span class="material-symbols-outlined text-lg" data-icon="chevron_right">chevron_right</span>
+</button>
+</section>
+</main>
+</div>
+
+
+</body></html>

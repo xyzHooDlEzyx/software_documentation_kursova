@@ -1,0 +1,470 @@
+<!DOCTYPE html><html lang="uk"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>Рекомендована програма — Desktop</title>
+<link href="https://fonts.googleapis.com" rel="preconnect">
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect">
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "tertiary-fixed": "#cbf07d",
+            "tertiary": "#192500",
+            "on-tertiary-fixed-variant": "#374e00",
+            "secondary-fixed": "#9af4d5",
+            "inverse-primary": "#a8cfc4",
+            "on-primary": "#ffffff",
+            "surface-variant": "#d1e7df",
+            "on-tertiary-fixed": "#141f00",
+            "on-surface": "#0c1f1a",
+            "error-container": "#ffdad6",
+            "background": "#e8fef6",
+            "on-error": "#ffffff",
+            "error": "#ba1a1a",
+            "on-tertiary": "#ffffff",
+            "on-background": "#0c1f1a",
+            "on-tertiary-container": "#89ab41",
+            "on-error-container": "#93000a",
+            "surface-container-high": "#d7ede5",
+            "secondary": "#006b54",
+            "secondary-fixed-dim": "#7ed7b9",
+            "inverse-surface": "#21342f",
+            "on-primary-fixed-variant": "#294d46",
+            "on-secondary-container": "#007259",
+            "surface-container": "#ddf3eb",
+            "on-secondary-fixed-variant": "#00513f",
+            "surface-tint": "#41655d",
+            "on-surface-variant": "#414846",
+            "surface-dim": "#c9dfd7",
+            "secondary-container": "#9af4d5",
+            "surface-container-highest": "#d1e7df",
+            "primary-fixed-dim": "#a8cfc4",
+            "surface-container-low": "#e2f9f0",
+            "surface-container-lowest": "#ffffff",
+            "outline-variant": "#c1c8c5",
+            "tertiary-fixed-dim": "#afd364",
+            "primary-container": "#173c35",
+            "surface": "#e8fef6",
+            "primary-fixed": "#c3ebe0",
+            "tertiary-container": "#2a3c00",
+            "inverse-on-surface": "#dff6ed",
+            "surface-bright": "#e8fef6",
+            "on-primary-fixed": "#00201b",
+            "on-primary-container": "#81a69d",
+            "outline": "#717976",
+            "primary": "#002620",
+            "on-secondary": "#ffffff",
+            "on-secondary-fixed": "#002118"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "full": "9999px"
+          },
+          "spacing": {
+            "margin": "2rem",
+            "space-sm": "0.5rem",
+            "space-xl": "2rem",
+            "space-xs": "0.25rem",
+            "gutter-sm": "1rem",
+            "gutter": "1.5rem",
+            "space-md": "1rem",
+            "space-lg": "1.5rem",
+            "margin-sm": "1rem"
+          },
+          "fontFamily": {
+            "display": ["Manrope"],
+            "body-md": ["Manrope"],
+            "headline-xl": ["Manrope"],
+            "headline-lg": ["Manrope"],
+            "body-sm": ["Manrope"],
+            "caption": ["Manrope"],
+            "headline-md": ["Manrope"],
+            "label-sm": ["Manrope"],
+            "stat-counter": ["Manrope"],
+            "headline-sm": ["Manrope"],
+            "headline-xl-mobile": ["Manrope"],
+            "label-md": ["Manrope"],
+            "body-lg": ["Manrope"]
+          },
+          "fontSize": {
+            "display": ["3.5rem", { "lineHeight": "4rem", "letterSpacing": "-0.03em", "fontWeight": "800" }],
+            "body-md": ["1rem", { "lineHeight": "1.5rem", "fontWeight": "400" }],
+            "headline-xl": ["2.25rem", { "lineHeight": "2.75rem", "letterSpacing": "-0.025em", "fontWeight": "700" }],
+            "headline-lg": ["1.5rem", { "lineHeight": "2rem", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+            "body-sm": ["0.875rem", { "lineHeight": "1.25rem", "fontWeight": "400" }],
+            "caption": ["0.75rem", { "lineHeight": "1rem", "letterSpacing": "0.02em", "fontWeight": "500" }],
+            "headline-md": ["1.25rem", { "lineHeight": "1.75rem", "letterSpacing": "-0.015em", "fontWeight": "600" }],
+            "label-sm": ["0.75rem", { "lineHeight": "1rem", "letterSpacing": "0.03em", "fontWeight": "600" }],
+            "stat-counter": ["2rem", { "lineHeight": "2.25rem", "letterSpacing": "-0.03em", "fontWeight": "800" }],
+            "headline-sm": ["1.125rem", { "lineHeight": "1.5rem", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+            "headline-xl-mobile": ["1.75rem", { "lineHeight": "2.25rem", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+            "label-md": ["0.875rem", { "lineHeight": "1.25rem", "letterSpacing": "0.01em", "fontWeight": "600" }],
+            "body-lg": ["1.125rem", { "lineHeight": "1.75rem", "fontWeight": "400" }]
+          }
+        },
+      },
+    }
+  </script>
+</head>
+<body class="bg-surface text-on-surface font-body-md antialiased min-h-screen flex selection:bg-secondary-fixed selection:text-primary">
+<!-- SideNavBar Anchor -->
+<aside class="fixed top-0 left-0 h-screen w-64 flex flex-col justify-between bg-surface-container-lowest border-r border-outline-variant/30 shadow-sm z-30">
+<div class="p-4 flex flex-col gap-2">
+<!-- SideNav Header -->
+<div class="flex items-center gap-3 px-2 py-3 mb-2 border-b border-surface-container">
+<div class="w-10 h-10 rounded-xl bg-primary-container text-tertiary-fixed flex items-center justify-center font-headline-md font-bold shadow-sm">
+<span class="material-symbols-outlined text-tertiary-fixed" data-icon="fitness_center">fitness_center</span>
+</div>
+<div class="flex flex-col">
+<span class="text-headline-sm font-headline-sm font-bold text-primary leading-tight">Фітнес-трекер</span>
+<span class="text-caption font-caption text-on-surface-variant">Особистий кабінет</span>
+</div>
+</div>
+<!-- Action Button CTA -->
+<button class="w-full mb-3 flex items-center justify-center gap-2 bg-primary-container hover:bg-primary text-on-primary py-2.5 px-4 rounded-lg font-label-md text-label-md transition-colors shadow-sm active:scale-[0.98]">
+<span class="material-symbols-outlined text-sm" data-icon="add">add</span>
+<span class="">Нове тренування</span>
+</button>
+<!-- Navigation Tabs (12 items from JSON) -->
+<nav class="flex flex-col gap-1 overflow-y-auto max-h-[calc(100vh-270px)] pr-1">
+<!-- Головна -->
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-on-surface-variant font-label-md text-label-md hover:bg-surface-container-low hover:text-on-surface transition-colors duration-150 active:scale-[0.98]" href="#">
+<span class="material-symbols-outlined text-[20px]" data-icon="dashboard">dashboard</span>
+<span class="">Головна</span>
+</a>
+<!-- Мій профіль -->
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-on-surface-variant font-label-md text-label-md hover:bg-surface-container-low hover:text-on-surface transition-colors duration-150 active:scale-[0.98]" href="#">
+<span class="material-symbols-outlined text-[20px]" data-icon="person">person</span>
+<span class="">Мій профіль</span>
+</a>
+<!-- Вправи -->
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-on-surface-variant font-label-md text-label-md hover:bg-surface-container-low hover:text-on-surface transition-colors duration-150 active:scale-[0.98]" href="#">
+<span class="material-symbols-outlined text-[20px]" data-icon="fitness_center">fitness_center</span>
+<span class="">Вправи</span>
+</a>
+<!-- Тренування -->
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-on-surface-variant font-label-md text-label-md hover:bg-surface-container-low hover:text-on-surface transition-colors duration-150 active:scale-[0.98]" href="#">
+<span class="material-symbols-outlined text-[20px]" data-icon="directions_run">directions_run</span>
+<span class="">Тренування</span>
+</a>
+<!-- Програми (ACTIVE) -->
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg bg-surface-container text-secondary font-label-md text-label-md font-semibold active:scale-[0.98]" href="#">
+<span class="material-symbols-outlined text-[20px] text-secondary" data-icon="assignment" data-weight="fill" style="font-variation-settings: 'FILL' 1;">assignment</span>
+<span class="">Програми</span>
+</a>
+<!-- Календар -->
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-on-surface-variant font-label-md text-label-md hover:bg-surface-container-low hover:text-on-surface transition-colors duration-150 active:scale-[0.98]" href="#">
+<span class="material-symbols-outlined text-[20px]" data-icon="calendar_today">calendar_today</span>
+<span class="">Календар</span>
+</a>
+<!-- Історія тренувань -->
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-on-surface-variant font-label-md text-label-md hover:bg-surface-container-low hover:text-on-surface transition-colors duration-150 active:scale-[0.98]" href="#">
+<span class="material-symbols-outlined text-[20px]" data-icon="history">history</span>
+<span class="">Історія тренувань</span>
+</a>
+<!-- Статистика -->
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-on-surface-variant font-label-md text-label-md hover:bg-surface-container-low hover:text-on-surface transition-colors duration-150 active:scale-[0.98]" href="#">
+<span class="material-symbols-outlined text-[20px]" data-icon="bar_chart">bar_chart</span>
+<span class="">Статистика</span>
+</a>
+<!-- Досягнення -->
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-on-surface-variant font-label-md text-label-md hover:bg-surface-container-low hover:text-on-surface transition-colors duration-150 active:scale-[0.98]" href="#">
+<span class="material-symbols-outlined text-[20px]" data-icon="emoji_events">emoji_events</span>
+<span class="">Досягнення</span>
+</a>
+<!-- Челенджі -->
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-on-surface-variant font-label-md text-label-md hover:bg-surface-container-low hover:text-on-surface transition-colors duration-150 active:scale-[0.98]" href="#">
+<span class="material-symbols-outlined text-[20px]" data-icon="military_tech">military_tech</span>
+<span class="">Челенджі</span>
+</a>
+<!-- Рейтинг -->
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-on-surface-variant font-label-md text-label-md hover:bg-surface-container-low hover:text-on-surface transition-colors duration-150 active:scale-[0.98]" href="#">
+<span class="material-symbols-outlined text-[20px]" data-icon="leaderboard">leaderboard</span>
+<span class="">Рейтинг</span>
+</a>
+<!-- Налаштування -->
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-on-surface-variant font-label-md text-label-md hover:bg-surface-container-low hover:text-on-surface transition-colors duration-150 active:scale-[0.98]" href="#">
+<span class="material-symbols-outlined text-[20px]" data-icon="settings">settings</span>
+<span class="">Налаштування</span>
+</a>
+</nav>
+</div>
+<!-- SideNav Footer -->
+<div class="p-4 border-t border-surface-container flex flex-col gap-1 bg-surface-container-lowest">
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-on-surface-variant font-label-md text-label-md hover:bg-surface-container-low hover:text-on-surface transition-colors" href="#">
+<span class="material-symbols-outlined text-[20px]" data-icon="help_outline">help_outline</span>
+<span class="">Допомога</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-on-surface-variant font-label-md text-label-md hover:bg-surface-container-low hover:text-error transition-colors" href="#">
+<span class="material-symbols-outlined text-[20px]" data-icon="logout">logout</span>
+<span class="">Вийти</span>
+</a>
+</div>
+</aside>
+<!-- Main Viewport Wrap (1440px target container offset by 260px) -->
+<div class="ml-64 flex-1 flex flex-col min-w-0 bg-surface">
+<!-- TopNavBar Anchor -->
+<header class="sticky top-0 h-[72px] bg-surface-container-lowest border-b border-outline-variant/30 flex items-center justify-between px-8 z-20 shadow-sm">
+<div class="flex items-center gap-8 w-1/3">
+<!-- Search bar on left -->
+<div class="relative w-full max-w-sm">
+<span class="material-symbols-outlined absolute left-3 top-2.5 text-on-surface-variant text-[20px]" data-icon="search">search</span>
+<input class="w-full bg-surface-container-low border border-outline-variant/40 rounded-lg pl-10 pr-4 py-2 text-body-sm font-body-sm text-on-surface placeholder:text-outline focus:outline-none focus:border-secondary focus:ring-2 focus:ring-secondary/20 transition-all" placeholder="Пошук тренувань, програм..." type="text">
+</div>
+</div>
+<!-- Navigation links from TopNavBar JSON -->
+<div class="hidden lg:flex items-center gap-6">
+<a class="text-on-surface-variant font-label-md text-label-md hover:text-secondary transition-colors" href="#">Огляд</a>
+<a class="text-on-surface-variant font-label-md text-label-md hover:text-secondary transition-colors" href="#">Аналітика</a>
+<a class="text-secondary font-label-md text-label-md font-bold border-b-2 border-secondary pb-1" href="#">План тижня</a>
+</div>
+<!-- Trailing actions cluster -->
+<div class="flex items-center gap-4">
+<!-- Kyiv time badge -->
+<div class="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-surface-container-low text-on-surface-variant font-caption text-caption border border-outline-variant/30">
+<span class="material-symbols-outlined text-[16px] text-secondary" data-icon="schedule">schedule</span>
+<span class="">Київ 08:30</span>
+</div>
+<!-- Trailing icons -->
+<button class="w-9 h-9 rounded-lg flex items-center justify-center text-on-surface-variant hover:bg-surface-container-low transition-colors" title="Календар">
+<span class="material-symbols-outlined text-[20px]" data-icon="date_range">date_range</span>
+</button>
+<button class="relative w-9 h-9 rounded-lg flex items-center justify-center text-on-surface-variant hover:bg-surface-container-low transition-colors" title="Сповіщення">
+<span class="material-symbols-outlined text-[20px]" data-icon="notifications">notifications</span>
+<span class="absolute top-2 right-2 w-2 h-2 rounded-full bg-tertiary-fixed border border-surface-container-lowest"></span>
+</button>
+<!-- User Avatar Initial (ОК) - no photo -->
+<div class="flex items-center gap-3 pl-2 border-l border-outline-variant/30">
+<div class="w-10 h-10 rounded-full bg-primary-container text-tertiary-fixed font-headline-sm font-bold flex items-center justify-center shadow-sm select-none" title="Олександр Кравченко">
+            ОК
+          </div>
+<div class="hidden xl:flex flex-col">
+<span class="text-label-md font-label-md text-on-surface font-semibold leading-tight">Олександр К.</span>
+<span class="text-caption font-caption text-on-surface-variant">Атлет</span>
+</div>
+</div>
+</div>
+</header>
+<!-- Page Content Container -->
+<main class="p-8 max-w-[1240px] w-full mx-auto space-y-8">
+<!-- Breadcrumbs & Page Header Section -->
+<section class="space-y-3">
+<!-- Breadcrumb row & Link back -->
+<div class="flex items-center justify-between">
+<nav aria-label="Хлібні крихти" class="flex items-center gap-2 text-caption font-caption text-on-surface-variant">
+<a class="hover:text-secondary transition-colors" href="#">Головна</a>
+<span class="material-symbols-outlined text-[14px]" data-icon="chevron_right">chevron_right</span>
+<a class="hover:text-secondary transition-colors" href="#">Програми</a>
+<span class="material-symbols-outlined text-[14px]" data-icon="chevron_right">chevron_right</span>
+<span class="text-on-surface font-semibold">Рекомендація</span>
+</nav>
+<!-- Back button: Мої програми -->
+<a class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-outline-variant/60 text-secondary hover:bg-surface-container-low text-label-md font-label-md transition-colors active:scale-[0.98]" href="#">
+<span class="material-symbols-outlined text-[18px]" data-icon="arrow_back">arrow_back</span>
+<span class="">Мої програми</span>
+</a>
+</div>
+<!-- Header Title & Badges -->
+<div class="flex flex-col md:flex-row md:items-center justify-between gap-4 pt-1">
+<div>
+<div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-surface-container text-secondary text-caption font-caption font-semibold mb-2 border border-secondary/20">
+<span class="w-2 h-2 rounded-full bg-secondary"></span>
+<span class="">Персональна рекомендація</span>
+</div>
+<h1 class="text-headline-xl font-headline-xl text-primary tracking-tight">Рекомендована програма</h1>
+<p class="text-body-md font-body-md text-on-surface-variant mt-1 max-w-2xl">
+              Ми підібрали програму відповідно до вашої фітнес-цілі, рівня підготовки та бажаної частоти тренувань.
+            </p>
+</div>
+</div>
+</section>
+<!-- HERO CARD: Main Recommended Program Card -->
+<section class="relative bg-surface-container-lowest rounded-2xl border border-[#E6EDE8] shadow-[0_4px_20px_-2px_rgba(23,60,53,0.04),0_2px_6px_-1px_rgba(23,60,53,0.02)] p-8 overflow-hidden">
+<!-- Subtle Nordic vitality ambient accent glow -->
+<div class="absolute -right-24 -top-24 w-80 h-80 rounded-full bg-surface-container opacity-50 blur-3xl pointer-events-none"></div>
+<div class="relative z-10 flex flex-col lg:flex-row lg:items-center justify-between gap-8">
+<div class="space-y-5 flex-1">
+<!-- Program Header & Status -->
+<div class="flex flex-wrap items-center gap-3">
+<span class="px-3.5 py-1 rounded-full bg-surface-container-low text-secondary border border-secondary/20 text-label-sm font-label-sm font-bold tracking-wide">
+                ГОЛОВНИЙ ВИБІР
+              </span>
+<span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-surface-variant/40 text-on-surface-variant text-label-sm font-label-sm border border-outline-variant/30">
+<span class="material-symbols-outlined text-[14px]" data-icon="edit_note">edit_note</span>
+<span class="">Створюється як чернетка</span>
+</span>
+</div>
+<div>
+<h2 class="text-display text-primary font-display tracking-tight leading-none text-4xl lg:text-5xl font-extrabold">
+                «Баланс 3»
+              </h2>
+<p class="text-body-lg font-body-lg text-on-surface-variant mt-2 max-w-xl">
+                Збалансована програма для підтримання фізичної форми.
+              </p>
+</div>
+<!-- Program Attributes Pills -->
+<div class="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-2">
+<div class="p-3.5 rounded-xl bg-surface-container-low border border-surface-container flex items-center gap-3">
+<div class="w-9 h-9 rounded-lg bg-surface-container-lowest text-secondary flex items-center justify-center shadow-xs">
+<span class="material-symbols-outlined text-[20px]" data-icon="track_changes">track_changes</span>
+</div>
+<div>
+<div class="text-caption font-caption text-on-surface-variant">Фітнес-ціль</div>
+<div class="text-label-md font-label-md text-primary font-bold">Підтримання форми</div>
+</div>
+</div>
+<div class="p-3.5 rounded-xl bg-surface-container-low border border-surface-container flex items-center gap-3">
+<div class="w-9 h-9 rounded-lg bg-surface-container-lowest text-secondary flex items-center justify-center shadow-xs">
+<span class="material-symbols-outlined text-[20px]" data-icon="signal_cellular_alt">signal_cellular_alt</span>
+</div>
+<div>
+<div class="text-caption font-caption text-on-surface-variant">Рівень підготовки</div>
+<div class="text-label-md font-label-md text-primary font-bold">Середній</div>
+</div>
+</div>
+<div class="p-3.5 rounded-xl bg-surface-container-low border border-surface-container flex items-center gap-3">
+<div class="w-9 h-9 rounded-lg bg-surface-container-lowest text-secondary flex items-center justify-center shadow-xs">
+<span class="material-symbols-outlined text-[20px]" data-icon="calendar_month">calendar_month</span>
+</div>
+<div>
+<div class="text-caption font-caption text-on-surface-variant">Частота</div>
+<div class="text-label-md font-label-md text-primary font-bold">3 тренування на тиждень</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Actions Column -->
+<div class="lg:w-72 flex flex-col gap-3 justify-center border-t lg:border-t-0 lg:border-l border-outline-variant/30 pt-6 lg:pt-0 lg:pl-8">
+<button class="w-full py-3.5 px-6 rounded-xl bg-primary-container hover:bg-primary text-on-primary font-label-md text-label-md font-semibold flex items-center justify-center gap-2.5 transition-all shadow-sm active:scale-[0.98] ring-offset-2 focus:ring-2 focus:ring-tertiary-fixed" id="chooseProgramBtn">
+<span class="material-symbols-outlined text-[22px] text-tertiary-fixed" data-icon="check_circle">check_circle</span>
+<span class="">Обрати програму</span>
+</button>
+<a class="w-full py-3 px-6 rounded-xl border border-outline-variant/60 text-primary hover:bg-surface-container-low font-label-md text-label-md font-semibold text-center transition-all active:scale-[0.98]" href="#programComposition">
+              Переглянути склад
+            </a>
+<div class="flex items-start gap-2 pt-2 px-1 text-caption font-caption text-on-surface-variant">
+<span class="material-symbols-outlined text-[16px] text-secondary mt-0.5 shrink-0" data-icon="info">info</span>
+<span class="">Створює особисту копію програми зі статусом "Чернетка" у вашому кабінеті</span>
+</div>
+</div>
+</div>
+</section>
+<!-- BENTO SPLIT: Why this program? & Key Details -->
+<section class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+<!-- ЧОМУ САМЕ ЦЯ ПРОГРАМА? (8 Cols) -->
+<div class="lg:col-span-8 bg-surface-container-lowest rounded-2xl border border-[#E6EDE8] shadow-[0_4px_20px_-2px_rgba(23,60,53,0.04)] p-7 space-y-6">
+<div class="flex items-center gap-3">
+<div class="w-9 h-9 rounded-xl bg-surface-container text-secondary flex items-center justify-center">
+<span class="material-symbols-outlined text-[22px]" data-icon="verified">verified</span>
+</div>
+<div>
+<h3 class="text-headline-md font-headline-md text-primary font-bold">Чому саме ця програма?</h3>
+<p class="text-body-sm font-body-sm text-on-surface-variant">Критерії автоматичного підбору за параметрами вашого профілю</p>
+</div>
+</div>
+<div class="space-y-4"><div class="p-4 rounded-xl bg-surface-container-low/60 border border-surface-container flex items-start gap-4"><div class="w-8 h-8 rounded-full bg-surface-container text-secondary flex items-center justify-center font-bold text-label-md shrink-0 mt-0.5">1</div><div class="space-y-1"><div class="text-headline-sm font-headline-sm text-primary font-semibold">Програма відповідає вашій фітнес-цілі</div><p class="text-body-sm font-body-sm text-on-surface-variant leading-relaxed">Фокус програми спрямований на підтримання фізичної форми.</p></div></div><div class="p-4 rounded-xl bg-surface-container-low/60 border border-surface-container flex items-start gap-4"><div class="w-8 h-8 rounded-full bg-surface-container text-secondary flex items-center justify-center font-bold text-label-md shrink-0 mt-0.5">2</div><div class="space-y-1"><div class="text-headline-sm font-headline-sm text-primary font-semibold">Програма відповідає вашому рівню підготовки</div><p class="text-body-sm font-body-sm text-on-surface-variant leading-relaxed">Складність та навантаження відповідають середньому рівню підготовки.</p></div></div><div class="p-4 rounded-xl bg-surface-container-low/60 border border-surface-container flex items-start gap-4"><div class="w-8 h-8 rounded-full bg-surface-container text-secondary flex items-center justify-center font-bold text-label-md shrink-0 mt-0.5">3</div><div class="space-y-1"><div class="text-headline-sm font-headline-sm text-primary font-semibold">Частота тренувань найближча до ваших побажань</div><p class="text-body-sm font-body-sm text-on-surface-variant leading-relaxed">Програма розрахована на 3 тренування на тиждень.</p></div></div></div>
+</div>
+<!-- Sidebar Summary / Principle Card (4 Cols) -->
+<div class="lg:col-span-4 bg-surface-container-low rounded-2xl border border-surface-container p-7 flex flex-col justify-between space-y-6">
+<div class="space-y-4">
+<span class="px-3 py-1 rounded-full bg-surface-container-lowest text-secondary border border-outline-variant/30 text-caption font-caption font-bold">
+              ПРИНЦИП NORDIC VITALITY
+            </span>
+<h4 class="text-headline-sm font-headline-sm text-primary font-bold">Природний ритм та стала дисципліна</h4>
+<p class="text-body-sm font-body-sm text-on-surface-variant leading-relaxed">
+              Програма побудована на чергуванні типів навантаження, що дозволяє уникнути перевтоми й планомірно покращувати витривалість та мобільність.
+            </p>
+<div class="space-y-2 pt-2">
+<div class="flex items-center gap-2 text-label-sm font-label-sm text-on-surface">
+<span class="material-symbols-outlined text-secondary text-[18px]" data-icon="check">check</span>
+<span class="">Без виснажливих перевантажень</span>
+</div>
+<div class="flex items-center gap-2 text-label-sm font-label-sm text-on-surface">
+<span class="material-symbols-outlined text-secondary text-[18px]" data-icon="check">check</span>
+<span class="">Збалансований тижневий цикл</span>
+</div>
+<div class="flex items-center gap-2 text-label-sm font-label-sm text-on-surface">
+<span class="material-symbols-outlined text-secondary text-[18px]" data-icon="check">check</span>
+<span class="">Гнучка адаптація розкладу</span>
+</div>
+</div>
+</div>
+<div class="p-4 rounded-xl bg-surface-container-lowest border border-outline-variant/30"><div class="text-caption font-caption text-on-surface-variant">Частота за програмою:</div><div class="text-label-md font-label-md font-bold text-primary">3 тренування на тиждень</div></div>
+</div>
+</section>
+<!-- СКЛАД ПРОГРАМИ SECTION -->
+<section class="space-y-5 pt-2" id="programComposition">
+<div class="flex items-center justify-between">
+<div>
+<h3 class="text-headline-lg font-headline-lg text-primary font-bold">Склад програми</h3>
+<p class="text-body-sm font-body-sm text-on-surface-variant mt-0.5">Структура тренувальних блоків шаблону «Баланс 3»</p>
+</div>
+<span class="text-label-md font-label-md text-secondary font-semibold">3 тренування в програмі</span>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+<!-- Card 1 -->
+<div class="bg-surface-container-lowest rounded-2xl border border-[#E6EDE8] p-6 shadow-[0_4px_20px_-2px_rgba(23,60,53,0.04)] flex flex-col justify-between hover:shadow-[0_12px_28px_-4px_rgba(23,60,53,0.08)] transition-all"><div class="space-y-4"><div class="flex items-center justify-between"><span class="w-8 h-8 rounded-lg bg-surface-container text-secondary font-bold text-label-md flex items-center justify-center">01</span><span class="text-caption font-caption text-on-surface-variant font-semibold uppercase tracking-wider">ТРЕНУВАННЯ 1</span></div><div><h4 class="text-headline-sm font-headline-sm text-primary font-bold mt-1">Силове тренування А: Верх тіла та кор</h4><p class="text-body-sm font-body-sm text-on-surface-variant mt-2 leading-relaxed">Включає базові вправи для зміцнення постави, м'язів спини, грудей та корпусу.</p></div></div><div class="pt-6 border-t border-surface-container mt-6 flex items-center justify-between text-caption font-caption text-on-surface-variant"><span class="flex items-center gap-1.5"><span class="material-symbols-outlined text-[16px] text-secondary" data-icon="fitness_center">fitness_center</span><span class="">Базова силова робота</span></span><span class="font-semibold text-secondary">Основне</span></div></div>
+<!-- Card 2 -->
+<div class="bg-surface-container-lowest rounded-2xl border border-[#E6EDE8] p-6 shadow-[0_4px_20px_-2px_rgba(23,60,53,0.04)] flex flex-col justify-between hover:shadow-[0_12px_28px_-4px_rgba(23,60,53,0.08)] transition-all"><div class="space-y-4"><div class="flex items-center justify-between"><span class="w-8 h-8 rounded-lg bg-surface-container text-secondary font-bold text-label-md flex items-center justify-center">02</span><span class="text-caption font-caption text-on-surface-variant font-semibold uppercase tracking-wider">ТРЕНУВАННЯ 2</span></div><div><h4 class="text-headline-sm font-headline-sm text-primary font-bold mt-1">Кардіотренування та витривалість</h4><p class="text-body-sm font-body-sm text-on-surface-variant mt-2 leading-relaxed">Помірне навантаження для серцево-судинної системи та підтримки витривалості.</p></div></div><div class="pt-6 border-t border-surface-container mt-6 flex items-center justify-between text-caption font-caption text-on-surface-variant"><span class="flex items-center gap-1.5"><span class="material-symbols-outlined text-[16px] text-secondary" data-icon="directions_run">directions_run</span><span class="">Аеробний темп</span></span><span class="font-semibold text-secondary">Динамічне</span></div></div>
+<!-- Card 3 -->
+<div class="bg-surface-container-lowest rounded-2xl border border-[#E6EDE8] p-6 shadow-[0_4px_20px_-2px_rgba(23,60,53,0.04)] flex flex-col justify-between hover:shadow-[0_12px_28px_-4px_rgba(23,60,53,0.08)] transition-all"><div class="space-y-4"><div class="flex items-center justify-between"><span class="w-8 h-8 rounded-lg bg-surface-container text-secondary font-bold text-label-md flex items-center justify-center">03</span><span class="text-caption font-caption text-on-surface-variant font-semibold uppercase tracking-wider">ТРЕНУВАННЯ 3</span></div><div><h4 class="text-headline-sm font-headline-sm text-primary font-bold mt-1">Мобільність та відновлення</h4><p class="text-body-sm font-body-sm text-on-surface-variant mt-2 leading-relaxed">Робота над гнучкістю, суглобами та зняттям напруги.</p></div></div><div class="pt-6 border-t border-surface-container mt-6 flex items-center justify-between text-caption font-caption text-on-surface-variant"><span class="flex items-center gap-1.5"><span class="material-symbols-outlined text-[16px] text-secondary" data-icon="self_improvement">self_improvement</span><span class="">Регенерація та гнучкість</span></span><span class="font-semibold text-secondary">Відновлення</span></div></div>
+</div>
+</section>
+<!-- SYSTEM EDGE CASES & PREVIEWS -->
+
+</main>
+</div>
+<!-- TOAST NOTIFICATION (Demonstration & Interactive) -->
+<div class="fixed bottom-8 right-8 z-50 transform translate-y-32 opacity-0 transition-all duration-300 pointer-events-none max-w-md w-full" id="toastNotification">
+<div class="bg-surface-container-lowest border border-secondary/40 rounded-2xl shadow-[0_10px_30px_rgba(23,60,53,0.12)] p-4 flex items-center gap-4">
+<div class="w-10 h-10 rounded-xl bg-surface-container text-secondary flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-[24px]" data-icon="task_alt">task_alt</span>
+</div>
+<div class="flex-1">
+<div class="text-label-md font-label-md font-bold text-primary">Програму додано до ваших програм.</div>
+<div class="text-caption font-caption text-on-surface-variant">Статус: <span class="text-secondary font-semibold">Чернетка</span>. Ви можете редагувати розклад у розділі «Програми».</div>
+</div>
+<button class="text-on-surface-variant hover:text-on-surface p-1" id="closeToast">
+<span class="material-symbols-outlined text-[18px]" data-icon="close">close</span>
+</button>
+</div>
+</div>
+<!-- Light Vanilla Script for action demo -->
+<script>
+    const chooseBtn = document.getElementById('chooseProgramBtn');
+    const toast = document.getElementById('toastNotification');
+    const closeToast = document.getElementById('closeToast');
+
+    function showToast() {
+      toast.classList.remove('translate-y-32', 'opacity-0', 'pointer-events-none');
+      toast.classList.add('translate-y-0', 'opacity-100');
+
+      setTimeout(() => {
+        hideToast();
+      }, 5000);
+    }
+
+    function hideToast() {
+      toast.classList.add('translate-y-32', 'opacity-0', 'pointer-events-none');
+      toast.classList.remove('translate-y-0', 'opacity-100');
+    }
+
+    if (chooseBtn) {
+      chooseBtn.addEventListener('click', showToast);
+    }
+
+    if (closeToast) {
+      closeToast.addEventListener('click', hideToast);
+    }
+  </script>
+
+
+</body></html>

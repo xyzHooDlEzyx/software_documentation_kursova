@@ -1,0 +1,604 @@
+<!DOCTYPE html><html lang="uk"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>Фітнес-трекер — Історія тренувань</title>
+<!-- Google Fonts: Manrope -->
+<link href="https://fonts.googleapis.com" rel="preconnect">
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect">
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet">
+<!-- Material Symbols Outlined -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<!-- Tailwind CSS CDN -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Tailwind Configuration verbatim from theme -->
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "primary": "#002620",
+            "primary-container": "#173c35",
+            "inverse-on-surface": "#dff6ed",
+            "on-background": "#0c1f1a",
+            "primary-fixed-dim": "#a8cfc4",
+            "surface-bright": "#e8fef6",
+            "on-surface-variant": "#414846",
+            "secondary-fixed-dim": "#7ed7b9",
+            "surface-container": "#ddf3eb",
+            "error-container": "#ffdad6",
+            "on-error": "#ffffff",
+            "inverse-primary": "#a8cfc4",
+            "on-secondary-fixed": "#002118",
+            "surface-variant": "#d1e7df",
+            "surface-container-highest": "#d1e7df",
+            "secondary-container": "#9af4d5",
+            "error": "#ba1a1a",
+            "on-tertiary-fixed": "#141f00",
+            "primary-fixed": "#c3ebe0",
+            "on-primary": "#ffffff",
+            "tertiary-fixed": "#cbf07d",
+            "on-tertiary": "#ffffff",
+            "surface-container-low": "#e2f9f0",
+            "on-primary-fixed": "#00201b",
+            "on-secondary": "#ffffff",
+            "on-primary-container": "#81a69d",
+            "tertiary": "#192500",
+            "surface-tint": "#41655d",
+            "surface-container-lowest": "#ffffff",
+            "outline": "#717976",
+            "tertiary-fixed-dim": "#afd364",
+            "secondary-fixed": "#9af4d5",
+            "on-error-container": "#93000a",
+            "on-secondary-container": "#007259",
+            "surface": "#e8fef6",
+            "surface-container-high": "#d7ede5",
+            "inverse-surface": "#21342f",
+            "on-tertiary-fixed-variant": "#374e00",
+            "on-tertiary-container": "#89ab41",
+            "background": "#e8fef6",
+            "on-primary-fixed-variant": "#294d46",
+            "on-surface": "#0c1f1a",
+            "on-secondary-fixed-variant": "#00513f",
+            "outline-variant": "#c1c8c5",
+            "surface-dim": "#c9dfd7",
+            "secondary": "#006b54",
+            "tertiary-container": "#2a3c00"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "full": "9999px"
+          },
+          "spacing": {
+            "gutter": "1.5rem",
+            "space-xs": "0.25rem",
+            "margin": "2rem",
+            "gutter-sm": "1rem",
+            "space-sm": "0.5rem",
+            "space-lg": "1.5rem",
+            "space-md": "1rem",
+            "margin-sm": "1rem",
+            "space-xl": "2rem"
+          },
+          "fontFamily": {
+            "label-md": ["Manrope"],
+            "headline-sm": ["Manrope"],
+            "headline-xl-mobile": ["Manrope"],
+            "body-lg": ["Manrope"],
+            "caption": ["Manrope"],
+            "body-md": ["Manrope"],
+            "headline-xl": ["Manrope"],
+            "label-sm": ["Manrope"],
+            "stat-counter": ["Manrope"],
+            "headline-lg": ["Manrope"],
+            "headline-md": ["Manrope"],
+            "body-sm": ["Manrope"],
+            "display": ["Manrope"]
+          },
+          "fontSize": {
+            "label-md": ["0.875rem", { "lineHeight": "1.25rem", "letterSpacing": "0.01em", "fontWeight": "600" }],
+            "headline-sm": ["0.875rem", { "lineHeight": "1.5rem", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+            "headline-xl-mobile": ["1.75rem", { "lineHeight": "2.25rem", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+            "body-lg": ["1.125rem", { "lineHeight": "1.75rem", "fontWeight": "400" }],
+            "caption": ["0.75rem", { "lineHeight": "1rem", "letterSpacing": "0.02em", "fontWeight": "500" }],
+            "body-md": ["1rem", { "lineHeight": "1.5rem", "fontWeight": "400" }],
+            "headline-xl": ["2.25rem", { "lineHeight": "2.75rem", "letterSpacing": "-0.025em", "fontWeight": "700" }],
+            "label-sm": ["0.75rem", { "lineHeight": "1rem", "letterSpacing": "0.03em", "fontWeight": "600" }],
+            "stat-counter": ["2rem", { "lineHeight": "2.25rem", "letterSpacing": "-0.03em", "fontWeight": "800" }],
+            "headline-lg": ["1.5rem", { "lineHeight": "2rem", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+            "headline-md": ["1.25rem", { "lineHeight": "1.75rem", "letterSpacing": "-0.015em", "fontWeight": "600" }],
+            "body-sm": ["0.875rem", { "lineHeight": "1.25rem", "fontWeight": "400" }],
+            "display": ["3.5rem", { "lineHeight": "4rem", "letterSpacing": "-0.03em", "fontWeight": "800" }]
+          }
+        },
+      },
+    }
+  </script>
+<style>
+    body {
+      font-family: 'Manrope', sans-serif;
+      background-color: #F6F8F5;
+      color: #0c1f1a;
+    }
+    .custom-scroll::-webkit-scrollbar {
+      width: 4px;
+    }
+    .custom-scroll::-webkit-scrollbar-thumb {
+      background-color: #c1c8c5;
+      border-radius: 9999px;
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col antialiased selection:bg-secondary selection:text-white">
+<!-- Desktop App Shell (1440px target container layout) -->
+<div class="flex min-h-screen w-full bg-[#F6F8F5]">
+<!-- 1. LEFT SIDEBAR (SideNavBar component from Shared Spec) -->
+<aside class="fixed top-0 left-0 h-screen w-64 bg-surface-container-lowest border-r border-outline-variant/30 flex flex-col justify-between z-30 shadow-sm">
+<div class="p-4 flex flex-col h-full overflow-hidden">
+<!-- Header Emblem & Brand Info -->
+<div class="flex items-center gap-3 px-2 py-3 mb-2">
+<div class="w-10 h-10 rounded-xl bg-primary flex items-center justify-center text-tertiary-fixed shadow-sm">
+<span class="material-symbols-outlined text-2xl" data-icon="fitness_center">fitness_center</span>
+</div>
+<div class="flex flex-col">
+<span class="text-headline-md font-headline-md font-bold text-primary tracking-tight">Фітнес-трекер</span>
+<span class="text-caption font-caption text-on-surface-variant">Особистий кабінет</span>
+</div>
+</div>
+<!-- Sidebar Navigation Links -->
+<nav aria-label="Головна навігація" class="flex-1 space-y-1 overflow-y-auto pr-1 custom-scroll">
+<!-- 1. Головна -->
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-on-surface-variant font-medium hover:bg-surface-container-low hover:text-on-surface transition-colors duration-150 active:scale-[0.98]" href="#">
+<span class="material-symbols-outlined text-[20px]" data-icon="dashboard">dashboard</span>
+<span class="text-label-md font-label-md">Головна</span>
+</a>
+<!-- 2. Мій профіль -->
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-on-surface-variant font-medium hover:bg-surface-container-low hover:text-on-surface transition-colors duration-150 active:scale-[0.98]" href="#">
+<span class="material-symbols-outlined text-[20px]" data-icon="person">person</span>
+<span class="text-label-md font-label-md">Мій профіль</span>
+</a>
+<!-- 3. Вправи -->
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-on-surface-variant font-medium hover:bg-surface-container-low hover:text-on-surface transition-colors duration-150 active:scale-[0.98]" href="#">
+<span class="material-symbols-outlined text-[20px]" data-icon="fitness_center">fitness_center</span>
+<span class="text-label-md font-label-md">Вправи</span>
+</a>
+<!-- 4. Тренування -->
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-on-surface-variant font-medium hover:bg-surface-container-low hover:text-on-surface transition-colors duration-150 active:scale-[0.98]" href="#">
+<span class="material-symbols-outlined text-[20px]" data-icon="directions_run">directions_run</span>
+<span class="text-label-md font-label-md">Тренування</span>
+</a>
+<!-- 5. Програми -->
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-on-surface-variant font-medium hover:bg-surface-container-low hover:text-on-surface transition-colors duration-150 active:scale-[0.98]" href="#">
+<span class="material-symbols-outlined text-[20px]" data-icon="assignment">assignment</span>
+<span class="text-label-md font-label-md">Програми</span>
+</a>
+<!-- 6. Календар -->
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-on-surface-variant font-medium hover:bg-surface-container-low hover:text-on-surface transition-colors duration-150 active:scale-[0.98]" href="#">
+<span class="material-symbols-outlined text-[20px]" data-icon="calendar_today">calendar_today</span>
+<span class="text-label-md font-label-md">Календар</span>
+</a>
+<!-- 7. Історія тренувань (ACTIVE LOCK per hierarchy rules) -->
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg bg-surface-container text-secondary font-semibold hover:bg-surface-container-low transition-colors duration-150 active:scale-[0.98] shadow-sm" href="#">
+<span class="material-symbols-outlined text-[20px]" data-icon="history" data-weight="fill" style="font-variation-settings: 'FILL' 1;">history</span>
+<span class="text-label-md font-label-md text-secondary">Історія тренувань</span>
+</a>
+<!-- 8. Статистика -->
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-on-surface-variant font-medium hover:bg-surface-container-low hover:text-on-surface transition-colors duration-150 active:scale-[0.98]" href="#">
+<span class="material-symbols-outlined text-[20px]" data-icon="bar_chart">bar_chart</span>
+<span class="text-label-md font-label-md">Статистика</span>
+</a>
+<!-- 9. Досягнення -->
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-on-surface-variant font-medium hover:bg-surface-container-low hover:text-on-surface transition-colors duration-150 active:scale-[0.98]" href="#">
+<span class="material-symbols-outlined text-[20px]" data-icon="emoji_events">emoji_events</span>
+<span class="text-label-md font-label-md">Досягнення</span>
+</a>
+<!-- 10. Челенджі -->
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-on-surface-variant font-medium hover:bg-surface-container-low hover:text-on-surface transition-colors duration-150 active:scale-[0.98]" href="#">
+<span class="material-symbols-outlined text-[20px]" data-icon="military_tech">military_tech</span>
+<span class="text-label-md font-label-md">Челенджі</span>
+</a>
+<!-- 11. Рейтинг -->
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-on-surface-variant font-medium hover:bg-surface-container-low hover:text-on-surface transition-colors duration-150 active:scale-[0.98]" href="#">
+<span class="material-symbols-outlined text-[20px]" data-icon="leaderboard">leaderboard</span>
+<span class="text-label-md font-label-md">Рейтинг</span>
+</a>
+<!-- 12. Налаштування -->
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-on-surface-variant font-medium hover:bg-surface-container-low hover:text-on-surface transition-colors duration-150 active:scale-[0.98]" href="#">
+<span class="material-symbols-outlined text-[20px]" data-icon="settings">settings</span>
+<span class="text-label-md font-label-md">Налаштування</span>
+</a>
+</nav>
+<!-- Sidebar Quick CTA -->
+<div class="pt-3 pb-2">
+<button class="w-full flex items-center justify-center gap-2 bg-[#27866C] hover:bg-[#173C35] text-white py-2.5 px-3 rounded-lg text-label-md font-label-md transition-all duration-150 active:scale-[0.98] shadow-sm" type="button">
+<span class="material-symbols-outlined text-lg" data-icon="add">add</span>
+<span class="">Нове тренування</span>
+</button>
+</div>
+<!-- Sidebar Footer Items -->
+<div class="pt-2 border-t border-outline-variant/30 space-y-0.5">
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-on-surface-variant hover:bg-surface-container-low hover:text-on-surface transition-colors text-label-md font-label-md" href="#">
+<span class="material-symbols-outlined text-[18px]" data-icon="help_outline">help_outline</span>
+<span class="">Допомога</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-error hover:bg-error-container/40 transition-colors text-label-md font-label-md" href="#">
+<span class="material-symbols-outlined text-[18px]" data-icon="logout">logout</span>
+<span class="">Вийти</span>
+</a>
+</div>
+</div>
+</aside>
+<!-- 2. MAIN LAYOUT WRAPPER (Offset for 260px fixed sidebar) -->
+<div class="ml-64 flex-1 flex flex-col min-h-screen">
+<!-- TOP APP BAR (TopNavBar component from Shared Spec) -->
+<header class="sticky top-0 z-20 h-[72px] bg-surface-container-lowest/95 backdrop-blur-md border-b border-outline-variant/30 flex items-center justify-between px-8 shadow-sm">
+<!-- Left: Product Identity & Active Context -->
+<div class="flex items-center gap-6">
+<div class="flex items-center gap-2">
+<span class="text-headline-md font-headline-md font-bold text-primary tracking-tight">Фітнес-трекер</span>
+
+
+</div>
+<!-- Quick Navigation Links (per TopNavBar spec) -->
+<div class="hidden lg:flex items-center gap-6 pl-4 border-l border-outline-variant/30">
+<a class="text-on-surface-variant hover:text-on-surface text-label-md font-label-md transition-colors" href="#">Огляд</a>
+<a class="text-on-surface-variant hover:text-on-surface text-label-md font-label-md transition-colors" href="#">Аналітика</a>
+<a class="text-on-surface-variant hover:text-on-surface text-label-md font-label-md transition-colors" href="#">План тижня</a>
+</div>
+</div>
+<!-- Right: Timezone pill, Notifications, Monogram avatar -->
+<div class="flex items-center gap-4">
+<!-- Time pill -->
+<div class="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-surface-container-low border border-outline-variant/40 text-on-surface-variant text-label-sm font-label-sm">
+<span class="material-symbols-outlined text-[16px] text-secondary" data-icon="date_range">date_range</span>
+<span class="">Київ 08:30</span>
+</div>
+<!-- Notifications trigger -->
+<button aria-label="Сповіщення" class="relative p-2 rounded-full text-on-surface-variant hover:bg-surface-container transition-colors active:scale-95" type="button">
+<span class="material-symbols-outlined text-[22px]" data-icon="notifications">notifications</span>
+<span class="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-[#27866C] ring-2 ring-surface-container-lowest"></span>
+</button>
+<!-- Divider -->
+<div class="h-6 w-px bg-outline-variant/40"></div>
+<!-- User Profile: Round monogram avatar "ОК" (No external photos as requested) -->
+<div class="flex items-center gap-3 pl-1 cursor-pointer group">
+<div class="w-10 h-10 rounded-full bg-primary-container text-tertiary-fixed font-bold text-sm flex items-center justify-center border-2 border-surface-container shadow-sm group-hover:ring-2 ring-secondary/30 transition-all">
+              ОК
+            </div>
+<div class="hidden xl:flex flex-col text-left">
+<span class="text-label-md font-label-md text-on-surface leading-tight">Олександр К.</span>
+<span class="text-caption font-caption text-on-surface-variant leading-none">Спортсмен</span>
+</div>
+<span class="material-symbols-outlined text-outline text-[18px] group-hover:text-primary transition-colors" data-icon="expand_more">expand_more</span>
+</div>
+</div>
+</header>
+<!-- MAIN CONTENT CANVAS -->
+<main class="flex-1 px-8 py-8 max-w-[1240px] w-full mx-auto">
+<!-- Breadcrumbs trail -->
+<nav aria-label="Хлібні крихти" class="flex items-center gap-2 mb-3 text-caption font-caption text-on-surface-variant">
+<a class="hover:text-secondary transition-colors" href="#">Головна</a>
+<span class="text-outline-variant">/</span>
+<span class="text-primary font-semibold">Історія тренувань</span>
+</nav>
+<!-- PAGE HEADER: Title + Actions + Compact Metric Counter -->
+<div class="flex flex-col lg:flex-row lg:items-end justify-between gap-4 pb-6 border-b border-outline-variant/30 mb-8">
+<div>
+<h1 class="text-headline-xl font-headline-xl text-primary tracking-tight">Історія тренувань</h1>
+<p class="text-body-md font-body-md text-on-surface-variant mt-1 max-w-2xl">
+              Переглядайте завершені тренування та свої фактичні результати.
+            </p>
+<!-- Compact summary counter (strictly no aggregate lifetime stats) -->
+<div class="mt-3 inline-flex items-center gap-2 px-3 py-1 rounded-full bg-surface-container text-secondary text-label-sm font-label-sm font-semibold">
+<span class="w-2 h-2 rounded-full bg-[#27866C]"></span>
+<span class="">Знайдено тренувань: 2 завершені тренування</span>
+</div>
+</div>
+<!-- Header navigation actions -->
+<div class="flex items-center gap-3 shrink-0">
+<!-- Secondary Action Button -->
+<button class="inline-flex items-center gap-2 px-4 py-2.5 rounded-lg border border-outline-variant/60 bg-surface-container-lowest hover:bg-[#F0F6F2] text-primary text-label-md font-label-md transition-colors active:scale-[0.98] shadow-sm" type="button">
+<span class="material-symbols-outlined text-[18px] text-secondary" data-icon="calendar_month">calendar_month</span>
+<span class="">Календар тренувань</span>
+</button>
+<!-- Primary Action Button -->
+<button class="inline-flex items-center gap-2 px-4 py-2.5 rounded-lg bg-[#27866C] hover:bg-[#173C35] text-white text-label-md font-label-md transition-all active:scale-[0.98] shadow-sm" type="button">
+<span class="material-symbols-outlined text-[18px]" data-icon="insights">insights</span>
+<span class="">Переглянути статистику</span>
+</button>
+</div>
+</div>
+<!-- 2-COLUMN LAYOUT: Filter Panel (Left) & Workout History Stream (Right) -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+<!-- LEFT COLUMN: FILTER PANEL (4 of 12 cols) -->
+<section class="lg:col-span-4 bg-surface-container-lowest rounded-2xl border border-[#E6EDE8] p-6 shadow-[0_4px_20px_-2px_rgba(23,60,53,0.04)] sticky top-28">
+<div class="flex items-center justify-between pb-4 border-b border-outline-variant/30 mb-5">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-secondary text-[22px]" data-icon="tune">tune</span>
+<h2 class="text-headline-sm font-headline-sm text-primary">Фільтри історії</h2>
+</div>
+<span class="text-caption font-caption text-on-surface-variant bg-surface-container px-2 py-0.5 rounded">Часовий пояс: Europe/Kyiv</span>
+</div>
+<form class="space-y-5" onsubmit="event.preventDefault();">
+<!-- Date Range Group -->
+<div class="space-y-3">
+<label class="block text-label-md font-label-md text-primary">Діапазон дат</label>
+<div class="grid grid-cols-2 gap-3">
+<!-- Date "Від" -->
+<div>
+<label class="block text-caption font-caption text-on-surface-variant mb-1" for="date-from">Від</label>
+<div class="relative">
+<input class="w-full pl-3 pr-8 py-2 rounded-xl border border-outline-variant/50 bg-white text-body-sm font-body-sm text-on-surface focus:outline-none focus:border-secondary focus:ring-2 focus:ring-[#27866C]/20 transition-all" id="date-from" placeholder="ДД.ММ.РРРР" type="text" value="01.10.2026">
+<span class="material-symbols-outlined absolute right-2.5 top-1/2 -translate-y-1/2 text-outline-variant text-[18px] pointer-events-none" data-icon="calendar_today">calendar_today</span>
+</div>
+</div>
+<!-- Date "До" -->
+<div>
+<label class="block text-caption font-caption text-on-surface-variant mb-1" for="date-to">До</label>
+<div class="relative">
+<input class="w-full pl-3 pr-8 py-2 rounded-xl border border-outline-variant/50 bg-white text-body-sm font-body-sm text-on-surface focus:outline-none focus:border-secondary focus:ring-2 focus:ring-[#27866C]/20 transition-all" id="date-to" placeholder="ДД.ММ.РРРР" type="text" value="31.10.2026">
+<span class="material-symbols-outlined absolute right-2.5 top-1/2 -translate-y-1/2 text-outline-variant text-[18px] pointer-events-none" data-icon="calendar_today">calendar_today</span>
+</div>
+</div>
+</div>
+<!-- Helper note about Europe/Kyiv boundaries -->
+<p class="text-caption font-caption text-on-surface-variant flex items-start gap-1.5 pt-1"><span class="material-symbols-outlined text-[16px] text-outline mt-0.5 shrink-0" data-icon="info">info</span><span class="">Часові межі розраховано згідно з поясом Europe/Kyiv.</span></p>
+</div>
+<!-- Workout Selector Dropdown -->
+<div class="space-y-1.5 pt-2">
+<label class="block text-label-md font-label-md text-primary" for="workout-select">Тренування</label>
+<div class="relative">
+<select class="w-full appearance-none pl-3.5 pr-10 py-2.5 rounded-xl border border-outline-variant/50 bg-white text-body-sm font-body-sm text-on-surface focus:outline-none focus:border-secondary focus:ring-2 focus:ring-[#27866C]/20 transition-all cursor-pointer" id="workout-select">
+<option value="all">Усі тренування</option>
+<option value="w1">Силове тренування А</option>
+<option value="w2">Кардіо сесія</option>
+<option value="w3">Базовий комплекс</option>
+</select>
+<span class="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 text-outline text-[20px] pointer-events-none" data-icon="expand_more">expand_more</span>
+</div>
+<span class="text-caption font-caption text-outline">Оберіть тренування для перегляду його історії.</span>
+</div>
+<!-- Filter Action Buttons -->
+<div class="pt-4 flex flex-col gap-2">
+<button class="w-full py-2.5 px-4 rounded-xl bg-[#27866C] hover:bg-[#173C35] text-white text-label-md font-label-md font-semibold transition-all duration-150 active:scale-[0.98] shadow-sm flex items-center justify-center gap-2" type="submit">
+<span class="material-symbols-outlined text-[18px]" data-icon="filter_list">filter_list</span>
+<span class="">Застосувати</span>
+</button>
+<button class="w-full py-2 px-4 rounded-xl bg-transparent hover:bg-surface-container-low text-on-surface-variant hover:text-on-surface text-label-md font-label-md font-medium transition-colors text-center" type="reset">
+                  Скинути фільтри
+                </button>
+</div>
+</form>
+<!-- Quick Filter Info Callout -->
+<div class="mt-6 pt-5 border-t border-outline-variant/30 flex items-center gap-3 text-caption font-caption text-on-surface-variant">
+<span class="material-symbols-outlined text-[18px] text-secondary shrink-0" data-icon="lock_clock">lock_clock</span>
+<span class="">Фільтрація доступна лише за офіційним розкладом сесій.</span>
+</div>
+</section>
+<!-- RIGHT COLUMN: MAIN HISTORY LIST (8 of 12 cols) -->
+<section class="lg:col-span-8 space-y-6">
+<!-- TIMELINE FEED GROUP 1: "29 жовтня 2026" -->
+<div class="space-y-3">
+<!-- Group Date Marker -->
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-secondary text-[20px]" data-icon="event">event</span>
+<h3 class="text-headline-sm font-headline-sm text-primary font-bold">29 жовтня 2026</h3>
+<span class="h-px flex-1 bg-outline-variant/30"></span>
+<span class="text-caption font-caption text-outline font-medium">Четвер</span>
+</div>
+<!-- WORKOUT CARD 1: Силовий блок -->
+<article class="bg-surface-container-lowest rounded-2xl border border-[#E6EDE8] p-6 shadow-[0_4px_20px_-2px_rgba(23,60,53,0.04)] hover:shadow-[0_12px_28px_-4px_rgba(23,60,53,0.08)] transition-all duration-200">
+<div class="flex flex-col md:flex-row md:items-start justify-between gap-4 pb-4 border-b border-outline-variant/20">
+<div class="flex items-start gap-3.5">
+<!-- Icon container -->
+<div class="w-12 h-12 rounded-xl bg-[#DDF3E8] text-[#173C35] flex items-center justify-center shrink-0 mt-0.5">
+<span class="material-symbols-outlined text-2xl" data-icon="fitness_center">fitness_center</span>
+</div>
+<div>
+<div class="flex items-center gap-3 flex-wrap">
+<h4 class="text-headline-md font-headline-md font-bold text-primary">Силовий блок</h4>
+<!-- Status Chip -->
+<span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#DDF3E8] text-[#27866C] text-label-sm font-label-sm">
+<span class="w-1.5 h-1.5 rounded-full bg-[#27866C]"></span>
+                          Виконано
+                        </span>
+</div>
+<p class="text-body-sm font-body-sm text-on-surface-variant mt-0.5">
+                        На основі: <span class="font-medium text-primary">Силове тренування А</span>
+</p>
+</div>
+</div>
+<!-- Performed Time -->
+<div class="flex items-center gap-1.5 text-on-surface-variant text-label-md font-label-md bg-surface-container-low px-3 py-1.5 rounded-lg shrink-0 self-start">
+<span class="material-symbols-outlined text-[18px] text-secondary" data-icon="schedule">schedule</span>
+<span class="">19:00</span>
+</div>
+</div>
+<!-- Metrics Grid: Badges / Cards -->
+<div class="grid grid-cols-1 sm:grid-cols-3 gap-3 py-4">
+<!-- Metric 1: Тривалість -->
+<div class="bg-[#F8FAF8] rounded-xl p-3.5 border border-outline-variant/20">
+<div class="flex items-center gap-1.5 text-caption font-caption text-outline">
+<span class="material-symbols-outlined text-[16px] text-secondary" data-icon="timer">timer</span>
+<span class="">Тривалість</span>
+</div>
+<div class="text-headline-sm font-headline-sm text-primary font-bold mt-1">45 хв</div>
+<span class="text-caption font-caption text-on-surface-variant">Чистий час тренування</span>
+</div>
+<!-- Metric 2: Оцінка калорій -->
+<div class="bg-[#F8FAF8] rounded-xl p-3.5 border border-outline-variant/20">
+<div class="flex items-center gap-1.5 text-caption font-caption text-outline">
+<span class="material-symbols-outlined text-[16px] text-secondary" data-icon="local_fire_department">local_fire_department</span>
+<span class="">Оцінка калорій</span>
+</div>
+<div class="text-headline-sm font-headline-sm text-primary font-bold mt-1">254,63 ккал</div>
+<span class="text-caption font-caption text-secondary font-medium flex items-center gap-1">
+<span class="material-symbols-outlined text-[12px]" data-icon="calculate">calculate</span>
+                      Розраховано системою
+                    </span>
+</div>
+<!-- Metric 3: Бали -->
+<div class="bg-[#F8FAF8] rounded-xl p-3.5 border border-outline-variant/20">
+<div class="flex items-center gap-1.5 text-caption font-caption text-outline">
+<span class="material-symbols-outlined text-[16px] text-secondary" data-icon="stars">stars</span>
+<span class="">Бали активності</span>
+</div>
+<div class="text-headline-sm font-headline-sm text-primary font-bold mt-1 text-[#27866C]">+23 бали</div>
+<span class="text-caption font-caption text-on-surface-variant">Нараховано за тренування</span>
+</div>
+</div>
+<!-- Footer Card Action: Read-only navigation to Details (No edit or delete buttons) -->
+<div class="pt-3 border-t border-outline-variant/20 flex items-center justify-between">
+<span class="text-caption font-caption text-outline flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px]" data-icon="verified">verified</span>
+                    Запис зафіксовано в локальному сховищі
+                  </span>
+<a class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-[#173C35] hover:bg-[#27866C] text-white text-label-md font-label-md transition-all duration-150 active:scale-[0.98] shadow-sm" href="#e03-details">
+<span class="">Переглянути результати</span>
+<span class="material-symbols-outlined text-[18px]" data-icon="arrow_forward">arrow_forward</span>
+</a>
+</div>
+</article>
+</div>
+<!-- TIMELINE FEED GROUP 2: "14 жовтня 2026" -->
+<div class="space-y-3 pt-4">
+<!-- Group Date Marker -->
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-secondary text-[20px]" data-icon="event">event</span>
+<h3 class="text-headline-sm font-headline-sm text-primary font-bold">14 жовтня 2026</h3>
+<span class="h-px flex-1 bg-outline-variant/30"></span>
+<span class="text-caption font-caption text-outline font-medium">Середа</span>
+</div>
+<!-- WORKOUT CARD 2: Кардіо розминка -->
+<article class="bg-surface-container-lowest rounded-2xl border border-[#E6EDE8] p-6 shadow-[0_4px_20px_-2px_rgba(23,60,53,0.04)] hover:shadow-[0_12px_28px_-4px_rgba(23,60,53,0.08)] transition-all duration-200">
+<div class="flex flex-col md:flex-row md:items-start justify-between gap-4 pb-4 border-b border-outline-variant/20">
+<div class="flex items-start gap-3.5">
+<!-- Icon container -->
+<div class="w-12 h-12 rounded-xl bg-[#DDF3E8] text-[#173C35] flex items-center justify-center shrink-0 mt-0.5">
+<span class="material-symbols-outlined text-2xl" data-icon="directions_run">directions_run</span>
+</div>
+<div>
+<div class="flex items-center gap-3 flex-wrap">
+<h4 class="text-headline-md font-headline-md font-bold text-primary">Кардіо розминка</h4>
+<!-- Status Chip -->
+<span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#DDF3E8] text-[#27866C] text-label-sm font-label-sm">
+<span class="w-1.5 h-1.5 rounded-full bg-[#27866C]"></span>
+                          Виконано
+                        </span>
+</div>
+<p class="text-body-sm font-body-sm text-on-surface-variant mt-0.5">
+                        На основі: <span class="font-medium text-primary">Інтервальне кардіо</span>
+</p>
+</div>
+</div>
+<!-- Performed Time -->
+<div class="flex items-center gap-1.5 text-on-surface-variant text-label-md font-label-md bg-surface-container-low px-3 py-1.5 rounded-lg shrink-0 self-start">
+<span class="material-symbols-outlined text-[18px] text-secondary" data-icon="schedule">schedule</span>
+<span class="">08:15</span>
+</div>
+</div>
+<!-- Metrics Grid: Badges / Cards with Missing Calories test case -->
+<div class="grid grid-cols-1 sm:grid-cols-3 gap-3 py-4">
+<!-- Metric 1: Тривалість -->
+<div class="bg-[#F8FAF8] rounded-xl p-3.5 border border-outline-variant/20">
+<div class="flex items-center gap-1.5 text-caption font-caption text-outline">
+<span class="material-symbols-outlined text-[16px] text-secondary" data-icon="timer">timer</span>
+<span class="">Тривалість</span>
+</div>
+<div class="text-headline-sm font-headline-sm text-primary font-bold mt-1">30 хв</div>
+<span class="text-caption font-caption text-on-surface-variant">Чистий час тренування</span>
+</div>
+<!-- Metric 2: Оцінка калорій (Missing Calorie Scenario) -->
+<div class="bg-[#F8FAF8] rounded-xl p-3.5 border border-outline-variant/20">
+<div class="flex items-center gap-1.5 text-caption font-caption text-outline">
+<span class="material-symbols-outlined text-[16px] text-outline" data-icon="local_fire_department">local_fire_department</span>
+<span class="">Оцінка калорій</span>
+</div>
+<div class="text-label-md font-label-md text-on-surface-variant font-semibold mt-2.5 text-sm">
+                      Оцінка калорій недоступна
+                    </div>
+
+</div>
+<!-- Metric 3: Бали -->
+<div class="bg-[#F8FAF8] rounded-xl p-3.5 border border-outline-variant/20">
+<div class="flex items-center gap-1.5 text-caption font-caption text-outline">
+<span class="material-symbols-outlined text-[16px] text-secondary" data-icon="stars">stars</span>
+<span class="">Бали активності</span>
+</div>
+<div class="text-headline-sm font-headline-sm text-primary font-bold mt-1 text-[#27866C]">+15 балів</div>
+<span class="text-caption font-caption text-on-surface-variant">Нараховано за тренування</span>
+</div>
+</div>
+<!-- Footer Card Action: Read-only navigation to Details (No edit or delete buttons) -->
+<div class="pt-3 border-t border-outline-variant/20 flex items-center justify-between">
+<span class="text-caption font-caption text-outline flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px]" data-icon="verified">verified</span>
+                    Запис зафіксовано в локальному сховищі
+                  </span>
+<a class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-[#173C35] hover:bg-[#27866C] text-white text-label-md font-label-md transition-all duration-150 active:scale-[0.98] shadow-sm" href="#e03-details">
+<span class="">Переглянути результати</span>
+<span class="material-symbols-outlined text-[18px]" data-icon="arrow_forward">arrow_forward</span>
+</a>
+</div>
+</article>
+</div>
+<!-- 4. IMMUTABILITY BANNER & PAGINATION -->
+<!-- Bottom Immutability Info Card -->
+<div class="rounded-2xl border border-secondary/20 bg-surface-container-low p-4.5 flex items-center gap-3.5 shadow-sm">
+<div class="w-9 h-9 rounded-full bg-[#DDF3E8] flex items-center justify-center text-secondary shrink-0">
+<span class="material-symbols-outlined text-[20px]" data-icon="lock">lock</span>
+</div>
+<p class="text-body-sm font-body-sm text-primary leading-relaxed font-medium">
+                Історичні дані незмінні — результати зафіксовані в системі та захищені від редагування.
+              </p>
+</div>
+<!-- Pagination Bar -->
+<div class="bg-surface-container-lowest rounded-2xl border border-[#E6EDE8] p-4 flex flex-col sm:flex-row items-center justify-between gap-4 shadow-sm">
+<span class="text-body-sm font-body-sm text-on-surface-variant font-medium">
+                Показано 2 із 2 тренувань
+              </span>
+<div class="flex items-center gap-2">
+<!-- Previous Button (Disabled) -->
+<button class="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg border border-outline-variant/30 text-outline text-label-md font-label-md bg-surface-container-lowest opacity-50 cursor-not-allowed" disabled="" type="button">
+<span class="material-symbols-outlined text-[18px]" data-icon="chevron_left">chevron_left</span>
+<span class="">Попередня</span>
+</button>
+<!-- Page Number Pill (Active) -->
+<span class="w-8 h-8 rounded-lg bg-[#27866C] text-white flex items-center justify-center text-label-md font-label-md font-bold shadow-sm">
+                  1
+                </span>
+<!-- Next Button (Disabled) -->
+<button class="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg border border-outline-variant/30 text-outline text-label-md font-label-md bg-surface-container-lowest opacity-50 cursor-not-allowed" disabled="" type="button">
+<span class="">Наступна</span>
+<span class="material-symbols-outlined text-[18px]" data-icon="chevron_right">chevron_right</span>
+</button>
+</div>
+</div>
+<!-- 5. REUSABLE COMPONENT PREVIEW: Reference Empty State Block -->
+
+</section>
+</div>
+</main>
+<!-- Minimalist Desktop App Footer -->
+<footer class="mt-auto border-t border-outline-variant/30 bg-surface-container-lowest/80 px-8 py-4">
+<div class="max-w-[1240px] mx-auto flex flex-col sm:flex-row items-center justify-between text-caption font-caption text-on-surface-variant gap-2">
+<div class="flex items-center gap-2">
+<span class="">© 2026 Фітнес-трекер. Усі права захищено.</span>
+<span class="text-outline-variant">•</span>
+<span class="">Локалізація: Українська (Europe/Kyiv)</span>
+</div>
+<div class="flex items-center gap-4">
+<a class="hover:text-primary transition-colors" href="#">Політика конфіденційності</a>
+<a class="hover:text-primary transition-colors" href="#">Підтримка</a>
+
+</div>
+</div>
+</footer>
+</div>
+</div>
+
+
+</body></html>

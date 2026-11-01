@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+
+<html lang="uk"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Відновлення пароля | Фітнес-трекер</title>
+<!-- Google Fonts: Manrope -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols Outlined -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS v3 -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "surface-container-highest": "#d1e7df",
+            "on-secondary-fixed-variant": "#00513f",
+            "secondary-fixed": "#9af4d5",
+            "background": "#e8fef6",
+            "on-primary": "#ffffff",
+            "on-error": "#ffffff",
+            "surface-container-low": "#e2f9f0",
+            "surface-bright": "#e8fef6",
+            "on-primary-fixed-variant": "#294d46",
+            "on-background": "#0c1f1a",
+            "surface-container-high": "#d7ede5",
+            "tertiary-fixed": "#cbf07d",
+            "primary": "#002620",
+            "outline-variant": "#c1c8c5",
+            "surface-variant": "#d1e7df",
+            "on-secondary-container": "#007259",
+            "on-tertiary-fixed": "#141f00",
+            "primary-fixed-dim": "#a8cfc4",
+            "primary-container": "#173c35",
+            "primary-fixed": "#c3ebe0",
+            "error-container": "#ffdad6",
+            "on-tertiary-container": "#89ab41",
+            "surface": "#e8fef6",
+            "secondary": "#006b54",
+            "on-tertiary": "#ffffff",
+            "on-secondary": "#ffffff",
+            "surface-dim": "#c9dfd7",
+            "tertiary": "#192500",
+            "tertiary-fixed-dim": "#afd364",
+            "inverse-primary": "#a8cfc4",
+            "surface-container": "#ddf3eb",
+            "secondary-fixed-dim": "#7ed7b9",
+            "on-secondary-fixed": "#002118",
+            "error": "#ba1a1a",
+            "surface-tint": "#41655d",
+            "tertiary-container": "#2a3c00",
+            "outline": "#717976",
+            "inverse-on-surface": "#dff6ed",
+            "inverse-surface": "#21342f",
+            "secondary-container": "#9af4d5",
+            "on-primary-container": "#81a69d",
+            "on-primary-fixed": "#00201b",
+            "on-surface": "#0c1f1a",
+            "on-error-container": "#93000a",
+            "on-tertiary-fixed-variant": "#374e00",
+            "on-surface-variant": "#414846",
+            "surface-container-lowest": "#ffffff"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "full": "9999px"
+          },
+          "spacing": {
+            "space-xl": "2rem",
+            "margin-sm": "1rem",
+            "space-md": "1rem",
+            "space-xs": "0.25rem",
+            "gutter-sm": "1rem",
+            "gutter": "1.5rem",
+            "margin": "2rem",
+            "space-lg": "1.5rem",
+            "space-sm": "0.5rem"
+          },
+          "fontFamily": {
+            "headline-md": ["Manrope"],
+            "caption": ["Manrope"],
+            "headline-sm": ["Manrope"],
+            "display": ["Manrope"],
+            "label-sm": ["Manrope"],
+            "stat-counter": ["Manrope"],
+            "headline-xl-mobile": ["Manrope"],
+            "body-lg": ["Manrope"],
+            "headline-xl": ["Manrope"],
+            "label-md": ["Manrope"],
+            "headline-lg": ["Manrope"],
+            "body-md": ["Manrope"],
+            "body-sm": ["Manrope"]
+          },
+          "fontSize": {
+            "headline-md": ["1.25rem", { "lineHeight": "1.75rem", "letterSpacing": "-0.015em", "fontWeight": "600" }],
+            "caption": ["0.75rem", { "lineHeight": "1rem", "letterSpacing": "0.02em", "fontWeight": "500" }],
+            "headline-sm": ["1.125rem", { "lineHeight": "1.5rem", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+            "display": ["3.5rem", { "lineHeight": "4rem", "letterSpacing": "-0.03em", "fontWeight": "800" }],
+            "label-sm": ["0.75rem", { "lineHeight": "1rem", "letterSpacing": "0.03em", "fontWeight": "600" }],
+            "stat-counter": ["2rem", { "lineHeight": "2.25rem", "letterSpacing": "-0.03em", "fontWeight": "800" }],
+            "headline-xl-mobile": ["1.75rem", { "lineHeight": "2.25rem", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+            "body-lg": ["1.125rem", { "lineHeight": "1.75rem", "fontWeight": "400" }],
+            "headline-xl": ["2.25rem", { "lineHeight": "2.75rem", "letterSpacing": "-0.025em", "fontWeight": "700" }],
+            "label-md": ["0.875rem", { "lineHeight": "1.25rem", "letterSpacing": "0.01em", "fontWeight": "600" }],
+            "headline-lg": ["1.5rem", { "lineHeight": "2rem", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+            "body-md": ["1rem", { "lineHeight": "1.5rem", "fontWeight": "400" }],
+            "body-sm": ["0.875rem", { "lineHeight": "1.25rem", "fontWeight": "400" }]
+          }
+        }
+      }
+    }
+  </script>
+<style>
+    body {
+      font-family: 'Manrope', sans-serif;
+    }
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+      display: inline-block;
+      vertical-align: middle;
+      line-height: 1;
+    }
+  </style>
+</head>
+<body class="bg-surface-container-low text-on-surface antialiased min-h-screen flex flex-col justify-center items-center p-0 md:p-6 lg:p-8">
+<!-- Main Canvas: Two-column split layout for 1440px target (Nordic Vitality aesthetic) -->
+<main class="w-full max-w-[1440px] min-h-[900px] bg-surface-container-lowest rounded-none md:rounded-3xl shadow-[0_24px_48px_-8px_rgba(23,60,53,0.16)] border border-surface-container-highest overflow-hidden grid grid-cols-1 lg:grid-cols-12">
+<!-- LEFT COLUMN: Deep Forest Green (#173C35 / primary-container) Brand Anchor Panel -->
+<section class="lg:col-span-5 bg-primary-container text-on-primary flex flex-col justify-between p-8 md:p-12 lg:p-16 relative overflow-hidden">
+<!-- Decorative ambient gradient & subtle Nordic biome line glow -->
+<div class="absolute -top-32 -left-32 w-96 h-96 rounded-full bg-secondary opacity-20 blur-3xl pointer-events-none"></div>
+<div class="absolute -bottom-32 -right-32 w-96 h-96 rounded-full bg-tertiary-fixed opacity-15 blur-3xl pointer-events-none"></div>
+<div class="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(154,244,213,0.06),transparent_70%)] pointer-events-none"></div>
+<!-- Top Section: Brand Identity Header & Badge -->
+<div class="relative z-10 space-y-8">
+<!-- Logo & App Title -->
+<div class="flex items-center gap-3.5">
+<div class="w-12 h-12 rounded-xl bg-surface-container-lowest/10 border border-surface-container-lowest/20 flex items-center justify-center text-secondary-fixed shadow-sm">
+<span class="material-symbols-outlined text-2xl" data-icon="fitness_center">fitness_center</span>
+</div>
+<div>
+<span class="block font-headline-md text-headline-md font-bold tracking-tight text-surface-container-lowest">Фітнес-трекер</span>
+<span class="block font-caption text-caption text-secondary-fixed font-medium">Особистий кабінет атлета</span>
+</div>
+</div>
+<!-- Category Badge -->
+<div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-surface-container-lowest/10 border border-surface-container-lowest/15 backdrop-blur-sm">
+<span class="w-2 h-2 rounded-full bg-secondary-fixed animate-pulse"></span>
+<span class="font-label-sm text-label-sm text-surface-container-lowest font-medium tracking-wide">Безпека та відновлення доступу</span>
+</div>
+</div>
+<!-- Middle Section: Headline, Copy & Analytical Graphic Elements -->
+<div class="relative z-10 py-10 my-auto space-y-6">
+<h1 class="font-headline-xl text-headline-xl text-surface-container-lowest leading-tight">
+          Поверніться до тренувального процесу без перерв
+        </h1>
+<p class="font-body-lg text-body-lg text-surface-variant font-normal leading-relaxed max-w-md">
+          Безпечний доступ до ваших персональних програм, щоденника тренувань та детальної аналітики ваги.
+        </p>
+<!-- Feature Pillar Micro-Cards (Wellness rigor & security) -->
+<div class="grid grid-cols-2 gap-3.5 pt-4">
+<div class="p-4 rounded-2xl bg-surface-container-lowest/5 border border-surface-container-lowest/10 backdrop-blur-sm">
+<div class="flex items-center gap-2 text-secondary-fixed mb-1.5">
+<span class="material-symbols-outlined text-lg" data-icon="sync_saved_locally">sync_saved_locally</span>
+<span class="font-label-sm text-label-sm font-semibold">Синхронізація</span>
+</div>
+<p class="font-caption text-caption text-on-primary-container leading-snug">
+              Всі тренувальні логи збережено в хмарному сховищі
+            </p>
+</div>
+<div class="p-4 rounded-2xl bg-surface-container-lowest/5 border border-surface-container-lowest/10 backdrop-blur-sm">
+<div class="flex items-center gap-2 text-tertiary-fixed mb-1.5">
+<span class="material-symbols-outlined text-lg" data-icon="lock_reset">lock_reset</span>
+<span class="font-label-sm text-label-sm font-semibold">1-Click Скидання</span>
+</div>
+<p class="font-caption text-caption text-on-primary-container leading-snug">
+              Миттєве підтвердження через захищений протокол
+            </p>
+</div>
+</div>
+</div>
+<!-- Bottom Trust Indicator & Release Details -->
+<div class="relative z-10 pt-6 border-t border-surface-container-lowest/10 flex items-center justify-between">
+<div class="flex items-center gap-2.5">
+<span class="material-symbols-outlined text-secondary-fixed text-lg" data-icon="verified_user">verified_user</span>
+<span class="font-caption text-caption text-surface-variant font-medium">
+            Наскрізне шифрування та збереження персональних даних
+          </span>
+</div>
+<span class="font-caption text-caption text-surface-container-lowest/60 font-semibold tracking-wider">v3.4.2</span>
+</div>
+</section>
+<!-- RIGHT COLUMN: Clean White Form Canvas -->
+<section class="lg:col-span-7 bg-surface-container-lowest flex flex-col justify-between p-8 md:p-12 lg:p-16">
+<!-- Top Secondary Bar: Language Selector & Helpdesk -->
+<div class="flex items-center justify-between pb-8">
+<!-- Interactive State Demo Selector (User Experience showcase) -->
+<div class="hidden sm:flex items-center gap-1.5 p-1 bg-surface-container-low rounded-xl border border-surface-container-highest">
+<button class="px-2.5 py-1 rounded-lg font-caption text-caption transition-all font-semibold bg-surface-container-lowest text-secondary shadow-sm" id="btn-state-default" onclick="setDemoState('default')" type="button">
+            Звичайний стан
+          </button>
+<button class="px-2.5 py-1 rounded-lg font-caption text-caption transition-all text-on-surface-variant hover:text-on-surface" id="btn-state-error" onclick="setDemoState('error')" type="button">
+            Невірний email
+          </button>
+<button class="px-2.5 py-1 rounded-lg font-caption text-caption transition-all text-on-surface-variant hover:text-on-surface" id="btn-state-loading" onclick="setDemoState('loading')" type="button">
+            Завантаження...
+          </button>
+<button class="px-2.5 py-1 rounded-lg font-caption text-caption transition-all text-on-surface-variant hover:text-on-surface" id="btn-state-network-error" onclick="setDemoState('network-error')" type="button">
+            Помилка мережі
+          </button>
+</div>
+<div class="flex items-center gap-4 ml-auto">
+<!-- Language Selector -->
+<div class="relative group">
+<button class="inline-flex items-center gap-1.5 font-label-md text-label-md text-on-surface-variant hover:text-secondary transition-colors py-1">
+<span class="material-symbols-outlined text-lg" data-icon="language">language</span>
+<span>Українська (UA)</span>
+<span class="material-symbols-outlined text-sm" data-icon="expand_more">expand_more</span>
+</button>
+</div>
+<div class="w-px h-4 bg-outline-variant/40"></div>
+<!-- Support Link -->
+<a class="inline-flex items-center gap-1 font-label-md text-label-md text-on-surface-variant hover:text-secondary transition-colors" href="#">
+<span class="material-symbols-outlined text-lg" data-icon="help_outline">help_outline</span>
+<span>Підтримка</span>
+</a>
+</div>
+</div>
+<!-- Main Form Wrapper -->
+<div class="max-w-md w-full mx-auto my-auto space-y-8">
+<!-- Form Header -->
+<div class="space-y-2">
+<div class="w-12 h-12 rounded-2xl bg-surface-container-low text-secondary flex items-center justify-center mb-3">
+<span class="material-symbols-outlined text-2xl" data-icon="key">key</span>
+</div>
+<h2 class="font-headline-lg text-headline-lg font-bold text-on-background tracking-tight">
+            Відновлення пароля
+          </h2>
+<p class="font-body-md text-body-md text-on-surface-variant leading-relaxed">
+            Вкажіть електронну пошту, пов'язану з вашим акаунтом.
+          </p>
+</div>
+<!-- Global Alert Banner for Network or System Error -->
+<div class="hidden p-4 rounded-xl bg-error-container/50 border border-error/20 flex items-start gap-3" id="network-alert">
+<span class="material-symbols-outlined text-error text-xl shrink-0 mt-0.5" data-icon="error">error</span>
+<div>
+<h4 class="font-label-md text-label-md text-on-error-container font-semibold">Помилка з'єднання</h4>
+<p class="font-body-sm text-body-sm text-on-error-container/90 mt-0.5">
+              Не вдалося з'єднатися з сервером перевірки. Будь ласка, перевірте інтернет-з'єднання та спробуйте ще раз.
+            </p>
+</div>
+</div>
+<!-- Success Toast Notification (Conditional) -->
+<div class="hidden p-4 rounded-xl bg-secondary-fixed/30 border border-secondary/30 flex items-start gap-3" id="success-banner">
+<span class="material-symbols-outlined text-secondary text-xl shrink-0 mt-0.5" data-icon="mark_email_read">mark_email_read</span>
+<div>
+<h4 class="font-label-md text-label-md text-on-secondary-fixed-variant font-semibold">Лист відправлено!</h4>
+<p class="font-body-sm text-body-sm text-on-secondary-fixed-variant/90 mt-0.5">
+              Інструкції з відновлення надіслані на вашу пошту. Перевірте також папку «Спам».
+            </p>
+</div>
+</div>
+<!-- Interactive Form -->
+<form class="space-y-6" id="recovery-form" onsubmit="event.preventDefault(); simulateSubmit();">
+<!-- Email Input Group -->
+<div class="space-y-2">
+<div class="flex items-center justify-between">
+<label class="block font-label-md text-label-md font-semibold text-on-background" for="email">
+                Електронна пошта <span class="text-error">*</span>
+</label>
+<span class="font-caption text-caption text-on-surface-variant">Основний логін</span>
+</div>
+<div class="relative rounded-xl transition-all">
+<div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-outline">
+<span class="material-symbols-outlined text-xl" data-icon="mail">mail</span>
+</div>
+<input autocomplete="email" class="block w-full pl-11 pr-4 py-3 bg-surface-container-lowest border border-outline-variant/80 rounded-xl text-on-background placeholder:text-outline font-body-md text-body-md focus:outline-none focus:border-secondary focus:ring-4 focus:ring-secondary/10 transition-all duration-150" id="email" name="email" placeholder="oleksandr@example.com" required="" type="email" value="oleksandr@example.com"/>
+<div class="hidden absolute inset-y-0 right-0 pr-3.5 flex items-center pointer-events-none text-error" id="input-error-icon">
+<span class="material-symbols-outlined text-xl" data-icon="error">error</span>
+</div>
+</div>
+<!-- Dynamic Feedback / Helper Text -->
+<div class="space-y-1" id="email-helper-container">
+<p class="font-body-sm text-body-sm text-on-surface-variant flex items-center gap-1.5" id="helper-default">
+<span class="material-symbols-outlined text-base text-secondary" data-icon="info">info</span>
+<span>Ми надішлемо захищене посилання для створення нового пароля.</span>
+</p>
+<p class="hidden font-body-sm text-body-sm text-error flex items-center gap-1.5" id="helper-error">
+<span class="material-symbols-outlined text-base" data-icon="cancel">cancel</span>
+<span>Користувача з такою електронною адресою не знайдено в базі системи.</span>
+</p>
+</div>
+</div>
+<!-- Primary Submit Action Button -->
+<div class="pt-2">
+<button class="w-full flex items-center justify-center gap-2.5 px-6 py-3.5 rounded-xl bg-primary-container hover:bg-primary text-on-primary font-label-md text-label-md font-semibold transition-all duration-200 active:scale-[0.99] shadow-sm focus:outline-none focus:ring-4 focus:ring-secondary-fixed/50" id="submit-btn" type="submit">
+<span id="btn-text">Надіслати інструкції</span>
+<span class="material-symbols-outlined text-lg transition-transform group-hover:translate-x-1" data-icon="arrow_forward" id="btn-icon">arrow_forward</span>
+<span class="hidden animate-spin material-symbols-outlined text-lg" data-icon="progress_activity" id="btn-spinner">progress_activity</span>
+</button>
+</div>
+<!-- Return to Login Navigation Link -->
+<div class="text-center pt-2">
+<a class="inline-flex items-center gap-2 font-label-md text-label-md font-semibold text-secondary hover:text-primary transition-colors py-2 px-3 rounded-lg hover:bg-surface-container-low" href="#">
+<span class="material-symbols-outlined text-lg" data-icon="arrow_back">arrow_back</span>
+<span>Повернутися до входу</span>
+</a>
+</div>
+</form>
+<!-- Information Card for Athletes -->
+<div class="p-4 rounded-xl bg-surface-container-low/70 border border-surface-container-highest flex items-start gap-3">
+<span class="material-symbols-outlined text-secondary text-xl shrink-0 mt-0.5" data-icon="tips_and_updates">tips_and_updates</span>
+<div class="space-y-0.5">
+<span class="block font-label-sm text-label-sm font-semibold text-on-surface">Порада з безпеки</span>
+<span class="block font-caption text-caption text-on-surface-variant leading-relaxed">
+              Посилання для скидання пароля дійсне протягом 15 хвилин для запобігання несанкціонованому доступу.
+            </span>
+</div>
+</div>
+</div>
+<!-- Legal and Compliance Footer -->
+<footer class="pt-8 border-t border-surface-container-highest flex flex-col sm:flex-row items-center justify-between gap-4">
+<span class="font-caption text-caption text-on-surface-variant">
+          © 2025 Фітнес-трекер. Всі права захищені.
+        </span>
+<div class="flex items-center gap-6">
+<a class="font-caption text-caption text-on-surface-variant hover:text-secondary transition-colors underline-offset-2 hover:underline" href="#">
+            Політика конфіденційності
+          </a>
+<a class="font-caption text-caption text-on-surface-variant hover:text-secondary transition-colors underline-offset-2 hover:underline" href="#">
+            Умови користування
+          </a>
+</div>
+</footer>
+</section>
+</main>
+<!-- Interactive State Controller Script -->
+<script>
+    function setDemoState(state) {
+      const emailInput = document.getElementById('email');
+      const inputErrorIcon = document.getElementById('input-error-icon');
+      const helperDefault = document.getElementById('helper-default');
+      const helperError = document.getElementById('helper-error');
+      const networkAlert = document.getElementById('network-alert');
+      const successBanner = document.getElementById('success-banner');
+      const submitBtn = document.getElementById('submit-btn');
+      const btnText = document.getElementById('btn-text');
+      const btnIcon = document.getElementById('btn-icon');
+      const btnSpinner = document.getElementById('btn-spinner');
+
+      // Update state buttons styling
+      const buttons = ['default', 'error', 'loading', 'network-error'];
+      buttons.forEach(b => {
+        const el = document.getElementById('btn-state-' + b);
+        if (b === state) {
+          el.className = 'px-2.5 py-1 rounded-lg font-caption text-caption transition-all font-semibold bg-surface-container-lowest text-secondary shadow-sm';
+        } else {
+          el.className = 'px-2.5 py-1 rounded-lg font-caption text-caption transition-all text-on-surface-variant hover:text-on-surface';
+        }
+      });
+
+      // Reset common classes
+      emailInput.classList.remove('border-error', 'text-error', 'focus:border-error', 'focus:ring-error/10');
+      emailInput.classList.add('border-outline-variant/80', 'text-on-background', 'focus:border-secondary', 'focus:ring-secondary/10');
+      inputErrorIcon.classList.add('hidden');
+      helperDefault.classList.remove('hidden');
+      helperError.classList.add('hidden');
+      networkAlert.classList.add('hidden');
+      successBanner.classList.add('hidden');
+      submitBtn.disabled = false;
+      btnSpinner.classList.add('hidden');
+      btnIcon.classList.remove('hidden');
+      btnText.textContent = "Надіслати інструкції";
+
+      if (state === 'default') {
+        emailInput.value = 'oleksandr@example.com';
+      } else if (state === 'error') {
+        emailInput.value = 'unknown.athlete@gym.ua';
+        emailInput.classList.remove('border-outline-variant/80', 'focus:border-secondary', 'focus:ring-secondary/10');
+        emailInput.classList.add('border-error', 'focus:border-error', 'focus:ring-error/10');
+        inputErrorIcon.classList.remove('hidden');
+        helperDefault.classList.add('hidden');
+        helperError.classList.remove('hidden');
+      } else if (state === 'loading') {
+        emailInput.value = 'oleksandr@example.com';
+        submitBtn.disabled = true;
+        btnText.textContent = "Надсилання...";
+        btnIcon.classList.add('hidden');
+        btnSpinner.classList.remove('hidden');
+      } else if (state === 'network-error') {
+        emailInput.value = 'oleksandr@example.com';
+        networkAlert.classList.remove('hidden');
+      }
+    }
+
+    function simulateSubmit() {
+      setDemoState('loading');
+      setTimeout(() => {
+        const submitBtn = document.getElementById('submit-btn');
+        const btnText = document.getElementById('btn-text');
+        const btnIcon = document.getElementById('btn-icon');
+        const btnSpinner = document.getElementById('btn-spinner');
+        const successBanner = document.getElementById('success-banner');
+
+        submitBtn.disabled = false;
+        btnSpinner.classList.add('hidden');
+        btnIcon.classList.remove('hidden');
+        btnText.textContent = "Надіслати повторно";
+        successBanner.classList.remove('hidden');
+      }, 1200);
+    }
+  </script>
+</body></html>

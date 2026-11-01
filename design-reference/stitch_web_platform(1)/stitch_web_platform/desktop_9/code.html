@@ -1,0 +1,635 @@
+<!DOCTYPE html><html class="h-full bg-background" lang="uk"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>Скасування тренування — Фітнес-трекер</title>
+<!-- Google Fonts & Material Symbols -->
+<link href="https://fonts.googleapis.com" rel="preconnect">
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect">
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "on-primary-fixed-variant": "#294d46",
+            "error": "#ba1a1a",
+            "inverse-surface": "#21342f",
+            "on-background": "#0c1f1a",
+            "on-error": "#ffffff",
+            "tertiary-container": "#2a3c00",
+            "on-surface": "#0c1f1a",
+            "on-primary": "#ffffff",
+            "primary-fixed": "#c3ebe0",
+            "on-primary-fixed": "#00201b",
+            "surface-dim": "#c9dfd7",
+            "secondary-fixed": "#9af4d5",
+            "secondary-fixed-dim": "#7ed7b9",
+            "surface-container-high": "#d7ede5",
+            "tertiary": "#192500",
+            "on-tertiary": "#ffffff",
+            "secondary-container": "#9af4d5",
+            "surface-container-lowest": "#ffffff",
+            "primary-fixed-dim": "#a8cfc4",
+            "on-primary-container": "#81a69d",
+            "surface-container-highest": "#d1e7df",
+            "inverse-primary": "#a8cfc4",
+            "surface-container": "#ddf3eb",
+            "on-tertiary-fixed-variant": "#374e00",
+            "error-container": "#ffdad6",
+            "primary-container": "#173c35",
+            "on-error-container": "#93000a",
+            "inverse-on-surface": "#dff6ed",
+            "on-secondary-fixed": "#002118",
+            "secondary": "#006b54",
+            "surface-bright": "#e8fef6",
+            "surface-container-low": "#e2f9f0",
+            "surface-tint": "#41655d",
+            "outline": "#717976",
+            "tertiary-fixed": "#cbf07d",
+            "on-tertiary-container": "#89ab41",
+            "on-secondary": "#ffffff",
+            "surface-variant": "#d1e7df",
+            "on-secondary-container": "#007259",
+            "primary": "#002620",
+            "outline-variant": "#c1c8c5",
+            "on-surface-variant": "#414846",
+            "on-tertiary-fixed": "#141f00",
+            "on-secondary-fixed-variant": "#00513f",
+            "tertiary-fixed-dim": "#afd364",
+            "surface": "#e8fef6",
+            "background": "#e8fef6"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "2xl": "1rem",
+            "full": "9999px"
+          },
+          "spacing": {
+            "margin": "2rem",
+            "gutter-sm": "1rem",
+            "space-xl": "2rem",
+            "gutter": "1.5rem",
+            "space-lg": "1.5rem",
+            "space-xs": "0.25rem",
+            "margin-sm": "1rem",
+            "space-md": "1rem",
+            "space-sm": "0.5rem"
+          },
+          "fontFamily": {
+            "body-sm": ["Manrope"],
+            "headline-sm": ["Manrope"],
+            "headline-xl-mobile": ["Manrope"],
+            "stat-counter": ["Manrope"],
+            "headline-xl": ["Manrope"],
+            "body-md": ["Manrope"],
+            "label-sm": ["Manrope"],
+            "caption": ["Manrope"],
+            "display": ["Manrope"],
+            "headline-md": ["Manrope"],
+            "headline-lg": ["Manrope"],
+            "label-md": ["Manrope"],
+            "body-lg": ["Manrope"]
+          },
+          "fontSize": {
+            "body-sm": ["0.875rem", { "lineHeight": "1.25rem", "fontWeight": "400" }],
+            "headline-sm": ["1.125rem", { "lineHeight": "1.5rem", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+            "headline-xl-mobile": ["1.75rem", { "lineHeight": "2.25rem", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+            "stat-counter": ["2rem", { "lineHeight": "2.25rem", "letterSpacing": "-0.03em", "fontWeight": "800" }],
+            "headline-xl": ["2.25rem", { "lineHeight": "2.75rem", "letterSpacing": "-0.025em", "fontWeight": "700" }],
+            "body-md": ["1rem", { "lineHeight": "1.5rem", "fontWeight": "400" }],
+            "label-sm": ["0.75rem", { "lineHeight": "1rem", "letterSpacing": "0.03em", "fontWeight": "600" }],
+            "caption": ["0.75rem", { "lineHeight": "1rem", "letterSpacing": "0.02em", "fontWeight": "500" }],
+            "display": ["3.5rem", { "lineHeight": "4rem", "letterSpacing": "-0.03em", "fontWeight": "800" }],
+            "headline-md": ["1.25rem", { "lineHeight": "1.75rem", "letterSpacing": "-0.015em", "fontWeight": "600" }],
+            "headline-lg": ["1.5rem", { "lineHeight": "2rem", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+            "label-md": ["0.875rem", { "lineHeight": "1.25rem", "letterSpacing": "0.01em", "fontWeight": "600" }],
+            "body-lg": ["1.125rem", { "lineHeight": "1.75rem", "fontWeight": "400" }]
+          }
+        }
+      }
+    }
+  </script>
+<style>
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+      display: inline-block;
+      vertical-align: middle;
+      line-height: 1;
+    }
+    .custom-scroll::-webkit-scrollbar {
+      width: 5px;
+    }
+    .custom-scroll::-webkit-scrollbar-thumb {
+      background: #c1c8c5;
+      border-radius: 9999px;
+    }
+  </style>
+</head>
+<body class="h-full bg-background font-body-md text-on-surface antialiased flex overflow-hidden">
+<!-- ========================================================================= -->
+<!-- SIDE NAVIGATION (SideNavBar Anchor)                                        -->
+<!-- ========================================================================= -->
+<aside class="fixed top-0 left-0 h-screen w-64 flex flex-col justify-between bg-surface-container-lowest border-r border-outline-variant/30 shadow-sm z-30 select-none">
+<!-- Top Brand & Header -->
+<div class="p-4 flex flex-col gap-3">
+<div class="flex items-center gap-3 px-2 py-1">
+<div class="w-10 h-10 rounded-xl bg-primary-container text-tertiary-fixed flex items-center justify-center shadow-inner">
+<span class="material-symbols-outlined text-[24px]">fitness_center</span>
+</div>
+<div>
+<span class="text-headline-md font-headline-md font-bold text-primary block leading-tight">Фітнес-трекер</span>
+<span class="text-caption font-caption text-on-surface-variant">Особистий кабінет</span>
+</div>
+</div>
+<!-- Quick Action CTA -->
+<button class="mt-2 w-full flex items-center justify-center gap-2 bg-secondary text-on-secondary px-3 py-2.5 rounded-xl font-label-md text-label-md hover:bg-primary transition-colors shadow-sm active:scale-[0.98]">
+<span class="material-symbols-outlined text-[20px]">add</span>
+<span class="">Нове тренування</span>
+</button>
+<!-- Scrollable Navigation Items -->
+<nav class="mt-2 flex flex-col gap-1 overflow-y-auto max-h-[calc(100vh-270px)] pr-1 custom-scroll">
+<!-- 1. Головна -->
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-on-surface-variant font-medium hover:bg-surface-container-low hover:text-on-surface transition-colors duration-150 active:scale-[0.98]" href="#">
+<span class="material-symbols-outlined text-[20px]">dashboard</span>
+<span class="text-label-md font-label-md">Головна</span>
+</a>
+<!-- 2. Мій профіль -->
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-on-surface-variant font-medium hover:bg-surface-container-low hover:text-on-surface transition-colors duration-150 active:scale-[0.98]" href="#">
+<span class="material-symbols-outlined text-[20px]">person</span>
+<span class="text-label-md font-label-md">Мій профіль</span>
+</a>
+<!-- 3. Вправи -->
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-on-surface-variant font-medium hover:bg-surface-container-low hover:text-on-surface transition-colors duration-150 active:scale-[0.98]" href="#">
+<span class="material-symbols-outlined text-[20px]">fitness_center</span>
+<span class="text-label-md font-label-md">Вправи</span>
+</a>
+<!-- 4. Тренування -->
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-on-surface-variant font-medium hover:bg-surface-container-low hover:text-on-surface transition-colors duration-150 active:scale-[0.98]" href="#">
+<span class="material-symbols-outlined text-[20px]">directions_run</span>
+<span class="text-label-md font-label-md">Тренування</span>
+</a>
+<!-- 5. Програми -->
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-on-surface-variant font-medium hover:bg-surface-container-low hover:text-on-surface transition-colors duration-150 active:scale-[0.98]" href="#">
+<span class="material-symbols-outlined text-[20px]">assignment</span>
+<span class="text-label-md font-label-md">Програми</span>
+</a>
+<!-- 6. Календар (ACTIVE STATE as per instructions & task context) -->
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg bg-surface-container text-secondary font-semibold hover:bg-surface-container-high transition-colors duration-150 active:scale-[0.98]" href="#">
+<span class="material-symbols-outlined text-[20px]" style="font-variation-settings: 'FILL' 1;">calendar_today</span>
+<span class="text-label-md font-label-md">Календар</span>
+<span class="ml-auto w-1.5 h-1.5 rounded-full bg-secondary"></span>
+</a>
+<!-- 7. Історія тренувань -->
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-on-surface-variant font-medium hover:bg-surface-container-low hover:text-on-surface transition-colors duration-150 active:scale-[0.98]" href="#">
+<span class="material-symbols-outlined text-[20px]">history</span>
+<span class="text-label-md font-label-md">Історія тренувань</span>
+</a>
+<!-- 8. Статистика -->
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-on-surface-variant font-medium hover:bg-surface-container-low hover:text-on-surface transition-colors duration-150 active:scale-[0.98]" href="#">
+<span class="material-symbols-outlined text-[20px]">bar_chart</span>
+<span class="text-label-md font-label-md">Статистика</span>
+</a>
+<!-- 9. Досягнення -->
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-on-surface-variant font-medium hover:bg-surface-container-low hover:text-on-surface transition-colors duration-150 active:scale-[0.98]" href="#">
+<span class="material-symbols-outlined text-[20px]">emoji_events</span>
+<span class="text-label-md font-label-md">Досягнення</span>
+</a>
+<!-- 10. Челенджі -->
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-on-surface-variant font-medium hover:bg-surface-container-low hover:text-on-surface transition-colors duration-150 active:scale-[0.98]" href="#">
+<span class="material-symbols-outlined text-[20px]">military_tech</span>
+<span class="text-label-md font-label-md">Челенджі</span>
+</a>
+<!-- 11. Рейтинг -->
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-on-surface-variant font-medium hover:bg-surface-container-low hover:text-on-surface transition-colors duration-150 active:scale-[0.98]" href="#">
+<span class="material-symbols-outlined text-[20px]">leaderboard</span>
+<span class="text-label-md font-label-md">Рейтинг</span>
+</a>
+<!-- 12. Налаштування -->
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-on-surface-variant font-medium hover:bg-surface-container-low hover:text-on-surface transition-colors duration-150 active:scale-[0.98]" href="#">
+<span class="material-symbols-outlined text-[20px]">settings</span>
+<span class="text-label-md font-label-md">Налаштування</span>
+</a>
+</nav>
+</div>
+<!-- Footer Area: Help & User identity -->
+<div class="p-3 border-t border-outline-variant/30 flex flex-col gap-2 bg-surface-container-low/40">
+<div class="flex items-center justify-between px-2">
+<a class="flex items-center gap-2 text-on-surface-variant hover:text-primary transition-colors text-label-sm font-label-sm" href="#">
+<span class="material-symbols-outlined text-[18px]">help_outline</span>
+<span class="">Допомога</span>
+</a>
+<a class="flex items-center gap-2 text-error hover:text-on-error-container transition-colors text-label-sm font-label-sm" href="#">
+<span class="material-symbols-outlined text-[18px]">logout</span>
+<span class="">Вийти</span>
+</a>
+</div>
+<!-- User Monogram Footnote -->
+<div class="flex items-center gap-2.5 p-2 bg-surface-container-lowest rounded-xl border border-outline-variant/30">
+<div class="w-8 h-8 rounded-full bg-secondary-fixed flex items-center justify-center font-bold text-on-secondary-fixed text-label-md shadow-xs">
+          ОК
+        </div>
+<div class="flex-1 min-w-0">
+<p class="text-label-sm font-label-sm font-semibold text-primary truncate leading-tight">Олександр Кравченко</p>
+<p class="text-caption font-caption text-on-surface-variant truncate">Рівень: Атлет</p>
+</div>
+</div>
+</div>
+</aside>
+<!-- ========================================================================= -->
+<!-- MAIN WORKSPACE & TOP BAR                                                  -->
+<!-- ========================================================================= -->
+<div class="ml-64 flex-1 flex flex-col h-screen overflow-hidden">
+<!-- Top Navigation Bar (TopNavBar Anchor) -->
+<header class="h-[72px] bg-surface-container-lowest border-b border-outline-variant/30 px-8 flex items-center justify-between shrink-0 z-20">
+<!-- Search Input & Brand Breadcrumb Indicator -->
+<div class="flex items-center gap-6">
+<div class="relative w-72">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-[18px] text-on-surface-variant">search</span>
+<input class="w-full bg-surface-container-low border border-outline-variant/40 rounded-xl pl-9 pr-3 py-1.5 text-body-sm font-body-sm text-on-surface placeholder:text-on-surface-variant/70 focus:outline-none focus:border-secondary focus:ring-1 focus:ring-secondary/30 transition-all" placeholder="Пошук тренувань, програм..." type="text">
+</div>
+<nav class="hidden xl:flex items-center gap-5">
+<a class="text-on-surface-variant font-label-md text-label-md hover:text-primary transition-colors" href="#">Огляд</a>
+<a class="text-on-surface-variant font-label-md text-label-md hover:text-primary transition-colors" href="#">Аналітика</a>
+<a class="text-secondary font-bold font-label-md text-label-md border-b-2 border-secondary pb-0.5" href="#">План тижня</a>
+</nav>
+</div>
+<!-- Trailing Controls: Time, Notifications, Action & Profile -->
+<div class="flex items-center gap-3">
+<!-- City Time Indicator -->
+<div class="flex items-center gap-1.5 px-3 py-1.5 bg-surface-container-low/70 rounded-full border border-outline-variant/30 text-on-surface text-caption font-caption">
+<span class="material-symbols-outlined text-[16px] text-secondary">schedule</span>
+<span class="font-semibold text-primary">Київ 08:30</span>
+</div>
+<!-- Notification Trigger -->
+<button class="w-9 h-9 rounded-xl border border-outline-variant/30 flex items-center justify-center text-on-surface-variant hover:bg-surface-container hover:text-primary transition-colors relative">
+<span class="material-symbols-outlined text-[20px]">notifications</span>
+<span class="absolute top-2 right-2 w-2 h-2 rounded-full bg-secondary"></span>
+</button>
+<!-- Date Range Trigger -->
+<button class="w-9 h-9 rounded-xl border border-outline-variant/30 flex items-center justify-center text-on-surface-variant hover:bg-surface-container hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-[20px]">date_range</span>
+</button>
+<!-- Primary Top Action -->
+<button class="flex items-center gap-1.5 bg-primary-container text-tertiary-fixed px-3.5 py-1.5 rounded-xl font-label-md text-label-md font-semibold hover:bg-primary transition-colors active:scale-[0.98]">
+<span class="material-symbols-outlined text-[18px]">add_circle</span>
+<span class="">Записати тренування</span>
+</button>
+<!-- User Monogram Avatar (Strictly initials "ОК", NO photo) -->
+<div class="w-9 h-9 rounded-full bg-secondary-fixed text-primary font-bold text-label-md flex items-center justify-center ring-2 ring-surface-container-high ml-1">
+          ОК
+        </div>
+</div>
+</header>
+<!-- Scrollable Content Canvas -->
+<main class="flex-1 overflow-y-auto px-8 py-6 custom-scroll">
+<div class="max-w-[1360px] mx-auto pb-12 flex flex-col gap-6">
+<!-- Top Breadcrumbs & Technical Endpoint Context -->
+<div class="flex flex-wrap items-center justify-between gap-4">
+<div class="flex items-center gap-2 text-caption font-caption text-on-surface-variant">
+<a class="hover:text-primary transition-colors" href="#">Головна</a>
+<span class="text-outline-variant">/</span>
+<a class="hover:text-primary transition-colors" href="#">Календар</a>
+<span class="text-outline-variant">/</span>
+<a class="hover:text-primary transition-colors" href="#">Деталі тренування</a>
+<span class="text-outline-variant">/</span>
+<span class="text-primary font-semibold">Скасування</span>
+</div>
+<!-- Technical context pill (AR-01 REST Indicator) -->
+
+</div>
+<!-- Header Row with Back Button -->
+<div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+<div>
+<div class="flex items-center gap-3">
+<a class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-surface-container-lowest border border-outline-variant/40 rounded-xl text-label-sm font-label-sm text-primary hover:bg-surface-container transition-colors" href="#">
+<span class="material-symbols-outlined text-[16px]">arrow_back</span>
+<span class="">Повернутися до деталей</span>
+</a>
+<span class="px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-error-container text-on-error-container uppercase tracking-wider">
+                Дія скасування
+              </span>
+</div>
+<h1 class="text-headline-xl font-headline-xl text-primary mt-2">Скасувати тренування</h1>
+<p class="text-body-md font-body-md text-on-surface-variant mt-0.5">Перевірте інформацію перед підтвердженням операції.</p>
+</div>
+<!-- Quick Context Meta Badge -->
+
+</div>
+<!-- ===================================================================== -->
+<!-- TWO COLUMN LAYOUT (Left ~62%, Right ~38%)                              -->
+<!-- ===================================================================== -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+<!-- ================================================================= -->
+<!-- LEFT COLUMN (Read-only Summary + Warnings + Program Impact)        -->
+<!-- ================================================================= -->
+<div class="lg:col-span-7 xl:col-span-8 flex flex-col gap-6">
+<!-- 1. Read-Only Summary Card -->
+<div class="bg-surface-container-lowest rounded-2xl p-6 border border-outline-variant/40 shadow-xs relative overflow-hidden">
+<div class="flex items-center justify-between pb-4 border-b border-outline-variant/20">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-secondary text-[22px]">lock_clock</span>
+<h2 class="text-headline-sm font-headline-sm text-primary">Тренування, яке ви скасовуєте</h2>
+</div>
+<div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-secondary-fixed/50 text-secondary border border-secondary-fixed text-label-sm font-label-sm font-semibold">
+<span class="w-2 h-2 rounded-full bg-secondary"></span>
+<span class="">Заплановано</span>
+</div>
+</div>
+<!-- Main Attributes Grid -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-5">
+<!-- Title & Program -->
+<div class="p-4 bg-surface-container-low/60 rounded-xl border border-outline-variant/20">
+<p class="text-caption font-caption text-on-surface-variant uppercase tracking-wider">Назва заняття</p>
+<p class="text-headline-md font-headline-md font-bold text-primary mt-0.5">Силове тренування А</p>
+<div class="mt-2 flex items-center gap-1.5 text-secondary text-label-sm font-label-sm font-medium">
+<span class="material-symbols-outlined text-[16px]">folder_special</span>
+<span class="">Персональна програма: «Мій баланс»</span>
+</div>
+</div>
+<!-- Date, Time & Timezone -->
+<div class="p-4 bg-surface-container-low/60 rounded-xl border border-outline-variant/20">
+<p class="text-caption font-caption text-on-surface-variant uppercase tracking-wider">Запланований час</p>
+<p class="text-headline-sm font-headline-sm font-bold text-primary mt-0.5">5 листопада 2026, 18:30</p>
+<p class="text-body-sm font-body-sm text-on-surface-variant mt-1 flex items-center gap-1">
+<span class="material-symbols-outlined text-[15px] text-secondary">public</span>
+                    Київ (Europe/Kyiv, UTC +02:00) • Четвер
+                  </p>
+</div>
+</div>
+<!-- Exercise Composition Preview (Read-Only) -->
+<div class="mt-5">
+<div class="flex items-center justify-between mb-3">
+<span class="text-label-sm font-label-sm text-on-surface-variant uppercase tracking-wider font-semibold">Склад заняття (3 вправи)</span>
+<span class="text-caption font-caption text-outline">Режим лише читання — зміна вправ заблокована</span>
+</div>
+<div class="space-y-2">
+<!-- Ex 1 -->
+<div class="flex items-center justify-between p-3 bg-surface-bright/50 rounded-xl border border-outline-variant/30">
+<div class="flex items-center gap-3">
+<div class="w-7 h-7 rounded-lg bg-surface-container text-secondary flex items-center justify-center font-bold text-label-sm">
+                        1
+                      </div>
+<div>
+<p class="text-body-sm font-body-sm font-semibold text-primary">Присідання зі штангою</p>
+<p class="text-caption font-caption text-on-surface-variant">4 підходи × 10 повторень • 70 кг</p>
+</div>
+</div>
+<span class="material-symbols-outlined text-outline text-[18px]">lock</span>
+</div>
+<!-- Ex 2 -->
+<div class="flex items-center justify-between p-3 bg-surface-bright/50 rounded-xl border border-outline-variant/30">
+<div class="flex items-center gap-3">
+<div class="w-7 h-7 rounded-lg bg-surface-container text-secondary flex items-center justify-center font-bold text-label-sm">
+                        2
+                      </div>
+<div>
+<p class="text-body-sm font-body-sm font-semibold text-primary">Відтискання на брусах</p>
+<p class="text-caption font-caption text-on-surface-variant">3 підходи × 12 повторень • власна вага</p>
+</div>
+</div>
+<span class="material-symbols-outlined text-outline text-[18px]">lock</span>
+</div>
+<!-- Ex 3 -->
+<div class="flex items-center justify-between p-3 bg-surface-bright/50 rounded-xl border border-outline-variant/30">
+<div class="flex items-center gap-3">
+<div class="w-7 h-7 rounded-lg bg-surface-container text-secondary flex items-center justify-center font-bold text-label-sm">
+                        3
+                      </div>
+<div>
+<p class="text-body-sm font-body-sm font-semibold text-primary">Планка на передпліччях</p>
+<p class="text-caption font-caption text-on-surface-variant">3 раунди по 60 секунд</p>
+</div>
+</div>
+<span class="material-symbols-outlined text-outline text-[18px]">lock</span>
+</div>
+</div>
+</div>
+<!-- Read-only Security Notice Banner -->
+<div class="mt-4 flex items-center gap-2 p-2.5 rounded-lg bg-surface-container-high/30 border border-outline-variant/30 text-caption font-caption text-on-surface-variant"><span class="material-symbols-outlined text-secondary text-[16px]">info</span><span class="">Ви скасовуєте заплановане тренування. Дані заняття наведено для перевірки.</span></div>
+</div>
+<!-- 2. Cancellation Confirmation Clarification Card -->
+<div class="bg-surface-container-lowest rounded-2xl p-6 border border-outline-variant/40 shadow-xs">
+<div class="flex items-start gap-4">
+<div class="w-12 h-12 rounded-2xl bg-amber-50 text-amber-700 border border-amber-200 flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-[28px]">warning</span>
+</div>
+<div>
+<h2 class="text-headline-md font-headline-md font-bold text-primary">Ви впевнені, що хочете скасувати тренування?</h2>
+<p class="text-body-sm font-body-sm text-on-surface-variant mt-1">
+                    Ознайомтеся з правовими та аналітичними наслідками виконання цієї дії для вашого акаунту:
+                  </p>
+</div>
+</div>
+<!-- List of Clarification Points -->
+<div class="mt-5 space-y-3 pl-2">
+<div class="flex items-start gap-3">
+<div class="w-5 h-5 rounded-full bg-surface-container text-secondary flex items-center justify-center shrink-0 mt-0.5">
+<span class="material-symbols-outlined text-[14px]">check</span>
+</div>
+<p class="text-body-sm font-body-sm text-on-surface">
+<strong>Збереження в історії:</strong> Тренування залишиться в календарі зі статусом <span class="font-semibold text-error">«Скасовано»</span>. Воно не видаляється безповоротно з бази даних.
+                  </p>
+</div>
+<div class="flex items-start gap-3">
+<div class="w-5 h-5 rounded-full bg-surface-container text-secondary flex items-center justify-center shrink-0 mt-0.5">
+<span class="material-symbols-outlined text-[14px]">check</span>
+</div>
+<p class="text-body-sm font-body-sm text-on-surface">
+<strong>Статус виконання:</strong> Сесія <span class="font-semibold">не зарахується</span> як виконане заняття та не збільшить лічильник регулярності.
+                  </p>
+</div>
+<div class="flex items-start gap-3">
+<div class="w-5 h-5 rounded-full bg-surface-container text-secondary flex items-center justify-center shrink-0 mt-0.5">
+<span class="material-symbols-outlined text-[14px]">check</span>
+</div>
+<p class="text-body-sm font-body-sm text-on-surface">
+<strong>Бали активності:</strong> За скасування бали не нараховуються (бали за активність зараховуються виключно за внесені фактичні результати через форму запису E01).
+                  </p>
+</div>
+<div class="flex items-start gap-3">
+<div class="w-5 h-5 rounded-full bg-surface-container text-secondary flex items-center justify-center shrink-0 mt-0.5">
+<span class="material-symbols-outlined text-[14px]">check</span>
+</div>
+<p class="text-body-sm font-body-sm text-on-surface">
+<strong>Нагадування:</strong> Пов'язане нагадування за 1 годину автоматично позначиться як неактуальне і більше не турбуватиме вас.
+                  </p>
+</div>
+<div class="flex items-start gap-3">
+<div class="w-5 h-5 rounded-full bg-surface-container text-secondary flex items-center justify-center shrink-0 mt-0.5">
+<span class="material-symbols-outlined text-[14px]">check</span>
+</div>
+<p class="text-body-sm font-body-sm text-on-surface">
+<strong>Прогрес програми:</strong> Операція безпосередньо вплине на перерахунок прогресу поточної персональної програми «Мій баланс».
+                  </p>
+</div>
+</div>
+</div>
+<!-- 3. Program Progress Impact Card (Business Rule AR-01) -->
+<div class="bg-surface-container-lowest rounded-2xl p-6 border border-outline-variant/40 shadow-xs"><div class="flex items-center gap-2 pb-3 border-b border-outline-variant/20"><span class="material-symbols-outlined text-secondary text-[22px]">info</span><h2 class="text-headline-sm font-headline-sm text-primary">Як це вплине на програму?</h2></div><p class="text-body-sm font-body-sm text-on-surface mt-3 leading-relaxed">Скасування може змінити прогрес або автоматично завершити програму. Остаточний результат буде показано після підтвердження.</p><div class="mt-4 p-3.5 rounded-xl bg-surface-container-low border border-outline-variant/30 flex items-start gap-2.5"><span class="material-symbols-outlined text-secondary text-[18px] shrink-0 mt-0.5">help_outline</span><p class="text-caption font-caption text-on-surface-variant leading-relaxed">Остаточний статус програми та нарахування бонусу буде оновлено через запит G08 одразу після підтвердження.</p></div></div>
+</div>
+<!-- ================================================================= -->
+<!-- RIGHT COLUMN (Schedule, Actions & Server State Simulator)          -->
+<!-- ================================================================= -->
+<div class="lg:col-span-5 xl:col-span-4 flex flex-col gap-6">
+<!-- 1. Schedule & Reminder Widget -->
+<div class="bg-surface-container-lowest rounded-2xl p-6 border border-outline-variant/40 shadow-xs">
+<div class="flex items-center gap-2 pb-3 border-b border-outline-variant/20">
+<span class="material-symbols-outlined text-secondary text-[20px]">calendar_clock</span>
+<h3 class="text-headline-sm font-headline-sm text-primary">Поточний розклад та нагадування</h3>
+</div>
+<!-- Mini Calendar Highlight Card -->
+<div class="mt-4 p-4 rounded-xl bg-surface-container-low/60 border border-outline-variant/30 flex items-center justify-between">
+<div>
+<span class="text-caption font-caption text-on-surface-variant uppercase tracking-wider">Дата сесії</span>
+<p class="text-headline-sm font-headline-sm font-bold text-primary mt-0.5">5 лист. 2026</p>
+<p class="text-label-sm font-label-sm text-secondary font-semibold">18:30</p>
+</div>
+<div class="w-12 h-12 rounded-xl bg-surface-container-lowest border border-outline-variant/30 flex flex-col items-center justify-center text-center shadow-2xs">
+<span class="text-[10px] font-bold uppercase text-error">Лист</span>
+<span class="text-label-md font-bold text-primary">05</span>
+</div>
+</div>
+<!-- Reminder Status Item -->
+<div class="mt-4 p-3.5 bg-surface-bright rounded-xl border border-outline-variant/30">
+<div class="flex items-start gap-2.5">
+<span class="material-symbols-outlined text-outline text-[20px] shrink-0 mt-0.5">notifications_off</span>
+<div>
+<p class="text-label-sm font-label-sm font-bold text-primary">Стан нагадування:</p>
+<p class="text-caption font-caption text-on-surface-variant mt-0.5 leading-relaxed">Після скасування нагадування про це тренування більше не буде активним.</p>
+</div>
+</div>
+</div>
+</div>
+<!-- 2. Cancellation Action Card -->
+<div class="bg-surface-container-lowest rounded-2xl p-6 border border-outline-variant/40 shadow-xs">
+<h3 class="text-headline-sm font-headline-sm text-primary pb-3 border-b border-outline-variant/20">
+                Дії підтвердження скасування
+              </h3>
+<div class="mt-5 space-y-3">
+<!-- Primary Destructive Action Button -->
+<button class="w-full flex items-center justify-center gap-2 bg-rose-700 hover:bg-rose-800 text-white py-3 px-4 rounded-xl font-label-md text-label-md font-bold shadow-sm transition-all duration-150 active:scale-[0.99] focus:ring-2 focus:ring-rose-400 focus:outline-none" id="btn-confirm-cancel" onclick="triggerStateChange('success')">
+<span class="material-symbols-outlined text-[20px]">event_busy</span>
+<span class="">Так, скасувати тренування</span>
+</button>
+<!-- Secondary Keep Button -->
+<button class="w-full flex items-center justify-center gap-2 bg-surface-container-low border border-outline-variant text-primary py-2.5 px-4 rounded-xl font-label-md text-label-md font-semibold hover:bg-surface-container transition-colors duration-150 active:scale-[0.99]" onclick="alert('Повернення до перегляду тренування без змін.')">
+<span class="material-symbols-outlined text-[18px]">arrow_back</span>
+<span class="">Залишити тренування</span>
+</button>
+</div>
+<!-- Idempotency & Legal Notice -->
+<div class="mt-4 pt-4 border-t border-outline-variant/20 flex items-start gap-2 text-caption font-caption text-on-surface-variant">
+<span class="material-symbols-outlined text-[16px] text-secondary shrink-0 mt-0.5">verified_user</span>
+<p class="">Якщо тренування вже скасовано, повторна дія не змінить його стан. Операція не вимагає обов'язкового введення причини.</p>
+</div>
+</div>
+<!-- 3. Server Response State Switcher (Edge States Playground) -->
+<div class="bg-surface-container-lowest rounded-2xl p-5 border border-outline-variant/40 shadow-xs">
+<div class="flex items-center justify-between pb-3 border-b border-outline-variant/20">
+<span class="text-label-sm font-label-sm font-bold text-primary">Попередній перегляд станів відповіді сервера</span>
+<span class="material-symbols-outlined text-[18px] text-on-surface-variant">swap_horiz</span>
+</div>
+<!-- Interactive Tabs -->
+<div class="grid grid-cols-2 gap-1.5 mt-3 p-1 bg-surface-container-low rounded-xl">
+<button class="py-1.5 px-2 text-[11px] font-label-md font-bold rounded-lg transition-colors bg-surface-container-lowest text-primary shadow-xs" id="tab-confirm" onclick="triggerStateChange('confirm')">
+                  Форма запиту
+                </button>
+<button class="py-1.5 px-2 text-[11px] font-label-md font-medium text-on-surface-variant rounded-lg transition-colors hover:text-primary" id="tab-success" onclick="triggerStateChange('success')">
+                  Успішно (S05 + G08)
+                </button>
+<button class="py-1.5 px-2 text-[11px] font-label-md font-medium text-on-surface-variant rounded-lg transition-colors hover:text-primary" id="tab-already" onclick="triggerStateChange('already')">
+                  Вже скасовано
+                </button>
+<button class="py-1.5 px-2 text-[11px] font-label-md font-medium text-on-surface-variant rounded-lg transition-colors hover:text-primary" id="tab-completed" onclick="triggerStateChange('completed')">
+                  Завершене заняття
+                </button>
+</div>
+<!-- Live Simulation Feedback Panel -->
+<div class="mt-4 p-3.5 rounded-xl bg-surface-bright border border-outline-variant/30 text-body-sm" id="state-feedback-container">
+<!-- State 1 Content (Default) -->
+<div class="space-y-1.5" id="state-view-confirm">
+<div class="flex items-center gap-1.5 text-secondary font-bold text-label-sm">
+<span class="material-symbols-outlined text-[16px]">edit_calendar</span>
+<span class="">Стан підтвердження (Pending Action)</span>
+</div>
+<p class="text-caption font-caption text-on-surface-variant">Після скасування нагадування про це тренування більше не буде активним.</p>
+</div>
+<!-- State 2 Content (Success) -->
+<div class="space-y-2 hidden" id="state-view-success">
+<div class="flex items-center gap-1.5 text-secondary font-bold text-label-sm">
+<span class="material-symbols-outlined text-[16px]">check_circle</span>
+<span class="">Стан 200 OK: Сесію успішно скасовано</span>
+</div>
+<div class="p-2.5 rounded-lg bg-surface-container-lowest border border-outline-variant/30 space-y-1">
+<div class="flex items-center justify-between">
+<span class="text-caption font-caption text-on-surface-variant">Статус сесії:</span>
+<span class="text-caption font-caption font-bold text-error bg-error-container/40 px-2 py-0.5 rounded-full">Скасовано</span>
+</div>
+<div class="flex items-center justify-between">
+<span class="text-caption font-caption text-on-surface-variant">Програма «Мій баланс»:</span>
+<span class="text-caption font-caption font-bold text-secondary">Завершено (100%)</span>
+</div>
+<div class="flex items-center justify-between pt-1 border-t border-outline-variant/20">
+<span class="text-caption font-caption text-on-surface-variant">Бонус програми:</span>
+<span class="text-caption font-caption font-semibold text-on-surface-variant">Не нараховано (поріг 3/3)</span>
+</div>
+</div>
+<p class="text-[11px] font-caption text-secondary">
+                    ✓ Тренування залишилося в календарі. Програму переведено у фінальний архівний статус.
+                  </p>
+</div>
+<!-- State 3 Content (Already Cancelled) -->
+<div class="space-y-1.5 hidden" id="state-view-already">
+<div class="flex items-center gap-1.5 text-amber-700 font-bold text-label-sm">
+<span class="material-symbols-outlined text-[16px]">info</span>
+<span class="">Ідемпотентний результат (200 OK)</span>
+</div>
+<p class="text-caption font-caption text-on-surface-variant">Після скасування нагадування про це тренування більше не буде активним.</p>
+</div>
+<!-- State 4 Content (Completed Workout) -->
+<div class="space-y-1.5 hidden" id="state-view-completed">
+<div class="flex items-center gap-1.5 text-error font-bold text-label-sm">
+<span class="material-symbols-outlined text-[16px]">block</span>
+<span class="">Блокування скасування (409 Conflict)</span>
+</div>
+<p class="text-caption font-caption text-on-surface-variant">Після скасування нагадування про це тренування більше не буде активним.</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+</div>
+<!-- Inline Simulation Script -->
+<script>
+    function triggerStateChange(state) {
+      const views = ['confirm', 'success', 'already', 'completed'];
+      views.forEach(v => {
+        const viewEl = document.getElementById(`state-view-${v}`);
+        const tabEl = document.getElementById(`tab-${v}`);
+        if (viewEl) viewEl.classList.add('hidden');
+        if (tabEl) {
+          tabEl.classList.remove('bg-surface-container-lowest', 'text-primary', 'shadow-xs');
+          tabEl.classList.add('text-on-surface-variant');
+        }
+      });
+
+      const targetView = document.getElementById(`state-view-${state}`);
+      const targetTab = document.getElementById(`tab-${state}`);
+      if (targetView) targetView.classList.remove('hidden');
+      if (targetTab) {
+        targetTab.classList.remove('text-on-surface-variant');
+        targetTab.classList.add('bg-surface-container-lowest', 'text-primary', 'shadow-xs');
+      }
+    }
+  </script>
+
+
+</body></html>

@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+
+<html class="light" lang="uk"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport"/>
+<title>Фітнес-трекер — Вхід</title>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "tertiary-fixed-dim": "#afd364",
+            "on-error": "#ffffff",
+            "on-tertiary-fixed-variant": "#374e00",
+            "on-secondary-container": "#007259",
+            "on-primary-fixed-variant": "#294d46",
+            "secondary-fixed-dim": "#7ed7b9",
+            "on-error-container": "#93000a",
+            "on-tertiary": "#ffffff",
+            "surface": "#e8fef6",
+            "on-primary": "#ffffff",
+            "surface-variant": "#d1e7df",
+            "tertiary": "#192500",
+            "inverse-on-surface": "#dff6ed",
+            "on-surface": "#0c1f1a",
+            "on-tertiary-fixed": "#141f00",
+            "tertiary-container": "#2a3c00",
+            "surface-container-low": "#e2f9f0",
+            "surface-container-lowest": "#ffffff",
+            "on-background": "#0c1f1a",
+            "outline": "#717976",
+            "surface-container": "#ddf3eb",
+            "surface-container-high": "#d7ede5",
+            "inverse-primary": "#a8cfc4",
+            "primary-container": "#173c35",
+            "primary-fixed": "#c3ebe0",
+            "error-container": "#ffdad6",
+            "surface-tint": "#41655d",
+            "secondary-container": "#9af4d5",
+            "on-primary-container": "#81a69d",
+            "inverse-surface": "#21342f",
+            "surface-container-highest": "#d1e7df",
+            "surface-dim": "#c9dfd7",
+            "tertiary-fixed": "#cbf07d",
+            "on-surface-variant": "#414846",
+            "background": "#e8fef6",
+            "error": "#ba1a1a",
+            "primary": "#002620",
+            "on-primary-fixed": "#00201b",
+            "on-secondary": "#ffffff",
+            "on-tertiary-container": "#89ab41",
+            "on-secondary-fixed": "#002118",
+            "outline-variant": "#c1c8c5",
+            "on-secondary-fixed-variant": "#00513f",
+            "secondary-fixed": "#9af4d5",
+            "secondary": "#006b54",
+            "primary-fixed-dim": "#a8cfc4",
+            "surface-bright": "#e8fef6"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "full": "9999px"
+          },
+          "spacing": {
+            "space-xs": "0.25rem",
+            "space-sm": "0.5rem",
+            "gutter-sm": "1rem",
+            "space-md": "1rem",
+            "space-xl": "2rem",
+            "margin": "2rem",
+            "space-lg": "1.5rem",
+            "gutter": "1.5rem",
+            "margin-sm": "1rem"
+          },
+          "fontFamily": {
+            "headline-md": ["Manrope"],
+            "body-sm": ["Manrope"],
+            "label-md": ["Manrope"],
+            "display": ["Manrope"],
+            "label-sm": ["Manrope"],
+            "body-md": ["Manrope"],
+            "headline-lg": ["Manrope"],
+            "headline-xl": ["Manrope"],
+            "headline-xl-mobile": ["Manrope"],
+            "stat-counter": ["Manrope"],
+            "body-lg": ["Manrope"],
+            "headline-sm": ["Manrope"],
+            "caption": ["Manrope"]
+          },
+          "fontSize": {
+            "headline-md": ["1.25rem", { lineHeight: "1.75rem", letterSpacing: "-0.015em", fontWeight: "600" }],
+            "body-sm": ["0.875rem", { lineHeight: "1.25rem", fontWeight: "400" }],
+            "label-md": ["0.875rem", { lineHeight: "1.25rem", letterSpacing: "0.01em", fontWeight: "600" }],
+            "display": ["3.5rem", { lineHeight: "4rem", letterSpacing: "-0.03em", fontWeight: "800" }],
+            "label-sm": ["0.75rem", { lineHeight: "1rem", letterSpacing: "0.03em", fontWeight: "600" }],
+            "body-md": ["1rem", { lineHeight: "1.5rem", fontWeight: "400" }],
+            "headline-lg": ["1.5rem", { lineHeight: "2rem", letterSpacing: "-0.02em", fontWeight: "700" }],
+            "headline-xl": ["2.25rem", { lineHeight: "2.75rem", letterSpacing: "-0.025em", fontWeight: "700" }],
+            "headline-xl-mobile": ["1.75rem", { lineHeight: "2.25rem", letterSpacing: "-0.02em", fontWeight: "700" }],
+            "stat-counter": ["2rem", { lineHeight: "2.25rem", letterSpacing: "-0.03em", fontWeight: "800" }],
+            "body-lg": ["1.125rem", { lineHeight: "1.75rem", fontWeight: "400" }],
+            "headline-sm": ["1.125rem", { lineHeight: "1.5rem", letterSpacing: "-0.01em", fontWeight: "600" }],
+            "caption": ["0.75rem", { lineHeight: "1rem", letterSpacing: "0.02em", fontWeight: "500" }]
+          }
+        }
+      }
+    }
+  </script>
+<style>
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 500, 'GRAD' 0, 'opsz' 24;
+      display: inline-block;
+      vertical-align: middle;
+      line-height: 1;
+    }
+    body {
+      background-color: #F6F8F5;
+      font-family: 'Manrope', sans-serif;
+    }
+  </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="text-on-surface antialiased min-h-screen flex items-center justify-center p-0 sm:p-4">
+<!-- Mobile Viewport Container (Target 390px) -->
+<div class="w-full max-w-[390px] min-h-screen bg-surface-container-lowest flex flex-col justify-between relative shadow-xl sm:rounded-[2.5rem] sm:min-h-[844px] overflow-hidden border border-outline-variant/30">
+<!-- Top Decorative Gradient Tone -->
+<div class="absolute top-0 left-0 right-0 h-40 bg-gradient-to-b from-surface-container-low to-transparent pointer-events-none -z-0"></div>
+<!-- Header / Brand Bar -->
+<header class="relative z-10 pt-8 px-6 pb-2 flex items-center justify-between">
+<div class="flex items-center gap-2.5">
+<div class="w-10 h-10 rounded-xl bg-primary-container text-tertiary-fixed flex items-center justify-center shadow-sm">
+<span class="material-symbols-outlined text-[24px]" style="font-variation-settings: 'FILL' 1;">fitness_center</span>
+</div>
+<div>
+<span class="font-headline-md text-headline-md font-bold tracking-tight text-primary-container">Фітнес-трекер</span>
+<span class="block text-caption font-caption text-on-surface-variant -mt-0.5">Особистий кабінет</span>
+</div>
+</div>
+<!-- Session Alert Trigger (For quick demonstration / toggle) -->
+<button class="w-9 h-9 rounded-full bg-surface-container flex items-center justify-center text-secondary hover:bg-surface-container-high transition-colors" id="openModalBtn" title="Перевірити статус сесії" type="button">
+<span class="material-symbols-outlined text-[20px]">notifications</span>
+</button>
+</header>
+<!-- Main Content Canvas -->
+<main class="relative z-10 px-6 pt-4 pb-6 flex-1 flex flex-col justify-center">
+<!-- Athlete Motivation Badge -->
+<div class="inline-flex items-center gap-1.5 self-start px-3 py-1 rounded-full bg-surface-container text-secondary mb-4 border border-secondary-container/40">
+<span class="w-2 h-2 rounded-full bg-secondary"></span>
+<span class="font-label-sm text-label-sm font-semibold">Особистий кабінет атлета</span>
+</div>
+<!-- Welcome Headlines -->
+<div class="mb-7">
+<h1 class="font-headline-xl-mobile text-headline-xl-mobile font-bold text-primary-container mb-2">
+          З поверненням!
+        </h1>
+<p class="font-body-sm text-body-sm text-on-surface-variant">
+          Увійдіть у свій профіль для доступу до тренувань
+        </p>
+</div>
+<!-- Login Form -->
+<form class="space-y-4" id="loginForm" onsubmit="event.preventDefault();">
+<!-- Email Field -->
+<div>
+<label class="block font-label-md text-label-md text-on-surface-variant mb-1.5" for="email">
+            Електронна пошта
+          </label>
+<div class="relative">
+<div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-outline">
+<span class="material-symbols-outlined text-[20px]">mail</span>
+</div>
+<input class="w-full h-12 pl-10 pr-3.5 bg-surface-container-lowest border border-outline-variant/60 rounded-xl text-on-surface font-body-md text-body-md placeholder:text-outline/70 focus:outline-none focus:border-secondary focus:ring-2 focus:ring-secondary/20 transition-all duration-150" id="email" name="email" placeholder="athlete@tracker.ua" required="" type="email"/>
+</div>
+</div>
+<!-- Password Field -->
+<div>
+<div class="flex items-center justify-between mb-1.5">
+<label class="font-label-md text-label-md text-on-surface-variant" for="password">
+              Пароль
+            </label>
+<a class="font-label-sm text-label-sm text-secondary hover:underline" href="#">
+              Забули пароль?
+            </a>
+</div>
+<div class="relative">
+<div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-outline">
+<span class="material-symbols-outlined text-[20px]">lock</span>
+</div>
+<input class="w-full h-12 pl-10 pr-11 bg-surface-container-lowest border border-outline-variant/60 rounded-xl text-on-surface font-body-md text-body-md placeholder:text-outline/70 focus:outline-none focus:border-secondary focus:ring-2 focus:ring-secondary/20 transition-all duration-150" id="password" name="password" placeholder="Введіть ваш пароль" required="" type="password"/>
+<button aria-label="Показати або сховати пароль" class="absolute inset-y-0 right-0 pr-3 flex items-center text-outline hover:text-on-surface-variant focus:outline-none" id="togglePassword" type="button">
+<span class="material-symbols-outlined text-[20px]" id="passwordEyeIcon">visibility</span>
+</button>
+</div>
+</div>
+<!-- Remember Me Checkbox -->
+<div class="flex items-center gap-2 pt-1 pb-1">
+<input class="w-4 h-4 rounded border-outline-variant text-secondary focus:ring-secondary/30 accent-secondary cursor-pointer" id="rememberMe" type="checkbox"/>
+<label class="font-label-sm text-label-sm text-on-surface-variant cursor-pointer select-none" for="rememberMe">
+            Запам'ятати мене на цьому пристрої
+          </label>
+</div>
+<!-- Submit Button (Primary #173C35) -->
+<div class="pt-2">
+<button class="w-full h-12 bg-primary-container text-on-primary font-headline-sm text-headline-sm rounded-xl flex items-center justify-center gap-2 shadow-sm hover:bg-[#122e29] active:scale-[0.98] transition-all duration-150" type="submit">
+<span>Увійти</span>
+<span class="material-symbols-outlined text-[18px]">arrow_forward</span>
+</button>
+</div>
+</form>
+<!-- Quick Biometric Indicator / Key Feature -->
+<div class="mt-6 p-3 rounded-xl bg-surface-container-low border border-outline-variant/30 flex items-center gap-3">
+<div class="w-8 h-8 rounded-lg bg-surface-container flex items-center justify-center text-secondary">
+<span class="material-symbols-outlined text-[20px]">fingerprint</span>
+</div>
+<div class="flex-1">
+<p class="font-label-sm text-label-sm text-primary-container font-semibold">Швидкий захищений вхід</p>
+<p class="font-caption text-caption text-on-surface-variant">Підтримка біометрії та Passkey</p>
+</div>
+</div>
+</main>
+<!-- Bottom Action Section -->
+<footer class="relative z-10 px-6 pb-8 pt-2 text-center bg-surface-container-lowest">
+<div class="font-body-sm text-body-sm text-on-surface-variant">
+        Не маєте облікового запису?
+      </div>
+<a class="inline-block mt-1 font-label-md text-label-md text-secondary font-bold hover:underline py-1" href="#">
+        Створити акаунт
+      </a>
+<!-- Sub-label Version Tag -->
+<div class="mt-4 text-center">
+<span class="font-caption text-caption text-outline/80">Фітнес-трекер v2.4 • Безпечне з'єднання</span>
+</div>
+</footer>
+<!-- Session Expired Modal Overlay -->
+<div aria-labelledby="modalTitle" aria-modal="true" class="absolute inset-0 z-50 bg-[#182b26]/50 backdrop-blur-[4px] flex items-end sm:items-center justify-center p-4 transition-opacity duration-200" id="sessionModal" role="dialog">
+<!-- Dialog Card -->
+<div class="w-full max-w-[342px] bg-surface-container-lowest rounded-2xl p-5 border border-outline-variant/40 shadow-2xl animate-in fade-in zoom-in-95 duration-150">
+<!-- Status Icon / Header -->
+<div class="flex items-center gap-3 mb-3.5">
+<div class="w-10 h-10 rounded-full bg-error-container/60 text-error flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-[22px]">timer_off</span>
+</div>
+<div>
+<h3 class="font-headline-sm text-headline-sm font-bold text-primary-container leading-snug" id="modalTitle">
+              Сесію завершено
+            </h3>
+<span class="font-label-sm text-label-sm text-outline">Потрібна авторизація</span>
+</div>
+</div>
+<!-- Description Message -->
+<p class="font-body-sm text-body-sm text-on-surface-variant mb-5">
+          Термін дії вашої сесії завершився. Увійдіть повторно, щоб відновити доступ до журналу тренувань та аналітики.
+        </p>
+<!-- Modal Actions -->
+<div class="space-y-2">
+<button class="w-full h-11 bg-primary-container text-on-primary font-label-md text-label-md rounded-xl flex items-center justify-center gap-2 hover:bg-[#122e29] active:scale-[0.98] transition-all" id="closeModalLoginBtn" type="button">
+<span class="material-symbols-outlined text-[18px]">lock_open</span>
+<span>Увійти</span>
+</button>
+<button class="w-full h-9 bg-transparent text-outline font-label-sm text-label-sm hover:text-on-surface transition-colors" id="dismissModalBtn" type="button">
+            Закрити сповіщення
+          </button>
+</div>
+</div>
+</div>
+</div>
+<!-- Interactive Logic for Password Toggle and Modal Control -->
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+      // Password visibility toggle
+      const passwordInput = document.getElementById('password');
+      const togglePasswordBtn = document.getElementById('togglePassword');
+      const passwordEyeIcon = document.getElementById('passwordEyeIcon');
+
+      if (togglePasswordBtn && passwordInput) {
+        togglePasswordBtn.addEventListener('click', () => {
+          const isPassword = passwordInput.getAttribute('type') === 'password';
+          passwordInput.setAttribute('type', isPassword ? 'text' : 'password');
+          passwordEyeIcon.textContent = isPassword ? 'visibility_off' : 'visibility';
+        });
+      }
+
+      // Modal Controls
+      const modal = document.getElementById('sessionModal');
+      const openModalBtn = document.getElementById('openModalBtn');
+      const closeModalLoginBtn = document.getElementById('closeModalLoginBtn');
+      const dismissModalBtn = document.getElementById('dismissModalBtn');
+
+      function hideModal() {
+        if (modal) {
+          modal.classList.add('hidden');
+          modal.classList.remove('flex');
+        }
+      }
+
+      function showModal() {
+        if (modal) {
+          modal.classList.remove('hidden');
+          modal.classList.add('flex');
+        }
+      }
+
+      if (closeModalLoginBtn) {
+        closeModalLoginBtn.addEventListener('click', () => {
+          hideModal();
+          if (passwordInput) {
+            passwordInput.focus();
+          }
+        });
+      }
+
+      if (dismissModalBtn) {
+        dismissModalBtn.addEventListener('click', hideModal);
+      }
+
+      if (openModalBtn) {
+        openModalBtn.addEventListener('click', showModal);
+      }
+    });
+  </script>
+</body></html>
