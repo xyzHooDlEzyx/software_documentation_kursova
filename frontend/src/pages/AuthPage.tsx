@@ -74,6 +74,13 @@ export function AuthPage({ mode }: Props) {
       <form className="grid gap-space-4" onSubmit={(event) => void submit(event)} noValidate>
         <TextInput id="email" label="Email" type="email" autoComplete="email" value={email} onChange={(event) => setEmail(event.target.value)} error={fields.email?.join(" ")} />
         <TextInput id="password" label="Пароль" type="password" autoComplete={isRegister ? "new-password" : "current-password"} value={password} onChange={(event) => setPassword(event.target.value)} error={fields.password?.join(" ")} hint={isRegister ? "Щонайменше 12 символів." : undefined} />
+        {!isRegister && (
+          <div className="flex justify-end">
+            <Link className="text-small font-semibold text-brand underline-offset-4 hover:underline" to="/forgot-password">
+              Забули пароль?
+            </Link>
+          </div>
+        )}
         <Button type="submit" loading={busy} className="mt-space-1 w-full">{isRegister ? "Створити акаунт" : "Увійти"}</Button>
       </form>
       <p className="m-0 text-center text-small text-muted-foreground">

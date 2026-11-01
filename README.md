@@ -1,6 +1,6 @@
 # Фітнес-трекер — курсова робота, варіант 4
 
-Репозиторій містить документацію архітектури та Phase 1: кастомний `accounts.User`, Django session authentication, CSRF-захищений REST API A01–A06 і React-екрани реєстрації та входу. Наступні інкременти описані в [плані реалізації](docs/implementation/implementation-plan.md).
+Репозиторій містить документацію архітектури та повну реалізацію Phase 0 і Phase 1: кастомний `accounts.User`, Django session authentication, CSRF-захищений REST API A01–A08 (включно з відновленням пароля) та React-екрани реєстрації, входу, налаштувань і скидання пароля (`D01`/`D02`). Наступні інкременти описані в [плані реалізації](docs/implementation/implementation-plan.md).
 
 ## Передумови та версії
 
@@ -38,7 +38,7 @@ npm ci --prefix frontend
 Можна використати вже наявний PostgreSQL: створіть роль і базу із назвами з `.env` та надайте ролі права власника. Наприклад, для локального сервера з системним користувачем `postgres` (виконайте вручну, якщо маєте відповідні права):
 
 ```bash
-sudo -u postgres createuser --pwprompt fitness_app
+sudo -u postgres createuser --createdb --pwprompt fitness_app
 sudo -u postgres createdb --owner=fitness_app fitness_dev
 ```
 
@@ -82,6 +82,8 @@ npm --prefix frontend run dev
 | A04 | `POST /api/v1/auth/logout/` | 204 | Сесія, CSRF |
 | A05 | `GET /api/v1/me/` | 200 | Сесія |
 | A06 | `PATCH /api/v1/me/` | 200 | Сесія, CSRF |
+| A07 | `POST /api/v1/auth/password-reset/` | 200 | Публічний, CSRF, Throttling |
+| A08 | `POST /api/v1/auth/password-reset/confirm/` | 200 | Публічний, CSRF, Throttling |
 
 Реєстрація не виконує автоматичний вхід і не створює профіль. Мінімальна довжина пароля — 12 символів; застосовуються стандартні Django validators. Сесія триває 7 днів без подовження від кожного запиту. Після деактивації вхід і чинна сесія блокуються. Пароль і хеш не повертаються API. Профіль, тренування й звіти належать наступним фазам.
 
@@ -103,3 +105,10 @@ npm run build
 ```
 
 Backend тести створюють окрему PostgreSQL test-базу, тому роль БД має дозволяти її створення. Для тестів завантажте `.env` перед запуском команд. Жоден тест не використовує SQLite. HTTP-сценарій через Vite origin `:5173` перевірено: A01 → A02 → A03 → A05 → A06 → A04 → 401 для A05. Виробниче розгортання та доменні функції Phase 2+ ще не реалізовані.
+
+### Діагностика підключення до PostgreSQL і proxy
+
+- **Перевірка живого з'єднання з PostgreSQL та Vite proxy:** `backend/.venv/bin/python backend/manage.py showmigrations --plan` (перевіряє TCP-підключення і стан міграцій у PostgreSQL; `manage.py check` без прапорців не відкриває з'єднання з БД) та `curl -i http://localhost:5173/api/v1/auth/csrf/` (перевіряє проходження `/api/v1/*` через Vite `:5173` до Django `:8000` і видачу `csrftoken`).
+- **`Connection refused` на `127.0.0.1:5432`:** локальний сервер PostgreSQL або контейнер `db` не запущено. Перевірте `ss -ltnp | grep 5432`, статус системного сервісу (`systemctl is-active postgresql`) або запущених контейнерів.
+- **Docker Engine проти Docker Desktop на Linux:** системний Docker Engine слухає `/var/run/docker.sock` (контекст `default`), тоді як Docker Desktop працює у власній VM і слухає `~/.docker/desktop/docker.sock` (контекст `desktop-linux`, сервіс `systemctl --user is-active docker-desktop`). Перевірте активний контекст через `docker context ls` і використовуйте `docker --context desktop-linux compose up -d db`, якщо запущено саме Docker Desktop.
+- **Нова сесія термінала або запуск `pytest`:** змінні з `.env` не підвантажуються автоматично — перед командами `manage.py` чи `pytest` у кожному новому терміналі виконайте `set -a; . ./.env; set +a` з кореня репозиторію (або `set -a; . ../.env; set +a` із каталогу `backend/`). Для `pytest` роль PostgreSQL повинна мати право `CREATEDB` (у контейнері `postgres:17` воно надається `POSTGRES_USER` автоматично; для локального сервера: `sudo -u postgres psql -c "ALTER ROLE fitness_app CREATEDB;"`).

@@ -14,10 +14,24 @@ from .serializers import (
     AccountSerializer,
     CredentialsSerializer,
     LeaderboardSettingsSerializer,
+    PasswordResetConfirmSerializer,
+    PasswordResetRequestSerializer,
     RegistrationSerializer,
+)
+from .services import PasswordResetService
+from .throttling import (
+    PasswordResetConfirmIPThrottle,
+    PasswordResetEmailThrottle,
+    PasswordResetIPThrottle,
 )
 
 User = get_user_model()
+
+PASSWORD_RESET_REQUEST_MESSAGE = (
+    "Якщо акаунт із такою адресою існує, "
+    "ми надішлемо інструкції для відновлення пароля."
+)
+PASSWORD_RESET_CONFIRM_MESSAGE = "Пароль оновлено. Увійдіть із новим паролем."
 
 
 class CsrfView(APIView):
@@ -98,3 +112,35 @@ class MeView(APIView):
                 )
             user.save(update_fields=["public_alias", "leaderboard_opt_in"])
         return Response(AccountSerializer(user).data)
+
+
+@method_decorator(csrf_protect, name="dispatch")
+class PasswordResetRequestView(APIView):
+    permission_classes = [AllowAny]
+    throttle_classes = [PasswordResetIPThrottle, PasswordResetEmailThrottle]
+
+    def post(self, request):
+        serializer = PasswordResetRequestSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        PasswordResetService().request_reset(serializer.validated_data["email"])
+        return Response(
+            {"message": PASSWORD_RESET_REQUEST_MESSAGE}, status=status.HTTP_200_OK
+        )
+
+
+@method_decorator(csrf_protect, name="dispatch")
+class PasswordResetConfirmView(APIView):
+    permission_classes = [AllowAny]
+    throttle_classes = [PasswordResetConfirmIPThrottle]
+
+    def post(self, request):
+        serializer = PasswordResetConfirmSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        PasswordResetService().confirm_reset(
+            uid=serializer.validated_data["uid"],
+            token=serializer.validated_data["token"],
+            new_password=serializer.validated_data["new_password"],
+        )
+        return Response(
+            {"message": PASSWORD_RESET_CONFIRM_MESSAGE}, status=status.HTTP_200_OK
+        )

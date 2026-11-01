@@ -72,6 +72,20 @@ DATABASES = {
     },
 }
 
+# Multi-worker production deployments can set
+# DJANGO_CACHE_BACKEND=django.core.cache.backends.db.DatabaseCache
+# (or another shared cache backend) so rate limiting is shared across processes
+# without requiring Redis.
+CACHES = {
+    "default": {
+        "BACKEND": os.getenv(
+            "DJANGO_CACHE_BACKEND",
+            "django.core.cache.backends.locmem.LocMemCache",
+        ),
+        "LOCATION": os.getenv("DJANGO_CACHE_LOCATION", "fitness-default-cache"),
+    },
+}
+
 REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": [
         "accounts.authentication.APISessionAuthentication",
@@ -79,6 +93,15 @@ REST_FRAMEWORK = {
     "DEFAULT_PERMISSION_CLASSES": [
         "rest_framework.permissions.IsAuthenticated",
     ],
+    "DEFAULT_THROTTLE_RATES": {
+        "password_reset_ip": os.getenv("DJANGO_THROTTLE_PASSWORD_RESET_IP", "10/hour"),
+        "password_reset_email": os.getenv(
+            "DJANGO_THROTTLE_PASSWORD_RESET_EMAIL", "5/hour"
+        ),
+        "password_reset_confirm_ip": os.getenv(
+            "DJANGO_THROTTLE_PASSWORD_RESET_CONFIRM_IP", "10/hour"
+        ),
+    },
     "EXCEPTION_HANDLER": "accounts.errors.exception_handler",
 }
 
@@ -104,6 +127,27 @@ SESSION_COOKIE_HTTPONLY = True
 CSRF_COOKIE_HTTPONLY = False  # React reads csrftoken for X-CSRFToken.
 SESSION_COOKIE_SAMESITE = "Lax"
 CSRF_COOKIE_SAMESITE = "Lax"
+SECURE_REFERRER_POLICY = "no-referrer"
+PASSWORD_RESET_TIMEOUT = int(os.getenv("DJANGO_PASSWORD_RESET_TIMEOUT", str(60 * 60)))
+FRONTEND_ORIGIN = os.getenv("DJANGO_FRONTEND_ORIGIN", "http://localhost:5173").rstrip(
+    "/"
+)
+EMAIL_BACKEND = os.getenv(
+    "DJANGO_EMAIL_BACKEND", "django.core.mail.backends.smtp.EmailBackend"
+)
+DEFAULT_FROM_EMAIL = os.getenv("DJANGO_DEFAULT_FROM_EMAIL", "noreply@fitness.local")
+EMAIL_HOST = os.getenv("DJANGO_EMAIL_HOST", "localhost")
+EMAIL_PORT = int(os.getenv("DJANGO_EMAIL_PORT", "587"))
+EMAIL_HOST_USER = os.getenv("DJANGO_EMAIL_HOST_USER", "")
+EMAIL_HOST_PASSWORD = os.getenv("DJANGO_EMAIL_HOST_PASSWORD", "")
+EMAIL_USE_TLS = os.getenv("DJANGO_EMAIL_USE_TLS", "true").lower() in {
+    "1",
+    "true",
+    "yes",
+    "on",
+}
+EMAIL_TIMEOUT = int(os.getenv("DJANGO_EMAIL_TIMEOUT", "10"))
+EMAIL_FILE_PATH = os.getenv("DJANGO_EMAIL_FILE_PATH", "")
 LANGUAGE_CODE = "uk"
 TIME_ZONE = "Europe/Kyiv"
 USE_I18N = True

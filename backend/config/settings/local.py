@@ -18,3 +18,6 @@ CSRF_TRUSTED_ORIGINS = csv_env(  # noqa: F405
 )
 SESSION_COOKIE_SECURE = False
 CSRF_COOKIE_SECURE = False
+EMAIL_BACKEND = os.getenv(
+    "DJANGO_EMAIL_BACKEND", "django.core.mail.backends.locmem.EmailBackend"
+)

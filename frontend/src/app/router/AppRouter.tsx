@@ -5,6 +5,8 @@ import { PublicLayout } from "../../components/layout";
 import { AuthPage } from "../../pages/AuthPage";
 import { HomePage } from "../../pages/HomePage";
 import { NotFoundPage } from "../../pages/NotFoundPage";
+import { PasswordResetConfirmPage } from "../../pages/PasswordResetConfirmPage";
+import { PasswordResetRequestPage } from "../../pages/PasswordResetRequestPage";
 import { SettingsPage } from "../../pages/SettingsPage";
 import { Alert, Button, LoadingState } from "../../components/ui";
 import { RequireAuth } from "./RequireAuth";
@@ -23,6 +25,10 @@ export function AppRouter() {
       <Route element={<PublicLayout />}>
         <Route path="/login" element={<PublicOnly mode="login" />} />
         <Route path="/register" element={<PublicOnly mode="register" />} />
+        <Route path="/forgot-password" element={<PasswordResetRequestPage />} />
+        <Route path="/password-reset" element={<PasswordResetRequestPage />} />
+        <Route path="/reset-password/:uid/:token" element={<PasswordResetConfirmPage />} />
+        <Route path="/reset-password" element={<PasswordResetConfirmPage />} />
       </Route>
       <Route element={<RequireAuth />}>
         <Route path="/" element={<HomePage />} />

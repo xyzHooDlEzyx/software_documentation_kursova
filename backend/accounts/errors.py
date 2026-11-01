@@ -7,6 +7,7 @@ from rest_framework.exceptions import (
     NotAuthenticated,
     ParseError,
     PermissionDenied,
+    Throttled,
     ValidationError,
 )
 from rest_framework.views import exception_handler as drf_exception_handler
@@ -44,6 +45,14 @@ class InvalidCredentials(AuthenticationFailed):
     default_code = "invalid_credentials"
 
 
+class ResetTokenInvalidOrExpired(APIException):
+    status_code = 400
+    default_detail = (
+        "Посилання для відновлення пароля недійсне або термін його дії минув."
+    )
+    default_code = "reset_token_invalid_or_expired"
+
+
 def _field_errors(detail):
     if isinstance(detail, dict):
         return {
@@ -66,6 +75,14 @@ def exception_handler(exc, context):
         code, message, fields = "email_taken", str(exc.detail), {}
     elif isinstance(exc, InvalidCredentials):
         code, message, fields = "invalid_credentials", str(exc.detail), {}
+    elif isinstance(exc, ResetTokenInvalidOrExpired):
+        code, message, fields = "reset_token_invalid_or_expired", str(exc.detail), {}
+    elif isinstance(exc, Throttled):
+        code, message, fields = (
+            "rate_limit_exceeded",
+            "Забагато запитів. Спробуйте пізніше.",
+            {},
+        )
     elif isinstance(exc, (NotAuthenticated, AuthenticationFailed)):
         code, message, fields = "authentication_required", "Потрібен вхід.", {}
     elif isinstance(exc, ParseError):

@@ -56,3 +56,16 @@ class LeaderboardSettingsSerializer(StrictSerializer):
                 {"public_alias": ["Для участі в рейтингу потрібен псевдонім."]}
             )
         return attrs
+
+
+class PasswordResetRequestSerializer(StrictSerializer):
+    email = serializers.EmailField(max_length=254)
+
+    def validate_email(self, value):
+        return User.objects.normalize_email(value)
+
+
+class PasswordResetConfirmSerializer(StrictSerializer):
+    uid = serializers.CharField(max_length=128, trim_whitespace=True)
+    token = serializers.CharField(max_length=256, trim_whitespace=True)
+    new_password = serializers.CharField(trim_whitespace=False, write_only=True)

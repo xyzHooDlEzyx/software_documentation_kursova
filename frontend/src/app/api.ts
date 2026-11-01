@@ -5,6 +5,10 @@ export type Account = {
   leaderboard_opt_in: boolean;
 };
 
+export type MessageResponse = {
+  message: string;
+};
+
 export type ApiErrorBody = {
   error: {
     code: string;
@@ -101,6 +105,18 @@ export function login(email: string, password: string) {
 
 export function logout() {
   return request<void>("/api/v1/auth/logout/", "POST");
+}
+
+export function requestPasswordReset(email: string) {
+  return request<MessageResponse>("/api/v1/auth/password-reset/", "POST", { email });
+}
+
+export function confirmPasswordReset(uid: string, token: string, new_password: string) {
+  return request<MessageResponse>("/api/v1/auth/password-reset/confirm/", "POST", {
+    uid,
+    token,
+    new_password,
+  });
 }
 
 export function currentUser() {
