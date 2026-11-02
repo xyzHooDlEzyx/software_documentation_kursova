@@ -29,9 +29,12 @@ from .serializers import (
 )
 from .services import PasswordResetService, ProfileService
 from .throttling import (
+    LoginEmailThrottle,
+    LoginIPThrottle,
     PasswordResetConfirmIPThrottle,
     PasswordResetEmailThrottle,
     PasswordResetIPThrottle,
+    RegisterIPThrottle,
 )
 
 User = get_user_model()
@@ -60,6 +63,7 @@ class CsrfView(APIView):
 @method_decorator(csrf_protect, name="dispatch")
 class RegisterView(APIView):
     permission_classes = [AllowAny]
+    throttle_classes = [RegisterIPThrottle]
 
     def post(self, request):
         serializer = RegistrationSerializer(data=request.data)
@@ -82,6 +86,7 @@ class RegisterView(APIView):
 @method_decorator(csrf_protect, name="dispatch")
 class LoginView(APIView):
     permission_classes = [AllowAny]
+    throttle_classes = [LoginIPThrottle, LoginEmailThrottle]
 
     def post(self, request):
         serializer = CredentialsSerializer(data=request.data)

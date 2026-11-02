@@ -93,7 +93,13 @@ REST_FRAMEWORK = {
     "DEFAULT_PERMISSION_CLASSES": [
         "rest_framework.permissions.IsAuthenticated",
     ],
+    # Number of trusted reverse proxies in front of Django. 0 = use REMOTE_ADDR
+    # and ignore client-supplied X-Forwarded-For (prevents throttle bypass).
+    "NUM_PROXIES": int(os.getenv("DJANGO_NUM_PROXIES", "0")),
     "DEFAULT_THROTTLE_RATES": {
+        "login_ip": os.getenv("DJANGO_THROTTLE_LOGIN_IP", "30/hour"),
+        "login_email": os.getenv("DJANGO_THROTTLE_LOGIN_EMAIL", "10/hour"),
+        "register_ip": os.getenv("DJANGO_THROTTLE_REGISTER_IP", "20/hour"),
         "password_reset_ip": os.getenv("DJANGO_THROTTLE_PASSWORD_RESET_IP", "10/hour"),
         "password_reset_email": os.getenv(
             "DJANGO_THROTTLE_PASSWORD_RESET_EMAIL", "5/hour"
