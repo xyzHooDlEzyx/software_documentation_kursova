@@ -2,6 +2,7 @@ from decimal import Decimal
 
 import pytest
 from django.contrib.auth import get_user_model
+from django.contrib.auth.models import Group
 from django.core.exceptions import ValidationError
 from django.test import Client
 from django.urls import reverse
@@ -29,7 +30,18 @@ def admin_user(db):
         is_staff=True,
         is_active=True,
     )
+    user.groups.add(Group.objects.get(name="Administrator"))
     return user
+
+
+@pytest.fixture
+def staff_without_permissions(db):
+    return User.objects.create_user(
+        email="staff@fitness.local",
+        password="StaffSecurePassword123!",
+        is_staff=True,
+        is_active=True,
+    )
 
 
 @pytest.fixture
@@ -369,3 +381,100 @@ class TestDjangoAdminPublicationAtomicity:
         # Inline was NOT deleted in DB due to atomic savepoint rollback!
         assert ProgramTemplateWorkout.objects.filter(pk=ptw.pk).exists()
         assert template.program_template_workouts.count() == 1
+
+
+@pytest.mark.django_db
+class TestAdminCannotBypassCatalogRules:
+    """Regression tests: admin must not bypass BR-002/BR-004 or archive guards."""
+
+    def _strength_workout(self):
+        exercise = Exercise.objects.create(
+            name="Жим лежачи", category=ExerciseCategory.STRENGTH
+        )
+        workout = Workout.objects.create(
+            name="Силове Б", category=ExerciseCategory.STRENGTH
+        )
+        WorkoutExercise.objects.create(
+            workout=workout,
+            exercise=exercise,
+            position=1,
+            recommended_sets=3,
+            recommended_reps=8,
+        )
+        return exercise, workout
+
+    def test_staff_without_model_permissions_is_denied(
+        self, client: Client, staff_without_permissions
+    ):
+        client.force_login(staff_without_permissions)
+        res = client.get(reverse("admin:catalog_workout_changelist"))
+        assert res.status_code == 403
+
+    @pytest.mark.parametrize(
+        "url",
+        ["/admin/catalog/workoutexercise/", "/admin/catalog/programtemplateworkout/"],
+    )
+    def test_join_tables_have_no_standalone_admin(
+        self, client: Client, admin_user, url
+    ):
+        client.force_login(admin_user)
+        assert client.get(url).status_code == 404
+
+    def test_is_archived_is_read_only_in_admin_forms(self, client: Client, admin_user):
+        exercise, workout = self._strength_workout()
+        client.force_login(admin_user)
+
+        for url in (
+            reverse("admin:catalog_exercise_change", args=[exercise.pk]),
+            reverse("admin:catalog_workout_change", args=[workout.pk]),
+        ):
+            page = client.get(url)
+            assert page.status_code == 200
+            assert "is_archived" not in page.context["adminform"].form.fields
+
+    def test_category_change_of_used_exercise_is_rejected(self):
+        exercise, _ = self._strength_workout()
+        exercise.category = ExerciseCategory.CARDIO
+
+        with pytest.raises(ValidationError) as exc:
+            CatalogPublicationService.validate_exercise_category_change(exercise)
+        assert "category" in exc.value.message_dict
+
+    def test_category_change_via_admin_form_is_rejected(
+        self, client: Client, admin_user
+    ):
+        exercise, _ = self._strength_workout()
+        client.force_login(admin_user)
+
+        response = client.post(
+            reverse("admin:catalog_exercise_change", args=[exercise.pk]),
+            {
+                "name": exercise.name,
+                "description": "",
+                "category": ExerciseCategory.CARDIO,
+                "_save": "Save",
+            },
+        )
+        assert response.status_code == 200
+        assert "category" in response.context["adminform"].form.errors
+        exercise.refresh_from_db()
+        assert exercise.category == ExerciseCategory.STRENGTH
+
+    def test_category_change_of_unused_exercise_is_allowed(self):
+        exercise = Exercise.objects.create(
+            name="Нова вправа", category=ExerciseCategory.STRENGTH
+        )
+        exercise.category = ExerciseCategory.YOGA
+        CatalogPublicationService.validate_exercise_category_change(exercise)
+
+
+@pytest.mark.django_db
+def test_exercise_without_met_data_can_be_created_in_admin(client: Client, admin_user):
+    client.force_login(admin_user)
+    response = client.post(
+        reverse("admin:catalog_exercise_add"),
+        {"name": "Розтяжка", "description": "", "category": ExerciseCategory.YOGA},
+    )
+    assert response.status_code == 302
+    exercise = Exercise.objects.get(name="Розтяжка")
+    assert exercise.met_activity_description is None

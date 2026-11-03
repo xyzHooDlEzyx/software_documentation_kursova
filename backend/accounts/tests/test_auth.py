@@ -1,6 +1,6 @@
 import pytest
 from django.contrib.auth import authenticate, get_user_model
-from django.contrib.auth.models import Group, Permission
+from django.contrib.auth.models import Group
 from django.db import IntegrityError, transaction
 from rest_framework.test import APIClient
 
@@ -310,8 +310,7 @@ def test_admin_deactivation_requires_explicit_permission():
     client = APIClient()
     client.force_login(staff)
     assert client.get("/admin/accounts/user/").status_code == 403
-    group = Group.objects.create(name="Administrator")
-    group.permissions.add(Permission.objects.get(codename="deactivate_user"))
+    group = Group.objects.get(name="Administrator")
     staff.groups.add(group)
     staff = User.objects.get(pk=staff.pk)
     client.force_login(staff)
@@ -331,8 +330,7 @@ def test_admin_deactivation_requires_explicit_permission():
 def test_technical_superuser_can_assign_staff_group_without_password_exposure():
     root = User.objects.create_superuser("root@example.test", PASSWORD)
     member = User.objects.create_user("member@example.test", PASSWORD)
-    group = Group.objects.create(name="Administrator")
-    group.permissions.add(Permission.objects.get(codename="deactivate_user"))
+    group = Group.objects.get(name="Administrator")
     client = APIClient()
     client.force_login(root)
     page = client.get(f"/admin/accounts/user/{member.pk}/change/")
@@ -345,3 +343,19 @@ def test_technical_superuser_can_assign_staff_group_without_password_exposure():
     assert response.status_code == 302
     member.refresh_from_db()
     assert member.is_staff and member.groups.filter(pk=group.pk).exists()
+
+
+@pytest.mark.django_db
+def test_administrator_group_is_provisioned_by_migration():
+    group = Group.objects.get(name="Administrator")
+    codenames = set(group.permissions.values_list("codename", flat=True))
+    assert {
+        "deactivate_user",
+        "add_exercise",
+        "change_exercise",
+        "add_workout",
+        "change_workout",
+        "add_programtemplate",
+        "change_programtemplate",
+    } <= codenames
+    assert not any(code.startswith("delete_") for code in codenames)

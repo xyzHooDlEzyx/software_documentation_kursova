@@ -1,11 +1,15 @@
 """Django Admin configuration for the shared fitness catalog.
 
 Enforces:
-- Staff-only access for Administrator role (is_active and is_staff)
-- Disabled physical deletion (BR-005)
-- Atomic inlines publication and composition validation (BR-002, BR-003, BR-004)
+- Access for active staff with explicit catalog model permissions (Administrator
+  group, see ``accounts.0004_administrator_group``)
+- Disabled physical deletion (BR-003)
+- Composition is edited only through atomic inlines of its aggregate root, so
+  BR-002/BR-004 validation cannot be bypassed via standalone join-table admins
+- ``is_archived`` changes only through archive actions with their guards
 """
 
+from django import forms
 from django.contrib import admin, messages
 from django.contrib.admin import helpers
 from django.contrib.admin.options import (
@@ -30,28 +34,70 @@ from .models import (
 from .services import CatalogPublicationService
 
 
+def is_active_staff(request) -> bool:
+    user = request.user
+    return bool(user and user.is_active and user.is_staff)
+
+
 class CatalogBaseModelAdmin(admin.ModelAdmin):
-    """Base model admin enforcing staff access and disabling physical deletion."""
+    """Requires active staff plus Django model permissions; no physical deletion."""
 
     def has_module_permission(self, request):
-        return bool(request.user and request.user.is_active and request.user.is_staff)
+        return is_active_staff(request) and super().has_module_permission(request)
 
     def has_view_permission(self, request, obj=None):
-        return bool(request.user and request.user.is_active and request.user.is_staff)
+        return is_active_staff(request) and super().has_view_permission(request, obj)
 
     def has_add_permission(self, request):
-        return bool(request.user and request.user.is_active and request.user.is_staff)
+        return is_active_staff(request) and super().has_add_permission(request)
 
     def has_change_permission(self, request, obj=None):
-        return bool(request.user and request.user.is_active and request.user.is_staff)
+        return is_active_staff(request) and super().has_change_permission(request, obj)
 
     def has_delete_permission(self, request, obj=None):
-        # Physical deletion is strictly prohibited by BR-005
+        # Physical deletion of catalog entries is prohibited (BR-003).
         return False
+
+
+class MetNullableFormMixin:
+    """Store an empty MET description as NULL.
+
+    ``TextField(null=True)`` form fields keep ``""``, which violates the
+    ``*_met_pkg_consistent`` CHECK (all four MET fields NULL or all present),
+    so records without MET data could not be saved through the admin.
+    """
+
+    def clean_met_activity_description(self):
+        value = self.cleaned_data.get("met_activity_description")
+        return value or None
+
+
+class ExerciseAdminForm(MetNullableFormMixin, forms.ModelForm):
+    class Meta:
+        model = Exercise
+        fields = "__all__"
+
+    def clean(self):
+        cleaned = super().clean()
+        category = cleaned.get("category")
+        if category:
+            # cleaned_data is not yet copied to self.instance at this point.
+            CatalogPublicationService.validate_exercise_category_change(
+                self.instance, new_category=category
+            )
+        return cleaned
+
+
+class WorkoutAdminForm(MetNullableFormMixin, forms.ModelForm):
+    class Meta:
+        model = Workout
+        fields = "__all__"
 
 
 @admin.register(Exercise)
 class ExerciseAdmin(CatalogBaseModelAdmin):
+    form = ExerciseAdminForm
+    readonly_fields = ("is_archived",)
     list_display = (
         "name",
         "category",
@@ -87,19 +133,29 @@ class ExerciseAdmin(CatalogBaseModelAdmin):
 
 
 class CatalogTabularInline(admin.TabularInline):
-    """TabularInline enforcing staff permissions without requiring extra perms."""
+    """Composition rows inherit the permissions of their aggregate root.
+
+    The root admin already requires the matching model permission, so a user
+    who may change a Workout/ProgramTemplate may edit its composition.
+    """
+
+    def _root_permission(self, request, action: str) -> bool:
+        opts = self.parent_model._meta
+        return is_active_staff(request) and request.user.has_perm(
+            f"{opts.app_label}.{action}_{opts.model_name}"
+        )
 
     def has_view_permission(self, request, obj=None):
-        return bool(request.user and request.user.is_active and request.user.is_staff)
+        return self._root_permission(request, "view")
 
     def has_add_permission(self, request, obj=None):
-        return bool(request.user and request.user.is_active and request.user.is_staff)
+        return self._root_permission(request, "change")
 
     def has_change_permission(self, request, obj=None):
-        return bool(request.user and request.user.is_active and request.user.is_staff)
+        return self._root_permission(request, "change")
 
     def has_delete_permission(self, request, obj=None):
-        return bool(request.user and request.user.is_active and request.user.is_staff)
+        return self._root_permission(request, "change")
 
 
 class WorkoutExerciseInline(CatalogTabularInline):
@@ -266,6 +322,8 @@ class AtomicCompositeAdmin(CatalogBaseModelAdmin):
 
 @admin.register(Workout)
 class WorkoutAdmin(AtomicCompositeAdmin):
+    form = WorkoutAdminForm
+    readonly_fields = ("is_archived",)
     list_display = ("name", "category", "is_archived")
     list_filter = ("is_archived", "category")
     search_fields = ("name",)
@@ -342,26 +400,3 @@ class ProgramTemplateAdmin(AtomicCompositeAdmin):
                 f"Успішно архівовано шаблонів програм: {archived_count}.",
                 level=messages.SUCCESS,
             )
-
-
-@admin.register(WorkoutExercise)
-class WorkoutExerciseAdmin(CatalogBaseModelAdmin):
-    list_display = ("id", "workout", "exercise", "position")
-    list_filter = ("workout__category", "exercise__category")
-    search_fields = ("workout__name", "exercise__name")
-
-
-@admin.register(ProgramTemplateWorkout)
-class ProgramTemplateWorkoutAdmin(CatalogBaseModelAdmin):
-    list_display = (
-        "id",
-        "program_template",
-        "workout",
-        "position",
-        "suggested_weekday",
-    )
-    list_filter = (
-        "program_template__fitness_goal",
-        "program_template__experience_level",
-    )
-    search_fields = ("program_template__name", "workout__name")

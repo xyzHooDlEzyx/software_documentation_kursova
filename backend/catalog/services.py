@@ -89,6 +89,40 @@ class CatalogPublicationService:
         cls.validate_met_metadata(exercise)
 
     @classmethod
+    def validate_exercise_category_change(
+        cls, exercise: Exercise, *, new_category: str | None = None
+    ) -> None:
+        """Reject a category change while the exercise is in an active workout.
+
+        Recommended parameters of a WorkoutExercise are validated against the
+        exercise category (BR-002), so silently changing the category would
+        leave active workouts with inconsistent composition.
+        """
+        if exercise.pk is None:
+            return
+        previous = (
+            Exercise.objects.filter(pk=exercise.pk)
+            .values_list("category", flat=True)
+            .first()
+        )
+        target = new_category if new_category is not None else exercise.category
+        if previous is None or previous == target:
+            return
+        active_workouts = Workout.objects.filter(
+            is_archived=False, workout_exercises__exercise_id=exercise.pk
+        ).distinct()
+        if active_workouts.exists():
+            names = ", ".join(w.name for w in active_workouts[:3])
+            raise ValidationError(
+                {
+                    "category": (
+                        "Неможливо змінити категорію вправи, яка використовується "
+                        f"в активних тренуваннях: {names}."
+                    )
+                }
+            )
+
+    @classmethod
     def validate_workout_exercise_parameters(
         cls, we: WorkoutExercise, *, allow_archived_exercise: bool = False
     ) -> None:
