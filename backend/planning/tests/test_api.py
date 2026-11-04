@@ -431,6 +431,48 @@ def test_g06_rejects_invalid_payload_without_mutation(catalog_and_users, payload
 
 
 @pytest.mark.django_db
+@pytest.mark.parametrize(
+    "overrides",
+    [
+        {"recommended_sets": 100000},
+        {"recommended_reps": 40000},
+        {"position": 40000},
+        {"exercise_id": 2**63},
+    ],
+)
+def test_g06_out_of_range_values_return_400_not_500(catalog_and_users, overrides):
+    data = catalog_and_users
+    program = create_personal_program(data)
+    occurrence = program.workouts.get(position=2)
+    item = strength_item(data["extra_strength"].pk)
+    item.update(overrides)
+    before = list(occurrence.exercises.values_list("exercise_id", "position"))
+    response = client_for(data["owner"]).put(
+        composition_url(program.pk, occurrence.pk),
+        {"name": "Особистий блок", "exercises": [item]},
+        format="json",
+    )
+    assert response.status_code == 400
+    assert list(occurrence.exercises.values_list("exercise_id", "position")) == before
+
+
+@pytest.mark.django_db
+def test_g06_rejects_oversized_composition(catalog_and_users):
+    data = catalog_and_users
+    program = create_personal_program(data)
+    occurrence = program.workouts.get(position=2)
+    items = [
+        strength_item(data["extra_strength"].pk, position=i) for i in range(1, 102)
+    ]
+    response = client_for(data["owner"]).put(
+        composition_url(program.pk, occurrence.pk),
+        {"name": "Особистий блок", "exercises": items},
+        format="json",
+    )
+    assert response.status_code == 400
+
+
+@pytest.mark.django_db
 def test_g06_category_validation_and_foreign_entries(catalog_and_users):
     data = catalog_and_users
     program = create_personal_program(data)

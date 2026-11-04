@@ -211,11 +211,22 @@ class UpdateUserProgramResponseSerializer(serializers.ModelSerializer):
         read_only_fields = fields
 
 
+# PostgreSQL column limits: positions/sets/reps are ``smallint`` and IDs are
+# ``bigint``. Validating them here returns 400 instead of a DataError (500).
+SMALLINT_MAX = 32767
+BIGINT_MAX = 9223372036854775807
+MAX_WORKOUT_EXERCISES = 100
+
+
 class UpdateWorkoutExerciseItemSerializer(StrictSerializer):
-    position = StrictIntegerField(min_value=1)
-    exercise_id = StrictIntegerField(min_value=1)
-    recommended_sets = StrictIntegerField(min_value=1, required=True, allow_null=True)
-    recommended_reps = StrictIntegerField(min_value=1, required=True, allow_null=True)
+    position = StrictIntegerField(min_value=1, max_value=SMALLINT_MAX)
+    exercise_id = StrictIntegerField(min_value=1, max_value=BIGINT_MAX)
+    recommended_sets = StrictIntegerField(
+        min_value=1, max_value=SMALLINT_MAX, required=True, allow_null=True
+    )
+    recommended_reps = StrictIntegerField(
+        min_value=1, max_value=SMALLINT_MAX, required=True, allow_null=True
+    )
     recommended_load_kg = StrictDecimalField(
         min_value=Decimal("0.0"),
         max_digits=6,
@@ -244,6 +255,7 @@ class ReplaceWorkoutCompositionRequestSerializer(StrictSerializer):
     exercises = serializers.ListField(
         child=UpdateWorkoutExerciseItemSerializer(),
         min_length=1,
+        max_length=MAX_WORKOUT_EXERCISES,
     )
 
     def validate_name(self, value: str) -> str:
