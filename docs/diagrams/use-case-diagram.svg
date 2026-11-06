@@ -1,0 +1,164 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1100" height="1660" viewBox="0 0 1100 1660" font-family="DejaVu Sans, Arial, Helvetica, sans-serif">
+<title>UML Use Case: фітнес-додаток (варіант 4)</title>
+<rect width="1100" height="1660" fill="#FFFFFF"/>
+<rect x="170" y="40" width="770" height="1400" fill="none" stroke="#101828" stroke-width="2"/>
+<text x="184.0" y="58.0" font-size="16" font-weight="bold" text-anchor="start" dominant-baseline="middle" fill="#101828">Фітнес-додаток</text>
+<rect x="205" y="75" width="260" height="390" rx="10" fill="#EEF4FF" stroke="#98A2B3" stroke-dasharray="6 4"/>
+<text x="215.0" y="89.0" font-size="12" font-weight="bold" text-anchor="start" dominant-baseline="middle" fill="#475467">Акаунт і профіль</text>
+<rect x="205" y="480" width="260" height="287" rx="10" fill="#ECFDF3" stroke="#98A2B3" stroke-dasharray="6 4"/>
+<text x="215.0" y="494.0" font-size="12" font-weight="bold" text-anchor="start" dominant-baseline="middle" fill="#475467">Каталог і програми</text>
+<rect x="205" y="785" width="650" height="287" rx="10" fill="#F4F3FF" stroke="#98A2B3" stroke-dasharray="6 4"/>
+<text x="215.0" y="799.0" font-size="12" font-weight="bold" text-anchor="start" dominant-baseline="middle" fill="#475467">Виконання і прогрес</text>
+<rect x="205" y="1090" width="650" height="200" rx="10" fill="#FFF1F3" stroke="#98A2B3" stroke-dasharray="6 4"/>
+<text x="215.0" y="1104.0" font-size="12" font-weight="bold" text-anchor="start" dominant-baseline="middle" fill="#475467">Соціальні функції</text>
+<rect x="205" y="1307" width="260" height="111" rx="10" fill="#ECFDFF" stroke="#98A2B3" stroke-dasharray="6 4"/>
+<text x="215.0" y="1321.0" font-size="12" font-weight="bold" text-anchor="start" dominant-baseline="middle" fill="#475467">Нагадування</text>
+<rect x="605" y="75" width="260" height="495" rx="10" fill="#F2F4F7" stroke="#98A2B3" stroke-dasharray="6 4"/>
+<text x="615.0" y="89.0" font-size="12" font-weight="bold" text-anchor="start" dominant-baseline="middle" fill="#475467">Адміністрування (Django Admin)</text>
+<line x1="103.0" y1="234.4" x2="225.0" y2="140.0" stroke="#667085" stroke-width="1.3"/>
+<line x1="103.0" y1="234.4" x2="225.0" y2="230.0" stroke="#667085" stroke-width="1.3"/>
+<line x1="103.0" y1="234.4" x2="225.0" y2="330.0" stroke="#667085" stroke-width="1.3"/>
+<line x1="103.0" y1="849.4" x2="225.0" y2="330.0" stroke="#667085" stroke-width="1.3"/>
+<line x1="103.0" y1="849.4" x2="225.0" y2="418.0" stroke="#667085" stroke-width="1.3"/>
+<line x1="103.0" y1="849.4" x2="225.0" y2="545.0" stroke="#667085" stroke-width="1.3"/>
+<line x1="103.0" y1="849.4" x2="225.0" y2="633.0" stroke="#667085" stroke-width="1.3"/>
+<line x1="103.0" y1="849.4" x2="225.0" y2="721.0" stroke="#667085" stroke-width="1.3"/>
+<line x1="103.0" y1="849.4" x2="225.0" y2="850.0" stroke="#667085" stroke-width="1.3"/>
+<line x1="103.0" y1="849.4" x2="225.0" y2="938.0" stroke="#667085" stroke-width="1.3"/>
+<line x1="103.0" y1="849.4" x2="225.0" y2="1026.0" stroke="#667085" stroke-width="1.3"/>
+<line x1="103.0" y1="849.4" x2="225.0" y2="1155.0" stroke="#667085" stroke-width="1.3"/>
+<line x1="103.0" y1="849.4" x2="225.0" y2="1243.0" stroke="#667085" stroke-width="1.3"/>
+<line x1="103.0" y1="849.4" x2="225.0" y2="1372.0" stroke="#667085" stroke-width="1.3"/>
+<line x1="992.0" y1="329.4" x2="845.0" y2="140.0" stroke="#667085" stroke-width="1.3"/>
+<line x1="992.0" y1="329.4" x2="845.0" y2="235.0" stroke="#667085" stroke-width="1.3"/>
+<line x1="992.0" y1="329.4" x2="845.0" y2="330.0" stroke="#667085" stroke-width="1.3"/>
+<line x1="992.0" y1="329.4" x2="845.0" y2="425.0" stroke="#667085" stroke-width="1.3"/>
+<line x1="992.0" y1="329.4" x2="845.0" y2="520.0" stroke="#667085" stroke-width="1.3"/>
+<line x1="560.0" y1="1504.0" x2="380.1" y2="1398.5" stroke="#667085" stroke-width="1.3"/>
+<line x1="560.0" y1="1504.0" x2="717.2" y2="1190.5" stroke="#667085" stroke-width="1.3"/>
+<ellipse id="UC-001" cx="335" cy="140" rx="110.0" ry="29.0" fill="#FFFFFF" stroke="#344054" stroke-width="1.8"/>
+<text x="335.0" y="132.5" font-size="12" font-weight="bold" text-anchor="middle" dominant-baseline="middle" fill="#101828">UC-001</text>
+<text x="335.0" y="147.5" font-size="12" font-weight="bold" text-anchor="middle" dominant-baseline="middle" fill="#101828">Реєстрація</text>
+<ellipse id="UC-020" cx="335" cy="230" rx="110.0" ry="29.0" fill="#FFFFFF" stroke="#344054" stroke-width="1.8"/>
+<text x="335.0" y="222.5" font-size="12" font-weight="bold" text-anchor="middle" dominant-baseline="middle" fill="#101828">UC-020</text>
+<text x="335.0" y="237.5" font-size="12" font-weight="bold" text-anchor="middle" dominant-baseline="middle" fill="#101828">Відновлення пароля</text>
+<ellipse id="UC-016" cx="335" cy="330" rx="110.0" ry="29.0" fill="#FFFFFF" stroke="#344054" stroke-width="1.8"/>
+<text x="335.0" y="322.5" font-size="12" font-weight="bold" text-anchor="middle" dominant-baseline="middle" fill="#101828">UC-016</text>
+<text x="335.0" y="337.5" font-size="12" font-weight="bold" text-anchor="middle" dominant-baseline="middle" fill="#101828">Вхід / вихід</text>
+<ellipse id="UC-002" cx="335" cy="418" rx="110.0" ry="29.0" fill="#FFFFFF" stroke="#344054" stroke-width="1.8"/>
+<text x="335.0" y="410.5" font-size="12" font-weight="bold" text-anchor="middle" dominant-baseline="middle" fill="#101828">UC-002</text>
+<text x="335.0" y="425.5" font-size="12" font-weight="bold" text-anchor="middle" dominant-baseline="middle" fill="#101828">Оновлення профілю</text>
+<ellipse id="UC-003" cx="335" cy="545" rx="110.0" ry="29.0" fill="#FFFFFF" stroke="#344054" stroke-width="1.8"/>
+<text x="335.0" y="537.5" font-size="12" font-weight="bold" text-anchor="middle" dominant-baseline="middle" fill="#101828">UC-003</text>
+<text x="335.0" y="552.5" font-size="12" font-weight="bold" text-anchor="middle" dominant-baseline="middle" fill="#101828">Бібліотека тренувань</text>
+<ellipse id="UC-004" cx="335" cy="633" rx="110.0" ry="29.0" fill="#FFFFFF" stroke="#344054" stroke-width="1.8"/>
+<text x="335.0" y="625.5" font-size="12" font-weight="bold" text-anchor="middle" dominant-baseline="middle" fill="#101828">UC-004</text>
+<text x="335.0" y="640.5" font-size="12" font-weight="bold" text-anchor="middle" dominant-baseline="middle" fill="#101828">Персональна програма</text>
+<ellipse id="UC-005" cx="335" cy="721" rx="110.0" ry="29.0" fill="#FFFFFF" stroke="#344054" stroke-width="1.8"/>
+<text x="335.0" y="713.5" font-size="12" font-weight="bold" text-anchor="middle" dominant-baseline="middle" fill="#101828">UC-005</text>
+<text x="335.0" y="728.5" font-size="12" font-weight="bold" text-anchor="middle" dominant-baseline="middle" fill="#101828">Планування занять</text>
+<ellipse id="UC-006" cx="335" cy="850" rx="110.0" ry="29.0" fill="#FFFFFF" stroke="#344054" stroke-width="1.8"/>
+<text x="335.0" y="842.5" font-size="12" font-weight="bold" text-anchor="middle" dominant-baseline="middle" fill="#101828">UC-006</text>
+<text x="335.0" y="857.5" font-size="12" font-weight="bold" text-anchor="middle" dominant-baseline="middle" fill="#101828">Завершення заняття</text>
+<ellipse id="UC-008" cx="335" cy="938" rx="110.0" ry="29.0" fill="#FFFFFF" stroke="#344054" stroke-width="1.8"/>
+<text x="335.0" y="930.5" font-size="12" font-weight="bold" text-anchor="middle" dominant-baseline="middle" fill="#101828">UC-008</text>
+<text x="335.0" y="945.5" font-size="12" font-weight="bold" text-anchor="middle" dominant-baseline="middle" fill="#101828">Історія занять</text>
+<ellipse id="UC-009" cx="335" cy="1026" rx="110.0" ry="29.0" fill="#FFFFFF" stroke="#344054" stroke-width="1.8"/>
+<text x="335.0" y="1018.5" font-size="12" font-weight="bold" text-anchor="middle" dominant-baseline="middle" fill="#101828">UC-009</text>
+<text x="335.0" y="1033.5" font-size="12" font-weight="bold" text-anchor="middle" dominant-baseline="middle" fill="#101828">Прогрес і статистика</text>
+<ellipse id="UC-011" cx="335" cy="1155" rx="110.0" ry="29.0" fill="#FFFFFF" stroke="#344054" stroke-width="1.8"/>
+<text x="335.0" y="1147.5" font-size="12" font-weight="bold" text-anchor="middle" dominant-baseline="middle" fill="#101828">UC-011</text>
+<text x="335.0" y="1162.5" font-size="12" font-weight="bold" text-anchor="middle" dominant-baseline="middle" fill="#101828">Участь у челенджі</text>
+<ellipse id="UC-012" cx="335" cy="1243" rx="110.0" ry="29.0" fill="#FFFFFF" stroke="#344054" stroke-width="1.8"/>
+<text x="335.0" y="1235.5" font-size="12" font-weight="bold" text-anchor="middle" dominant-baseline="middle" fill="#101828">UC-012</text>
+<text x="335.0" y="1250.5" font-size="12" font-weight="bold" text-anchor="middle" dominant-baseline="middle" fill="#101828">Рейтинг</text>
+<ellipse id="UC-010" cx="335" cy="1372" rx="110.0" ry="29.0" fill="#FFFFFF" stroke="#344054" stroke-width="1.8"/>
+<text x="335.0" y="1364.5" font-size="12" font-weight="bold" text-anchor="middle" dominant-baseline="middle" fill="#101828">UC-010</text>
+<text x="335.0" y="1379.5" font-size="12" font-weight="bold" text-anchor="middle" dominant-baseline="middle" fill="#101828">Нагадування</text>
+<ellipse id="UC-007" cx="735" cy="850" rx="110.0" ry="29.0" fill="#FFFFFF" stroke="#344054" stroke-width="1.8"/>
+<text x="735.0" y="842.5" font-size="12" font-weight="bold" text-anchor="middle" dominant-baseline="middle" fill="#101828">UC-007</text>
+<text x="735.0" y="857.5" font-size="12" font-weight="bold" text-anchor="middle" dominant-baseline="middle" fill="#101828">Результати вправ</text>
+<ellipse id="UC-013" cx="735" cy="1155" rx="110.0" ry="36.0" fill="#FFFFFF" stroke="#344054" stroke-width="1.8"/>
+<text x="735.0" y="1140.0" font-size="12" font-weight="bold" text-anchor="middle" dominant-baseline="middle" fill="#101828">UC-013</text>
+<text x="735.0" y="1155.0" font-size="12" font-weight="bold" text-anchor="middle" dominant-baseline="middle" fill="#101828">Нарахування</text>
+<text x="735.0" y="1170.0" font-size="12" font-weight="bold" text-anchor="middle" dominant-baseline="middle" fill="#101828">досягнень</text>
+<ellipse id="UC-014" cx="735" cy="140" rx="110.0" ry="36.0" fill="#FFFFFF" stroke="#344054" stroke-width="1.8"/>
+<text x="735.0" y="125.0" font-size="12" font-weight="bold" text-anchor="middle" dominant-baseline="middle" fill="#101828">UC-014</text>
+<text x="735.0" y="140.0" font-size="12" font-weight="bold" text-anchor="middle" dominant-baseline="middle" fill="#101828">Керування каталогом</text>
+<text x="735.0" y="155.0" font-size="12" font-weight="bold" text-anchor="middle" dominant-baseline="middle" fill="#101828">вправ і тренувань</text>
+<ellipse id="UC-017" cx="735" cy="235" rx="110.0" ry="36.0" fill="#FFFFFF" stroke="#344054" stroke-width="1.8"/>
+<text x="735.0" y="220.0" font-size="12" font-weight="bold" text-anchor="middle" dominant-baseline="middle" fill="#101828">UC-017</text>
+<text x="735.0" y="235.0" font-size="12" font-weight="bold" text-anchor="middle" dominant-baseline="middle" fill="#101828">Каталог шаблонів</text>
+<text x="735.0" y="250.0" font-size="12" font-weight="bold" text-anchor="middle" dominant-baseline="middle" fill="#101828">програм</text>
+<ellipse id="UC-015" cx="735" cy="330" rx="110.0" ry="36.0" fill="#FFFFFF" stroke="#344054" stroke-width="1.8"/>
+<text x="735.0" y="315.0" font-size="12" font-weight="bold" text-anchor="middle" dominant-baseline="middle" fill="#101828">UC-015</text>
+<text x="735.0" y="330.0" font-size="12" font-weight="bold" text-anchor="middle" dominant-baseline="middle" fill="#101828">Звіти</text>
+<text x="735.0" y="345.0" font-size="12" font-weight="bold" text-anchor="middle" dominant-baseline="middle" fill="#101828">адміністратора</text>
+<ellipse id="UC-018" cx="735" cy="425" rx="110.0" ry="36.0" fill="#FFFFFF" stroke="#344054" stroke-width="1.8"/>
+<text x="735.0" y="410.0" font-size="12" font-weight="bold" text-anchor="middle" dominant-baseline="middle" fill="#101828">UC-018</text>
+<text x="735.0" y="425.0" font-size="12" font-weight="bold" text-anchor="middle" dominant-baseline="middle" fill="#101828">Деактивація</text>
+<text x="735.0" y="440.0" font-size="12" font-weight="bold" text-anchor="middle" dominant-baseline="middle" fill="#101828">акаунта</text>
+<ellipse id="UC-019" cx="735" cy="520" rx="110.0" ry="36.0" fill="#FFFFFF" stroke="#344054" stroke-width="1.8"/>
+<text x="735.0" y="505.0" font-size="12" font-weight="bold" text-anchor="middle" dominant-baseline="middle" fill="#101828">UC-019</text>
+<text x="735.0" y="520.0" font-size="12" font-weight="bold" text-anchor="middle" dominant-baseline="middle" fill="#101828">Остаточне видалення</text>
+<text x="735.0" y="535.0" font-size="12" font-weight="bold" text-anchor="middle" dominant-baseline="middle" fill="#101828">акаунта (після MVP)</text>
+<line x1="335.0" y1="259.0" x2="335.0" y2="301.0" stroke="#344054" stroke-width="1.8" stroke-dasharray="7 5"/>
+<polyline points="330.2,291.1 335.0,301.0 339.8,291.1" fill="none" stroke="#344054" stroke-width="1.8"/>
+<rect x="343.0" y="269.0" width="69.6" height="22.0" fill="#FFFFFF" opacity="0.92" rx="3"/>
+<text x="377.8" y="280.0" font-size="12" font-weight="bold" text-anchor="middle" dominant-baseline="middle" fill="#344054">«extend»</text>
+<line x1="445.0" y1="850.0" x2="625.0" y2="850.0" stroke="#344054" stroke-width="1.8" stroke-dasharray="7 5"/>
+<polyline points="615.1,854.8 625.0,850.0 615.1,845.2" fill="none" stroke="#344054" stroke-width="1.8"/>
+<rect x="496.6" y="824.0" width="76.8" height="22.0" fill="#FFFFFF" opacity="0.92" rx="3"/>
+<text x="535.0" y="835.0" font-size="12" font-weight="bold" text-anchor="middle" dominant-baseline="middle" fill="#344054">«include»</text>
+<line x1="625.0" y1="1155.0" x2="445.0" y2="850.0" stroke="#344054" stroke-width="1.8" stroke-dasharray="7 5"/>
+<polyline points="454.2,856.1 445.0,850.0 445.9,861.0" fill="none" stroke="#344054" stroke-width="1.8"/>
+<rect x="467.8" y="960.5" width="134.4" height="38.0" fill="#FFFFFF" opacity="0.92" rx="3"/>
+<text x="535.0" y="972.0" font-size="12" font-weight="bold" text-anchor="middle" dominant-baseline="middle" fill="#344054">«extend»</text>
+<text x="535.0" y="987.0" font-size="12" font-weight="bold" text-anchor="middle" dominant-baseline="middle" fill="#344054">[поріг досягнуто]</text>
+<path d="M620,905 h203 l12,12 v40 h-215 z" fill="#FFFBE8" stroke="#B54708" stroke-width="1"/>
+<text x="727.5" y="924.0" font-size="11" font-weight="normal" text-anchor="middle" dominant-baseline="middle" fill="#4B3B0A">E01: факти, kcal, бали</text>
+<text x="727.5" y="938.0" font-size="11" font-weight="normal" text-anchor="middle" dominant-baseline="middle" fill="#4B3B0A">та snapshots — атомарно</text>
+<path d="M605,590 h248 l12,12 v40 h-260 z" fill="#FFFBE8" stroke="#B54708" stroke-width="1"/>
+<text x="735.0" y="609.0" font-size="11" font-weight="normal" text-anchor="middle" dominant-baseline="middle" fill="#4B3B0A">UC-015: R02 популярні тренування,</text>
+<text x="735.0" y="623.0" font-size="11" font-weight="normal" text-anchor="middle" dominant-baseline="middle" fill="#4B3B0A">R03 середня активність</text>
+<path d="M700,1335 h203 l12,12 v38 h-215 z" fill="#FFFBE8" stroke="#B54708" stroke-width="1"/>
+<text x="807.5" y="1353.0" font-size="11" font-weight="normal" text-anchor="middle" dominant-baseline="middle" fill="#4B3B0A">Часовий тригер, не обліковий</text>
+<text x="807.5" y="1367.0" font-size="11" font-weight="normal" text-anchor="middle" dominant-baseline="middle" fill="#4B3B0A">запис користувача</text>
+<g id="actor-guest" stroke="#101828" stroke-width="2" fill="none">
+<circle cx="85" cy="206" r="13" fill="#FFFFFF"/>
+<line x1="85" y1="219" x2="85" y2="253"/>
+<line x1="63" y1="235" x2="107" y2="235"/>
+<line x1="85" y1="253" x2="68" y2="285"/>
+<line x1="85" y1="253" x2="102" y2="285"/>
+</g>
+<text x="85.0" y="307.0" font-size="14" font-weight="bold" text-anchor="middle" dominant-baseline="middle" fill="#101828">Гість</text>
+<g id="actor-user" stroke="#101828" stroke-width="2" fill="none">
+<circle cx="85" cy="821" r="13" fill="#FFFFFF"/>
+<line x1="85" y1="834" x2="85" y2="868"/>
+<line x1="63" y1="850" x2="107" y2="850"/>
+<line x1="85" y1="868" x2="68" y2="900"/>
+<line x1="85" y1="868" x2="102" y2="900"/>
+</g>
+<text x="85.0" y="922.0" font-size="14" font-weight="bold" text-anchor="middle" dominant-baseline="middle" fill="#101828">Користувач</text>
+<g id="actor-admin" stroke="#101828" stroke-width="2" fill="none">
+<circle cx="1010" cy="301" r="13" fill="#FFFFFF"/>
+<line x1="1010" y1="314" x2="1010" y2="348"/>
+<line x1="988" y1="330" x2="1032" y2="330"/>
+<line x1="1010" y1="348" x2="993" y2="380"/>
+<line x1="1010" y1="348" x2="1027" y2="380"/>
+</g>
+<text x="1010.0" y="402.0" font-size="14" font-weight="bold" text-anchor="middle" dominant-baseline="middle" fill="#101828">Адміністратор</text>
+<g id="actor-system" stroke="#101828" stroke-width="2" fill="none">
+<circle cx="560" cy="1521" r="13" fill="#FFFFFF"/>
+<line x1="560" y1="1534" x2="560" y2="1568"/>
+<line x1="538" y1="1550" x2="582" y2="1550"/>
+<line x1="560" y1="1568" x2="543" y2="1600"/>
+<line x1="560" y1="1568" x2="577" y2="1600"/>
+</g>
+<text x="635.0" y="1541.5" font-size="14" font-weight="bold" text-anchor="start" dominant-baseline="middle" fill="#101828">Система</text>
+<text x="635.0" y="1558.5" font-size="14" font-weight="bold" text-anchor="start" dominant-baseline="middle" fill="#101828">(планувальник)</text>
+<line x1="30" y1="1590" x2="80" y2="1590" stroke="#667085" stroke-width="1.3"/>
+<text x="90.0" y="1590.0" font-size="11" font-weight="normal" text-anchor="start" dominant-baseline="middle" fill="#475467">асоціація актора з прецедентом</text>
+<line x1="30" y1="1612" x2="80" y2="1612" stroke="#344054" stroke-width="1.8" stroke-dasharray="7 5"/>
+<text x="90.0" y="1612.0" font-size="11" font-weight="normal" text-anchor="start" dominant-baseline="middle" fill="#475467">«include» / «extend»</text>
+</svg>

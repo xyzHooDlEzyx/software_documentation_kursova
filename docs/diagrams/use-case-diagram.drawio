@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mxfile host="app.diagrams.net">
+  <diagram id="use-cases" name="Use Case">
+    <mxGraphModel dx="1200" dy="900" grid="1" gridSize="10" page="1" pageWidth="1100" pageHeight="1660">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="boundary" value="Фітнес-додаток" style="rounded=0;whiteSpace=wrap;html=1;fillColor=none;strokeColor=#101828;strokeWidth=2;verticalAlign=top;align=left;spacingLeft=12;fontStyle=1;fontSize=16;" vertex="1" parent="1">
+          <mxGeometry x="170" y="40" width="770" height="1400" as="geometry" />
+        </mxCell>
+        <mxCell id="group-account" value="Акаунт і профіль" style="rounded=1;arcSize=6;whiteSpace=wrap;html=1;fillColor=#EEF4FF;strokeColor=#98A2B3;dashed=1;verticalAlign=top;align=left;spacingLeft=10;fontStyle=1;fontSize=12;fontColor=#475467;" vertex="1" parent="1">
+          <mxGeometry x="205" y="75" width="260" height="390" as="geometry" />
+        </mxCell>
+        <mxCell id="group-programs" value="Каталог і програми" style="rounded=1;arcSize=6;whiteSpace=wrap;html=1;fillColor=#ECFDF3;strokeColor=#98A2B3;dashed=1;verticalAlign=top;align=left;spacingLeft=10;fontStyle=1;fontSize=12;fontColor=#475467;" vertex="1" parent="1">
+          <mxGeometry x="205" y="480" width="260" height="287" as="geometry" />
+        </mxCell>
+        <mxCell id="group-execution" value="Виконання і прогрес" style="rounded=1;arcSize=6;whiteSpace=wrap;html=1;fillColor=#F4F3FF;strokeColor=#98A2B3;dashed=1;verticalAlign=top;align=left;spacingLeft=10;fontStyle=1;fontSize=12;fontColor=#475467;" vertex="1" parent="1">
+          <mxGeometry x="205" y="785" width="650" height="287" as="geometry" />
+        </mxCell>
+        <mxCell id="group-social" value="Соціальні функції" style="rounded=1;arcSize=6;whiteSpace=wrap;html=1;fillColor=#FFF1F3;strokeColor=#98A2B3;dashed=1;verticalAlign=top;align=left;spacingLeft=10;fontStyle=1;fontSize=12;fontColor=#475467;" vertex="1" parent="1">
+          <mxGeometry x="205" y="1090" width="650" height="200" as="geometry" />
+        </mxCell>
+        <mxCell id="group-reminders" value="Нагадування" style="rounded=1;arcSize=6;whiteSpace=wrap;html=1;fillColor=#ECFDFF;strokeColor=#98A2B3;dashed=1;verticalAlign=top;align=left;spacingLeft=10;fontStyle=1;fontSize=12;fontColor=#475467;" vertex="1" parent="1">
+          <mxGeometry x="205" y="1307" width="260" height="111" as="geometry" />
+        </mxCell>
+        <mxCell id="group-admin" value="Адміністрування (Django Admin)" style="rounded=1;arcSize=6;whiteSpace=wrap;html=1;fillColor=#F2F4F7;strokeColor=#98A2B3;dashed=1;verticalAlign=top;align=left;spacingLeft=10;fontStyle=1;fontSize=12;fontColor=#475467;" vertex="1" parent="1">
+          <mxGeometry x="605" y="75" width="260" height="495" as="geometry" />
+        </mxCell>
+        <mxCell id="UC-001" value="UC-001&lt;br&gt;Реєстрація" style="ellipse=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#344054;strokeWidth=2;fontStyle=1;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="225" y="111" width="220" height="58" as="geometry" />
+        </mxCell>
+        <mxCell id="UC-020" value="UC-020&lt;br&gt;Відновлення пароля" style="ellipse=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#344054;strokeWidth=2;fontStyle=1;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="225" y="201" width="220" height="58" as="geometry" />
+        </mxCell>
+        <mxCell id="UC-016" value="UC-016&lt;br&gt;Вхід / вихід" style="ellipse=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#344054;strokeWidth=2;fontStyle=1;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="225" y="301" width="220" height="58" as="geometry" />
+        </mxCell>
+        <mxCell id="UC-002" value="UC-002&lt;br&gt;Оновлення профілю" style="ellipse=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#344054;strokeWidth=2;fontStyle=1;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="225" y="389" width="220" height="58" as="geometry" />
+        </mxCell>
+        <mxCell id="UC-003" value="UC-003&lt;br&gt;Бібліотека тренувань" style="ellipse=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#344054;strokeWidth=2;fontStyle=1;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="225" y="516" width="220" height="58" as="geometry" />
+        </mxCell>
+        <mxCell id="UC-004" value="UC-004&lt;br&gt;Персональна програма" style="ellipse=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#344054;strokeWidth=2;fontStyle=1;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="225" y="604" width="220" height="58" as="geometry" />
+        </mxCell>
+        <mxCell id="UC-005" value="UC-005&lt;br&gt;Планування занять" style="ellipse=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#344054;strokeWidth=2;fontStyle=1;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="225" y="692" width="220" height="58" as="geometry" />
+        </mxCell>
+        <mxCell id="UC-006" value="UC-006&lt;br&gt;Завершення заняття" style="ellipse=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#344054;strokeWidth=2;fontStyle=1;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="225" y="821" width="220" height="58" as="geometry" />
+        </mxCell>
+        <mxCell id="UC-008" value="UC-008&lt;br&gt;Історія занять" style="ellipse=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#344054;strokeWidth=2;fontStyle=1;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="225" y="909" width="220" height="58" as="geometry" />
+        </mxCell>
+        <mxCell id="UC-009" value="UC-009&lt;br&gt;Прогрес і статистика" style="ellipse=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#344054;strokeWidth=2;fontStyle=1;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="225" y="997" width="220" height="58" as="geometry" />
+        </mxCell>
+        <mxCell id="UC-011" value="UC-011&lt;br&gt;Участь у челенджі" style="ellipse=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#344054;strokeWidth=2;fontStyle=1;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="225" y="1126" width="220" height="58" as="geometry" />
+        </mxCell>
+        <mxCell id="UC-012" value="UC-012&lt;br&gt;Рейтинг" style="ellipse=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#344054;strokeWidth=2;fontStyle=1;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="225" y="1214" width="220" height="58" as="geometry" />
+        </mxCell>
+        <mxCell id="UC-010" value="UC-010&lt;br&gt;Нагадування" style="ellipse=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#344054;strokeWidth=2;fontStyle=1;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="225" y="1343" width="220" height="58" as="geometry" />
+        </mxCell>
+        <mxCell id="UC-007" value="UC-007&lt;br&gt;Результати вправ" style="ellipse=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#344054;strokeWidth=2;fontStyle=1;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="625" y="821" width="220" height="58" as="geometry" />
+        </mxCell>
+        <mxCell id="UC-013" value="UC-013&lt;br&gt;Нарахування&lt;br&gt;досягнень" style="ellipse=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#344054;strokeWidth=2;fontStyle=1;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="625" y="1119" width="220" height="72" as="geometry" />
+        </mxCell>
+        <mxCell id="UC-014" value="UC-014&lt;br&gt;Керування каталогом&lt;br&gt;вправ і тренувань" style="ellipse=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#344054;strokeWidth=2;fontStyle=1;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="625" y="104" width="220" height="72" as="geometry" />
+        </mxCell>
+        <mxCell id="UC-017" value="UC-017&lt;br&gt;Каталог шаблонів&lt;br&gt;програм" style="ellipse=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#344054;strokeWidth=2;fontStyle=1;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="625" y="199" width="220" height="72" as="geometry" />
+        </mxCell>
+        <mxCell id="UC-015" value="UC-015&lt;br&gt;Звіти&lt;br&gt;адміністратора" style="ellipse=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#344054;strokeWidth=2;fontStyle=1;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="625" y="294" width="220" height="72" as="geometry" />
+        </mxCell>
+        <mxCell id="UC-018" value="UC-018&lt;br&gt;Деактивація&lt;br&gt;акаунта" style="ellipse=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#344054;strokeWidth=2;fontStyle=1;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="625" y="389" width="220" height="72" as="geometry" />
+        </mxCell>
+        <mxCell id="UC-019" value="UC-019&lt;br&gt;Остаточне видалення&lt;br&gt;акаунта (після MVP)" style="ellipse=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#344054;strokeWidth=2;fontStyle=1;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="625" y="484" width="220" height="72" as="geometry" />
+        </mxCell>
+        <mxCell id="note_completion" value="E01: факти, kcal, бали&lt;br&gt;та snapshots — атомарно" style="shape=note;size=12;whiteSpace=wrap;html=1;fillColor=#FFFBE8;strokeColor=#B54708;fontColor=#4B3B0A;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="620" y="905" width="215" height="52" as="geometry" />
+        </mxCell>
+        <mxCell id="note_reports" value="UC-015: R02 популярні тренування,&lt;br&gt;R03 середня активність" style="shape=note;size=12;whiteSpace=wrap;html=1;fillColor=#FFFBE8;strokeColor=#B54708;fontColor=#4B3B0A;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="605" y="590" width="260" height="52" as="geometry" />
+        </mxCell>
+        <mxCell id="note_system" value="Часовий тригер, не обліковий&lt;br&gt;запис користувача" style="shape=note;size=12;whiteSpace=wrap;html=1;fillColor=#FFFBE8;strokeColor=#B54708;fontColor=#4B3B0A;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="700" y="1335" width="215" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="actor-guest" value="Гість" style="shape=umlActor;html=1;outlineConnect=0;fillColor=#FFFFFF;strokeColor=#101828;strokeWidth=2;fontStyle=1;fontSize=14;verticalLabelPosition=bottom;verticalAlign=top;" vertex="1" parent="1">
+          <mxGeometry x="63" y="193" width="44" height="92" as="geometry" />
+        </mxCell>
+        <mxCell id="actor-user" value="Користувач" style="shape=umlActor;html=1;outlineConnect=0;fillColor=#FFFFFF;strokeColor=#101828;strokeWidth=2;fontStyle=1;fontSize=14;verticalLabelPosition=bottom;verticalAlign=top;" vertex="1" parent="1">
+          <mxGeometry x="63" y="808" width="44" height="92" as="geometry" />
+        </mxCell>
+        <mxCell id="actor-admin" value="Адміністратор" style="shape=umlActor;html=1;outlineConnect=0;fillColor=#FFFFFF;strokeColor=#101828;strokeWidth=2;fontStyle=1;fontSize=14;verticalLabelPosition=bottom;verticalAlign=top;" vertex="1" parent="1">
+          <mxGeometry x="988" y="288" width="44" height="92" as="geometry" />
+        </mxCell>
+        <mxCell id="actor-system" value="Система&lt;br&gt;(планувальник)" style="shape=umlActor;html=1;outlineConnect=0;fillColor=#FFFFFF;strokeColor=#101828;strokeWidth=2;fontStyle=1;fontSize=14;labelPosition=right;verticalLabelPosition=middle;align=left;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry x="538" y="1508" width="44" height="92" as="geometry" />
+        </mxCell>
+        <mxCell id="assoc-0" value="" style="endArrow=none;html=1;strokeColor=#667085;strokeWidth=1.3;" edge="1" parent="1" source="actor-guest" target="UC-001">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="assoc-1" value="" style="endArrow=none;html=1;strokeColor=#667085;strokeWidth=1.3;" edge="1" parent="1" source="actor-guest" target="UC-020">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="assoc-2" value="" style="endArrow=none;html=1;strokeColor=#667085;strokeWidth=1.3;" edge="1" parent="1" source="actor-guest" target="UC-016">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="assoc-3" value="" style="endArrow=none;html=1;strokeColor=#667085;strokeWidth=1.3;" edge="1" parent="1" source="actor-user" target="UC-016">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="assoc-4" value="" style="endArrow=none;html=1;strokeColor=#667085;strokeWidth=1.3;" edge="1" parent="1" source="actor-user" target="UC-002">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="assoc-5" value="" style="endArrow=none;html=1;strokeColor=#667085;strokeWidth=1.3;" edge="1" parent="1" source="actor-user" target="UC-003">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="assoc-6" value="" style="endArrow=none;html=1;strokeColor=#667085;strokeWidth=1.3;" edge="1" parent="1" source="actor-user" target="UC-004">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="assoc-7" value="" style="endArrow=none;html=1;strokeColor=#667085;strokeWidth=1.3;" edge="1" parent="1" source="actor-user" target="UC-005">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="assoc-8" value="" style="endArrow=none;html=1;strokeColor=#667085;strokeWidth=1.3;" edge="1" parent="1" source="actor-user" target="UC-006">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="assoc-9" value="" style="endArrow=none;html=1;strokeColor=#667085;strokeWidth=1.3;" edge="1" parent="1" source="actor-user" target="UC-008">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="assoc-10" value="" style="endArrow=none;html=1;strokeColor=#667085;strokeWidth=1.3;" edge="1" parent="1" source="actor-user" target="UC-009">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="assoc-11" value="" style="endArrow=none;html=1;strokeColor=#667085;strokeWidth=1.3;" edge="1" parent="1" source="actor-user" target="UC-011">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="assoc-12" value="" style="endArrow=none;html=1;strokeColor=#667085;strokeWidth=1.3;" edge="1" parent="1" source="actor-user" target="UC-012">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="assoc-13" value="" style="endArrow=none;html=1;strokeColor=#667085;strokeWidth=1.3;" edge="1" parent="1" source="actor-user" target="UC-010">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="assoc-14" value="" style="endArrow=none;html=1;strokeColor=#667085;strokeWidth=1.3;" edge="1" parent="1" source="actor-admin" target="UC-014">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="assoc-15" value="" style="endArrow=none;html=1;strokeColor=#667085;strokeWidth=1.3;" edge="1" parent="1" source="actor-admin" target="UC-017">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="assoc-16" value="" style="endArrow=none;html=1;strokeColor=#667085;strokeWidth=1.3;" edge="1" parent="1" source="actor-admin" target="UC-015">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="assoc-17" value="" style="endArrow=none;html=1;strokeColor=#667085;strokeWidth=1.3;" edge="1" parent="1" source="actor-admin" target="UC-018">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="assoc-18" value="" style="endArrow=none;html=1;strokeColor=#667085;strokeWidth=1.3;" edge="1" parent="1" source="actor-admin" target="UC-019">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="assoc-19" value="" style="endArrow=none;html=1;strokeColor=#667085;strokeWidth=1.3;" edge="1" parent="1" source="actor-system" target="UC-010">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="assoc-20" value="" style="endArrow=none;html=1;strokeColor=#667085;strokeWidth=1.3;" edge="1" parent="1" source="actor-system" target="UC-013">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="rel-0" value="«extend»" style="endArrow=open;endFill=0;dashed=1;html=1;strokeColor=#344054;strokeWidth=1.8;fontStyle=1;fontSize=12;labelBackgroundColor=#FFFFFF;" edge="1" parent="1" source="UC-020" target="UC-016">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="rel-1" value="«include»" style="endArrow=open;endFill=0;dashed=1;html=1;strokeColor=#344054;strokeWidth=1.8;fontStyle=1;fontSize=12;labelBackgroundColor=#FFFFFF;" edge="1" parent="1" source="UC-006" target="UC-007">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="rel-2" value="«extend»&lt;br&gt;[поріг досягнуто]" style="endArrow=open;endFill=0;dashed=1;html=1;strokeColor=#344054;strokeWidth=1.8;fontStyle=1;fontSize=12;labelBackgroundColor=#FFFFFF;" edge="1" parent="1" source="UC-013" target="UC-006">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
