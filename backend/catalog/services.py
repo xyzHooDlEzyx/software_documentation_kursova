@@ -123,6 +123,33 @@ class CatalogPublicationService:
             )
 
     @classmethod
+    def validate_exercise_distance_change(
+        cls, exercise: Exercise, *, tracks_distance: bool
+    ) -> None:
+        """Keep active workouts valid when an exercise stops tracking distance."""
+        if exercise.pk is None or tracks_distance:
+            return
+        in_use = (
+            Workout.objects.filter(
+                is_archived=False,
+                workout_exercises__exercise_id=exercise.pk,
+                workout_exercises__recommended_distance_km__isnull=False,
+            )
+            .distinct()
+            .values_list("name", flat=True)
+        )
+        names = list(in_use[:3])
+        if names:
+            raise ValidationError(
+                {
+                    "tracks_distance": (
+                        "Вправа має рекомендовану дистанцію в активних тренуваннях: "
+                        f"{', '.join(names)}. Спершу приберіть дистанцію там."
+                    )
+                }
+            )
+
+    @classmethod
     def validate_workout_exercise_parameters(
         cls, we: WorkoutExercise, *, allow_archived_exercise: bool = False
     ) -> None:
@@ -204,6 +231,16 @@ class CatalogPublicationService:
             if we.recommended_load_kg is not None:
                 raise ValidationError(
                     {"recommended_load_kg": "Вага не застосовується для кардіо-вправ."}
+                )
+
+            if we.recommended_distance_km is not None and not exercise.tracks_distance:
+                raise ValidationError(
+                    {
+                        "recommended_distance_km": (
+                            f"Вправа '{exercise.name}' не вимірюється дистанцією; "
+                            "вкажіть тривалість."
+                        )
+                    }
                 )
 
             has_dur = (

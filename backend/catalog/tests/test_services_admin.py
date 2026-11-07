@@ -90,7 +90,9 @@ class TestCatalogPublicationService:
         CatalogPublicationService.validate_workout_exercise_parameters(we)
 
     def test_cardio_exercise_parameter_validation(self):
-        ex = Exercise.objects.create(name="Біг", category=ExerciseCategory.CARDIO)
+        ex = Exercise.objects.create(
+            name="Біг", category=ExerciseCategory.CARDIO, tracks_distance=True
+        )
         workout = Workout.objects.create(
             name="Кардіо", category=ExerciseCategory.CARDIO
         )

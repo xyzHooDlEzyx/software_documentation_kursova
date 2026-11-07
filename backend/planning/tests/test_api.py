@@ -852,3 +852,32 @@ def test_g06_waits_for_exercise_archive_and_rejects_without_mutation(
     occurrence.refresh_from_db()
     assert occurrence.name == "Силовий блок"
     assert list(occurrence.exercises.values_list("exercise_id", "position")) == before
+
+
+@pytest.mark.django_db
+def test_g06_rejects_distance_for_exercise_without_distance(catalog_and_users):
+    """BR-004: rope jumping and similar cardio exercises have duration only."""
+    data = catalog_and_users
+    program = create_personal_program(data)
+    occurrence = program.workouts.get(position=1)
+    assert occurrence.category == ExerciseCategory.CARDIO
+    item = {
+        "position": 1,
+        "exercise_id": data["cardio"].pk,
+        "recommended_sets": None,
+        "recommended_reps": None,
+        "recommended_load_kg": None,
+        "recommended_duration_min": None,
+        "recommended_distance_km": "3.000",
+    }
+    client = client_for(data["owner"])
+    path = composition_url(program.pk, occurrence.pk)
+
+    rejected = client.put(path, {"name": "Кардіо", "exercises": [item]}, format="json")
+    assert rejected.status_code == 400
+    assert "exercises[0].recommended_distance_km" in rejected.json()["error"]["fields"]
+
+    data["cardio"].tracks_distance = True
+    data["cardio"].save(update_fields=["tracks_distance"])
+    accepted = client.put(path, {"name": "Кардіо", "exercises": [item]}, format="json")
+    assert accepted.status_code == 200

@@ -56,6 +56,7 @@ class ExerciseSerializer(serializers.ModelSerializer):
             "met_activity_code",
             "met_reference_version",
             "met_activity_description",
+            "tracks_distance",
         )
         read_only_fields = fields
 
@@ -76,7 +77,7 @@ class WorkoutExerciseNestedExerciseSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Exercise
-        fields = ("id", "name", "category")
+        fields = ("id", "name", "category", "tracks_distance")
         read_only_fields = fields
 
 

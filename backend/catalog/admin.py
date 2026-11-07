@@ -85,6 +85,10 @@ class ExerciseAdminForm(MetNullableFormMixin, forms.ModelForm):
             CatalogPublicationService.validate_exercise_category_change(
                 self.instance, new_category=category
             )
+        if "tracks_distance" in cleaned:
+            CatalogPublicationService.validate_exercise_distance_change(
+                self.instance, tracks_distance=cleaned["tracks_distance"]
+            )
         return cleaned
 
 
@@ -104,9 +108,10 @@ class ExerciseAdmin(CatalogBaseModelAdmin):
         "met_value",
         "met_activity_code",
         "met_reference_version",
+        "tracks_distance",
         "is_archived",
     )
-    list_filter = ("is_archived", "category")
+    list_filter = ("is_archived", "category", "tracks_distance")
     search_fields = ("name", "met_activity_code")
     actions = ["archive_selected"]
 

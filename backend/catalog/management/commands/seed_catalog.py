@@ -95,6 +95,7 @@ class Command(BaseCommand):
                 "met_activity_code": "12020",
                 "met_reference_version": "Compendium 2024",
                 "met_activity_description": "running, 6 mph (10 min/mile)",
+                "tracks_distance": True,
             },
             {
                 "name": "Велотренажер",
@@ -106,6 +107,7 @@ class Command(BaseCommand):
                 "met_activity_description": (
                     "bicycling, stationary, moderate to vigorous effort"
                 ),
+                "tracks_distance": True,
             },
             {
                 "name": "Стрибки на скакалці",
@@ -117,6 +119,7 @@ class Command(BaseCommand):
                 "met_activity_code": "02024",
                 "met_reference_version": "Compendium 2024",
                 "met_activity_description": "rope jumping, moderate pace",
+                "tracks_distance": False,
             },
             # Yoga exercises
             {

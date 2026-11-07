@@ -50,6 +50,15 @@ class Exercise(models.Model):
     met_activity_code = models.CharField(max_length=5, null=True, blank=True)
     met_reference_version = models.CharField(max_length=40, null=True, blank=True)
     met_activity_description = models.TextField(null=True, blank=True)
+    tracks_distance = models.BooleanField(
+        default=False,
+        db_default=False,
+        verbose_name="Вимірюється дистанцією",
+        help_text=(
+            "Лише для кардіо: чи має вправа дистанцію (біг, велосипед). "
+            "Для скакалки тощо — лише тривалість."
+        ),
+    )
     is_archived = models.BooleanField(default=False, db_default=False)
 
     class Meta:
@@ -79,6 +88,11 @@ class Exercise(models.Model):
             models.CheckConstraint(
                 condition=_met_package_consistent_q(),
                 name="exercises_met_pkg_consistent",
+            ),
+            models.CheckConstraint(
+                condition=models.Q(tracks_distance=False)
+                | models.Q(category=ExerciseCategory.CARDIO),
+                name="exercises_distance_only_cardio",
             ),
         ]
 
