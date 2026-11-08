@@ -9,6 +9,17 @@ export type MessageResponse = {
   message: string;
 };
 
+/** Page envelope shared by all paginated list endpoints. */
+export type Paginated<T> = {
+  count: number;
+  next: string | null;
+  previous: string | null;
+  results: T[];
+};
+
+export type HttpMethod = "GET" | "POST" | "PATCH" | "PUT" | "DELETE";
+type ApiPath = `/api/v1/${string}`;
+
 export type ApiErrorBody = {
   error: {
     code: string;
@@ -30,7 +41,7 @@ export class ApiError extends Error {
 }
 
 /** All browser API calls stay on the Vite origin in local development. */
-export function apiFetch(path: `/api/v1/${string}`, init: RequestInit = {}) {
+export function apiFetch(path: ApiPath, init: RequestInit = {}) {
   return fetch(path, { ...init, credentials: "same-origin" });
 }
 
@@ -65,13 +76,38 @@ async function asApiError(response: Response): Promise<ApiError> {
   return new ApiError(response.status, "request_failed");
 }
 
-async function request<T>(
-  path: `/api/v1/${string}`,
-  method: "GET" | "POST" | "PATCH",
-  body?: object,
-): Promise<T> {
+let unauthorizedHandler: (() => void) | null = null;
+
+/**
+ * Registers the single place that reacts to an expired session. Auth endpoints
+ * are excluded: their 401 (e.g. invalid credentials) is a form error, not a
+ * lost session.
+ */
+export function setUnauthorizedHandler(handler: (() => void) | null) {
+  unauthorizedHandler = handler;
+}
+
+/** Appends defined, non-empty query parameters to an API path. */
+export function withQuery(path: ApiPath, params: Record<string, string | number | boolean | null | undefined>): ApiPath {
+  const query = new URLSearchParams();
+  for (const [key, value] of Object.entries(params)) {
+    if (value === undefined || value === null || value === "") continue;
+    query.set(key, String(value));
+  }
+  const text = query.toString();
+  return (text ? `${path}?${text}` : path) as ApiPath;
+}
+
+export async function request<T>(path: ApiPath, method: HttpMethod, body?: object): Promise<T> {
   const unsafe = method !== "GET";
-  if (unsafe && !csrfCookie()) await initializeCsrf();
+  if (unsafe && !csrfCookie()) {
+    try {
+      await initializeCsrf();
+    } catch (reason) {
+      if (reason instanceof ApiError) throw reason;
+      throw new ApiError(0, "network_error", {}, "Немає зв’язку із сервером.");
+    }
+  }
   const headers: Record<string, string> = { Accept: "application/json" };
   if (body !== undefined) headers["Content-Type"] = "application/json";
   if (unsafe) {
@@ -90,7 +126,11 @@ async function request<T>(
   } catch {
     throw new ApiError(0, "network_error", {}, "Немає зв’язку із сервером.");
   }
-  if (!response.ok) throw await asApiError(response);
+  if (!response.ok) {
+    const error = await asApiError(response);
+    if (response.status === 401 && !path.startsWith("/api/v1/auth/")) unauthorizedHandler?.();
+    throw error;
+  }
   if (response.status === 204) return undefined as T;
   return (await response.json()) as T;
 }

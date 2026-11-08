@@ -38,3 +38,23 @@ test("API error envelope exposes status and field messages", async () => {
     fields: { email: ["Некоректний email."] },
   } satisfies Partial<ApiError>);
 });
+
+test("401 on a protected endpoint calls the handler, auth endpoints do not", async () => {
+  const { setUnauthorizedHandler, currentUser } = await import("./api");
+  const handler = vi.fn();
+  setUnauthorizedHandler(handler);
+  document.cookie = "csrftoken=ready; path=/";
+  vi.stubGlobal("fetch", vi.fn(async () => new Response(JSON.stringify({
+    error: { code: "invalid_credentials", message: "Невірні дані.", fields: {}, request_id: "r" },
+  }), { status: 401 })));
+  await expect(login("a@example.test", "wrong-password")).rejects.toMatchObject({ status: 401 });
+  expect(handler).not.toHaveBeenCalled();
+  await expect(currentUser()).rejects.toMatchObject({ status: 401 });
+  expect(handler).toHaveBeenCalledTimes(1);
+  setUnauthorizedHandler(null);
+});
+
+test("network failure while fetching the CSRF cookie becomes a typed network error", async () => {
+  vi.stubGlobal("fetch", vi.fn(async () => { throw new TypeError("Failed to fetch"); }));
+  await expect(login("a@example.test", "secret")).rejects.toMatchObject({ status: 0, code: "network_error" });
+});

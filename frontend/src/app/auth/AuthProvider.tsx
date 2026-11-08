@@ -1,6 +1,6 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState, type ReactNode } from "react";
 
-import { ApiError, currentUser, initializeCsrf, logout, type Account } from "../api";
+import { ApiError, currentUser, initializeCsrf, logout, setUnauthorizedHandler, type Account } from "../api";
 
 export type AuthStatus = "loading" | "authenticated" | "guest" | "error";
 
@@ -59,6 +59,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setStatus(next ? "authenticated" : "guest");
     setError("");
   }, []);
+
+  // Any protected request that returns 401 means the session is gone: drop the
+  // account so RequireAuth redirects to the login page with a return path.
+  useEffect(() => {
+    setUnauthorizedHandler(() => setAccount(null));
+    return () => setUnauthorizedHandler(null);
+  }, [setAccount]);
 
   const signOut = useCallback(async () => {
     await logout();

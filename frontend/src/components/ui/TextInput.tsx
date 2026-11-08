@@ -15,7 +15,7 @@ export function TextInput({ id, label, hint, error, className = "", ...props }: 
   const describedBy = [props["aria-describedby"], hintId, errorId].filter(Boolean).join(" ") || undefined;
 
   return (
-    <div className="grid gap-space-1">
+    <div className="grid content-start gap-space-1">
       <label className="text-sm font-semibold text-foreground" htmlFor={id}>{label}</label>
       <input
         {...props}
