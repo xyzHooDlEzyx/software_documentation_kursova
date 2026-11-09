@@ -27,8 +27,13 @@ function SettingsIcon({ className = "" }: { className?: string }) {
   return <svg aria-hidden="true" className={className} viewBox="0 0 24 24" fill="none"><path d="M12 15.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7Z" stroke="currentColor" strokeWidth="1.8" /><path d="m19.4 15 .1.1a1.8 1.8 0 1 1-2.5 2.5l-.1-.1a1.8 1.8 0 0 0-3 .9v.2a1.8 1.8 0 1 1-3.6 0v-.2a1.8 1.8 0 0 0-3-.9l-.1.1a1.8 1.8 0 1 1-2.5-2.5l.1-.1a1.8 1.8 0 0 0-.9-3H3.7a1.8 1.8 0 1 1 0-3.6h.2a1.8 1.8 0 0 0 .9-3l-.1-.1a1.8 1.8 0 1 1 2.5-2.5l.1.1a1.8 1.8 0 0 0 3-.9v-.2a1.8 1.8 0 1 1 3.6 0v.2a1.8 1.8 0 0 0 3 .9l.1-.1a1.8 1.8 0 1 1 2.5 2.5l.1.1a1.8 1.8 0 0 0 .9 3h.2a1.8 1.8 0 1 1 0 3.6h-.2a1.8 1.8 0 0 0-.9 3Z" stroke="currentColor" strokeWidth="1.5" strokeLinejoin="round" /></svg>;
 }
 
+function ProfileIcon({ className = "" }: { className?: string }) {
+  return <svg aria-hidden="true" className={className} viewBox="0 0 24 24" fill="none"><circle cx="12" cy="8" r="4" stroke="currentColor" strokeWidth="1.8" /><path d="M4 20.5c1.4-3.6 4.4-5.5 8-5.5s6.6 1.9 8 5.5" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" /></svg>;
+}
+
 const navigation = [
   { to: "/", label: "Головна", Icon: HomeIcon, end: true },
+  { to: "/profile", label: "Профіль", Icon: ProfileIcon, end: false },
   { to: "/settings", label: "Налаштування", Icon: SettingsIcon, end: false },
 ];
 
@@ -40,7 +45,7 @@ export function AuthenticatedLayout({
   return (
     <div className="flex min-h-svh bg-background">
       <a className="fixed left-space-2 top-space-2 z-50 -translate-y-[calc(100%_+_var(--space-4))] rounded-field bg-primary px-space-4 py-space-2 text-primary-foreground focus-visible:translate-y-0" href="#main-content">Пропустити до вмісту</a>
-      <aside className="sticky top-0 hidden h-svh w-[var(--layout-sidebar-width)] shrink-0 flex-col gap-space-8 border-r border-outline bg-card px-space-4 py-space-6 lg:flex" aria-label="Основна навігація">
+      <aside className="sticky top-0 hidden h-svh w-[var(--layout-sidebar-width)] shrink-0 flex-col gap-space-8 border-r border-outline bg-card px-space-4 py-space-6 lg:flex" aria-label="Бічна панель">
         <Link className="inline-flex w-fit items-center gap-space-3 px-space-2 text-foreground no-underline" to="/" aria-label="Фітнес-трекер — головна">
           <span className="grid size-11 shrink-0 place-items-center rounded-md bg-brand text-primary-foreground">
             <FitnessMark className="size-6" />
@@ -87,16 +92,17 @@ export function AuthenticatedLayout({
           <div className="mx-auto w-full max-w-[var(--layout-content-max-width)] px-space-4 py-space-6 sm:px-space-8 sm:py-space-8"><Outlet /></div>
         </main>
 
-        <nav className="fixed inset-x-0 bottom-0 z-30 grid min-h-[var(--layout-mobile-nav-height)] grid-cols-2 border-t border-outline bg-card pb-[env(safe-area-inset-bottom,0px)] lg:hidden" aria-label="Основна навігація">
+        <nav className="fixed inset-x-0 bottom-0 z-30 grid min-h-[var(--layout-mobile-nav-height)] grid-cols-3 border-t border-outline bg-card pb-[env(safe-area-inset-bottom,0px)] lg:hidden" aria-label="Мобільна навігація">
           {navigation.map(({ to, label, Icon, end }) => (
             <NavLink
               key={to}
               to={to}
               end={end}
+              aria-label={label}
               className={({ isActive }) => `flex min-w-0 flex-col items-center justify-center gap-0.5 p-space-1 text-caption no-underline transition-colors duration-150 hover:bg-interactive-hover-state hover:text-foreground motion-reduce:transition-none ${isActive ? "bg-selected-state text-brand" : "text-muted-foreground"}`}
             >
               <Icon className="size-5 shrink-0" />
-              <span>{label}</span>
+              <span className="w-full truncate text-center text-[0.6875rem] leading-tight">{label}</span>
             </NavLink>
           ))}
         </nav>

@@ -8,6 +8,7 @@ import { NotFoundPage } from "../../pages/NotFoundPage";
 import { PasswordResetConfirmPage } from "../../pages/PasswordResetConfirmPage";
 import { PasswordResetRequestPage } from "../../pages/PasswordResetRequestPage";
 import { SettingsPage } from "../../pages/SettingsPage";
+import { ProfilePage } from "../../features/profile/ProfilePage";
 import { Alert, Button, LoadingState } from "../../components/ui";
 import { RequireAuth } from "./RequireAuth";
 
@@ -32,6 +33,7 @@ export function AppRouter() {
       </Route>
       <Route element={<RequireAuth />}>
         <Route path="/" element={<HomePage />} />
+        <Route path="/profile" element={<ProfilePage />} />
         <Route path="/settings" element={<SettingsPage />} />
       </Route>
       <Route path="*" element={<NotFoundPage />} />
