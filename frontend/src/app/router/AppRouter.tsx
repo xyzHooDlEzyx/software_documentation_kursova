@@ -8,6 +8,8 @@ import { NotFoundPage } from "../../pages/NotFoundPage";
 import { PasswordResetConfirmPage } from "../../pages/PasswordResetConfirmPage";
 import { PasswordResetRequestPage } from "../../pages/PasswordResetRequestPage";
 import { SettingsPage } from "../../pages/SettingsPage";
+import { CatalogPage } from "../../features/catalog/CatalogPage";
+import { WorkoutDetailPage } from "../../features/catalog/WorkoutDetailPage";
 import { ProfilePage } from "../../features/profile/ProfilePage";
 import { Alert, Button, LoadingState } from "../../components/ui";
 import { RequireAuth } from "./RequireAuth";
@@ -34,6 +36,8 @@ export function AppRouter() {
       <Route element={<RequireAuth />}>
         <Route path="/" element={<HomePage />} />
         <Route path="/profile" element={<ProfilePage />} />
+        <Route path="/catalog" element={<CatalogPage />} />
+        <Route path="/catalog/workouts/:id" element={<WorkoutDetailPage />} />
         <Route path="/settings" element={<SettingsPage />} />
       </Route>
       <Route path="*" element={<NotFoundPage />} />
