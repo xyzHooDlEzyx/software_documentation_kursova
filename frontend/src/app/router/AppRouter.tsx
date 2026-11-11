@@ -11,6 +11,10 @@ import { SettingsPage } from "../../pages/SettingsPage";
 import { CatalogPage } from "../../features/catalog/CatalogPage";
 import { WorkoutDetailPage } from "../../features/catalog/WorkoutDetailPage";
 import { ProfilePage } from "../../features/profile/ProfilePage";
+import { CompositionEditorPage } from "../../features/programs/CompositionEditorPage";
+import { ProgramDetailPage } from "../../features/programs/ProgramDetailPage";
+import { ProgramsPage } from "../../features/programs/ProgramsPage";
+import { RecommendationPage } from "../../features/programs/RecommendationPage";
 import { Alert, Button, LoadingState } from "../../components/ui";
 import { RequireAuth } from "./RequireAuth";
 
@@ -38,6 +42,10 @@ export function AppRouter() {
         <Route path="/profile" element={<ProfilePage />} />
         <Route path="/catalog" element={<CatalogPage />} />
         <Route path="/catalog/workouts/:id" element={<WorkoutDetailPage />} />
+        <Route path="/programs" element={<ProgramsPage />} />
+        <Route path="/programs/recommendation" element={<RecommendationPage />} />
+        <Route path="/programs/:id" element={<ProgramDetailPage />} />
+        <Route path="/programs/:id/workouts/:entryId" element={<CompositionEditorPage />} />
         <Route path="/settings" element={<SettingsPage />} />
       </Route>
       <Route path="*" element={<NotFoundPage />} />

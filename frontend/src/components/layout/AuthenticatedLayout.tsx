@@ -35,10 +35,15 @@ function CatalogIcon({ className = "" }: { className?: string }) {
   return <svg aria-hidden="true" className={className} viewBox="0 0 24 24" fill="none"><path d="M4 5.5A1.5 1.5 0 0 1 5.5 4H10v16H5.5A1.5 1.5 0 0 1 4 18.5v-13ZM14 4h4.5A1.5 1.5 0 0 1 20 5.5v13a1.5 1.5 0 0 1-1.5 1.5H14V4Z" stroke="currentColor" strokeWidth="1.8" strokeLinejoin="round" /></svg>;
 }
 
+function ProgramsIcon({ className = "" }: { className?: string }) {
+  return <svg aria-hidden="true" className={className} viewBox="0 0 24 24" fill="none"><rect x="4" y="5" width="16" height="15" rx="2" stroke="currentColor" strokeWidth="1.8" /><path d="M8 3v4m8-4v4M4 10h16M8 14h3m-3 3h6" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" /></svg>;
+}
+
 const navigation = [
   { to: "/", label: "Головна", Icon: HomeIcon, end: true },
   { to: "/profile", label: "Профіль", Icon: ProfileIcon, end: false },
   { to: "/catalog", label: "Каталог", Icon: CatalogIcon, end: false },
+  { to: "/programs", label: "Програми", Icon: ProgramsIcon, end: false },
   { to: "/settings", label: "Налаштування", Icon: SettingsIcon, end: false },
 ];
 
@@ -97,7 +102,7 @@ export function AuthenticatedLayout({
           <div className="mx-auto w-full max-w-[var(--layout-content-max-width)] px-space-4 py-space-6 sm:px-space-8 sm:py-space-8"><Outlet /></div>
         </main>
 
-        <nav className="fixed inset-x-0 bottom-0 z-30 grid min-h-[var(--layout-mobile-nav-height)] grid-cols-4 border-t border-outline bg-card pb-[env(safe-area-inset-bottom,0px)] lg:hidden" aria-label="Мобільна навігація">
+        <nav className="fixed inset-x-0 bottom-0 z-30 grid min-h-[var(--layout-mobile-nav-height)] grid-cols-5 border-t border-outline bg-card pb-[env(safe-area-inset-bottom,0px)] lg:hidden" aria-label="Мобільна навігація">
           {navigation.map(({ to, label, Icon, end }) => (
             <NavLink
               key={to}
