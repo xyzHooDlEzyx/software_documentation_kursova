@@ -69,6 +69,5 @@ docker-compose.local.yml
 .DS_Store
 Thumbs.db
 
-.agents/*
 *PLAN*.md
 *plan*.md
