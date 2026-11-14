@@ -6,10 +6,10 @@
 
 | Частина | Реалізовано | Ще не реалізовано |
 |---|---|---|
-| Backend (REST) | 22 з 49 операцій контракту: автентифікація й відновлення пароля (A01–A08), профіль та історія ваги (P01–P04), каталог вправ і тренувань (C01–C04), рекомендація шаблону через **Strategy** і персональні програми (G01–G06) | розклад і нагадування, виконання тренувань (Observer, Template Method), бали, досягнення, рейтинг, челенджі, статистика, звіти R01–R03 |
-| БД | 11 з 20 таблиць ERD: `users`, `profiles`, `weight_entries`, каталог (`exercises`, `workouts`, `workout_exercises`, `program_templates`, `program_template_workouts`), персональні програми (`user_programs`, `user_program_workouts`, `user_program_exercises`) | таблиці виконання, балів, досягнень, челенджів і сповіщень |
+| Backend (REST) | 31 з 49 операцій контракту: автентифікація й відновлення пароля (A01–A08), профіль та історія ваги (P01–P04), каталог вправ і тренувань (C01–C04), рекомендація шаблону через **Strategy** і персональні програми (G01–G08), розклад (S01–S04) та нагадування (N01–N03) | скасування слотів і архівація програм (S05/G09), виконання тренувань (Observer, Template Method), бали, досягнення, рейтинг, челенджі, статистика, звіти R01–R03 |
+| БД | 13 з 20 таблиць ERD: `users`, `profiles`, `weight_entries`, каталог (`exercises`, `workouts`, `workout_exercises`, `program_templates`, `program_template_workouts`), персональні програми й планування (`user_programs`, `user_program_workouts`, `user_program_exercises`, `scheduled_sessions`, `notifications`) | таблиці виконання, балів, досягнень і челенджів |
 | Адмін-частина | Django Admin: каталог (створення, редагування, публікація, архівація), деактивація користувачів; група `Administrator` створюється міграцією | звіти для адміністратора, досягнення й челенджі |
-| Frontend | реєстрація, вхід, вихід, відновлення пароля, налаштування рейтингу; профіль та історія ваги (P01–P04), каталог тренувань і вправ (C01–C04), рекомендація програми, мої програми й редактор складу (G01–G06) | розклад, виконання тренувань, статистика, соціальні функції, звіти |
+| Frontend | реєстрація, вхід, вихід, відновлення пароля, налаштування рейтингу; профіль та історія ваги (P01–P04), каталог тренувань і вправ (C01–C04), рекомендація, персональні програми, активація й прогрес (G01–G08), тижневий розклад і планування (S01–S04), нагадування з непрочитаним badge (N01–N03) | скасування слотів і архівація програм (S05/G09), виконання тренувань, статистика, соціальні функції, звіти |
 
 Документація: [вимоги](docs/analysis/requirements.md), [Use Case діаграма](docs/analysis/use-case-diagram.md), [бізнес-правила](docs/analysis/business-rules.md), [доменна модель](docs/architecture/domain-model.md), [ERD](docs/architecture/erd.md), [REST API](docs/architecture/rest-api.md), [принципи й GoF](docs/architecture/design-principles.md), [діаграма класів](docs/diagrams/class-diagram.drawio), [рев'ю стану](docs/review/senior-review-2026-11-14.md).
 
@@ -125,13 +125,20 @@ DJANGO_EMAIL_BACKEND=django.core.mail.backends.console.EmailBackend
 | G02 / G03 | `GET` / `POST user-programs/` | Сесія |
 | G04 / G05 | `GET` / `PATCH user-programs/{id}/` | Сесія, лише власні програми |
 | G06 | `PUT user-programs/{id}/workouts/{entry_id}/` | Сесія, лише власні програми |
+| G07 | `POST user-programs/{id}/activate/` | Сесія, CSRF, лише власні програми |
+| G08 | `GET user-programs/{id}/progress/` | Сесія, лише власні програми |
+| S01 / S02 | `GET` / `POST scheduled-sessions/` | Сесія (POST — CSRF), лише власні слоти |
+| S03 / S04 | `GET` / `PATCH scheduled-sessions/{id}/` | Сесія (PATCH — CSRF), лише власні слоти |
+| N01 | `GET notifications/` | Сесія, лише власні видимі нагадування |
+| N02 | `GET notifications/{id}/` | Сесія, лише власні видимі нагадування |
+| N03 | `POST notifications/{id}/read/` | Сесія, CSRF, лише власні видимі нагадування |
 
 Безпека: session-автентифікація (`sessionid` HttpOnly), CSRF для всіх змінних запитів, вільний CORS не використовується. Реєстрація не виконує автоматичний вхід; мінімальна довжина пароля — 12 символів. Ліміти запитів налаштовуються змінними `DJANGO_THROTTLE_*`. `DJANGO_NUM_PROXIES` — кількість довірених reverse proxy перед Django: `0` (типово) означає, що IP береться з `REMOTE_ADDR`, а заголовок `X-Forwarded-For` від клієнта ігнорується.
 
 ## Перевірки
 
 ```bash
-backend/.venv/bin/python backend/manage.py check
+backend/.venv/bin/python backend/manage.py check --database default
 backend/.venv/bin/python backend/manage.py makemigrations --check --dry-run
 cd backend
 .venv/bin/python -m pytest
@@ -152,7 +159,7 @@ Backend-тести працюють на окремій тестовій баз�
 
 ## Діагностика
 
-- **Перевірка з'єднання з БД і proxy:** `backend/.venv/bin/python backend/manage.py showmigrations --plan` відкриває з'єднання з PostgreSQL і показує стан міграцій (`manage.py check` з БД не з'єднується). `curl -i http://localhost:5173/api/v1/auth/csrf/` перевіряє проходження запиту через Vite до Django.
+- **Перевірка з'єднання з БД і proxy:** `backend/.venv/bin/python backend/manage.py showmigrations --plan` відкриває з'єднання з PostgreSQL і показує стан міграцій (`manage.py check` без `--database` з БД не з'єднується). `curl -i http://localhost:5173/api/v1/auth/csrf/` перевіряє проходження запиту через Vite до Django.
 - **`Connection refused` на `127.0.0.1:5432`:** PostgreSQL або контейнер `db` не запущено. Перевірте `ss -ltnp | grep 5432`, `systemctl is-active postgresql` або `docker ps`.
 - **Docker Engine чи Docker Desktop:** Engine слухає `/var/run/docker.sock` (context `default`), Desktop — `~/.docker/desktop/docker.sock` (context `desktop-linux`). Активний context показує `docker context ls`.
 - **API профілю/каталогу/програм повертає 500 про відсутню таблицю:** не застосовано міграції — виконайте `manage.py migrate` (і `seed_catalog`).

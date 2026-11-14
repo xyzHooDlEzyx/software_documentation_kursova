@@ -2,7 +2,7 @@
 
 ## Scope
 
-The frontend is a React 19 and TypeScript single page application built with Vite 8, Tailwind CSS v4 and shadcn/ui source components. `App.tsx` owns the React Router 7 browser router and session provider; `main.tsx` mounts it under React Strict Mode. Account route components live in `src/pages/`; domain screens live in `src/features/<domain>/` (`profile`, `catalog`, `programs`), each with its typed `api.ts` (request/response DTOs mirroring the DRF serializers) next to its pages and tests. Shared public/authenticated layouts are in `src/components/layout/`, accessible UI primitives in `src/components/ui/`, and cross-feature helpers (enum labels, Ukrainian number/date formatting and plurals, error mapping, the `useResource` loader) in `src/lib/`. `src/app/api.ts` holds only the session/CSRF-aware `request()` core, query building, the paginated envelope type and auth calls.
+The frontend is a React 19 and TypeScript single page application built with Vite 8, Tailwind CSS v4 and shadcn/ui source components. `App.tsx` owns the React Router 7 browser router and session provider; `main.tsx` mounts it under React Strict Mode. Account route components live in `src/pages/`; domain screens live in `src/features/<domain>/` (`profile`, `catalog`, `programs`, `schedule`, `notifications`), each with its typed `api.ts` (request/response DTOs mirroring the DRF serializers) next to its pages and tests. Shared public/authenticated layouts are in `src/components/layout/`, accessible UI primitives in `src/components/ui/`, and cross-feature helpers (enum labels, Ukrainian number/date formatting and plurals, error mapping, the `useResource` loader) in `src/lib/`. `src/app/api.ts` holds only the session/CSRF-aware `request()` core, query building, the paginated envelope type and auth calls. `src/lib/kyivDateTime.ts` перетворює введений київський wall-clock час у UTC та явно відхиляє неіснуючі або неоднозначні моменти переходу DST.
 
 ## Styling and component boundary
 
@@ -24,12 +24,16 @@ The current primitive set is deliberately small. `Button` uses Base UI's button 
 | `/catalog/workouts/:id` | Authenticated session | Ordered exercises with category-specific recommended parameters (C04). |
 | `/programs` | Authenticated session | Own programs with status/archive filters (G02). |
 | `/programs/recommendation` | Authenticated session | Strategy recommendation with its reason (G01); accepting copies the template (G03). 409 `recommendation_mismatch` reloads the proposal; missing profile links to `/profile`. |
-| `/programs/:id` | Authenticated session | Program detail (G04) with rename/description (G05); exercise names are resolved from C02. |
+| `/programs/:id` | Authenticated session | Program detail (G04) with rename/description (G05), activation and progress (G07/G08), and scheduling S02 for its workout entries; exercise names are resolved from C02. |
 | `/programs/:id/workouts/:entryId` | Authenticated session | Composition editor (G06): add, remove, reorder exercises of the same category; only parameters valid for the category are sent; per-exercise server errors are mapped to readable lines. |
+| `/schedule` | Authenticated session | Тижневий календар за `Europe/Kyiv`; S01 читається для напіввідкритого інтервалу Monday-to-Monday, а назви тренувань і програм розв'язуються з фактичних C04/G04 даних. |
+| `/schedule/:id` | Authenticated session | Деталі власного слота (S03), похідний missed-стан, reminder та історія перенесень; форма S04 зберігає ID слота й нагадування. Дії S05/E01 відсутні до Phase 7. |
+| `/notifications` | Authenticated session | Видимі нагадування N01 з фільтрами status/current, пагінацією й явною дією N03; список і badge непрочитаних оновлюються приблизно раз на 60 секунд та при поверненні фокусу. |
+| `/notifications/:id` | Authenticated session | Видиме власне нагадування N02; відкриття не змінює статус, N03 виконується лише кнопкою. |
 | `/settings` | Authenticated session | Public alias and leaderboard opt-in using A05/A06. |
 | `*` | Public fallback | Not-found message. |
 
-`PublicLayout` and `AuthenticatedLayout` provide nested route shells. The authenticated navigation exposes home, profile, catalog, programs and settings. Planned screens (schedule, workout completion, statistics, social features, reports) are added only alongside their real API support; no route or navigation item presents a planned operation as functional.
+`PublicLayout` and `AuthenticatedLayout` provide nested route shells. The authenticated navigation exposes home, profile, catalog, programs, schedule, notifications and settings; the notification item includes the N01 unread count. Planned screens (workout completion, statistics, social features, reports) are added only alongside their real API support; no route or navigation item presents a planned operation as functional.
 
 ## Session and access behavior
 
@@ -41,7 +45,7 @@ HTTP 401 handling is endpoint-specific. An invalid login is displayed on the log
 
 Login and registration share one typed form component but have separate URLs and mode-specific validation. Client validation preserves the current email check and 12-character registration minimum; the API remains authoritative and field errors are shown next to inputs. Registration success navigates to login with a confirmation. Settings preserve draft values after failed saves, update displayed account state from the A06 response, and show field and request errors. Logout navigates to login after success; a failed network logout keeps the authenticated state and surfaces the error.
 
-The home page links only to implemented sections. No page contains sample workouts, invented metrics, or placeholder domain records; progress values come from the API (draft programs honestly show 0%).
+The home page links only to implemented sections. No page contains sample workouts, invented metrics, or placeholder domain records; program progress comes from G04/G08 and currently has `completed_planned=0` until Phase 7 publishes shared completion. Scheduling is available from program detail and shared workout detail, while all displayed dates and times use Kyiv presentation with UTC API timestamps.
 
 ## Navigation and component tests
 
