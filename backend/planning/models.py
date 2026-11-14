@@ -9,10 +9,14 @@ Entities:
 from decimal import Decimal
 
 from django.db import models
+from django.db.models import F, Func, Value
+from django.db.models.lookups import Exact
 from django.utils import timezone
 
 from accounts.models import FitnessGoal
 from catalog.models import ExerciseCategory
+
+from .policies import session_is_missed
 
 
 class UserProgramStatus(models.TextChoices):
@@ -246,3 +250,165 @@ class UserProgramExercise(models.Model):
             f"UserProgramExercise(upw={self.user_program_workout_id}, "
             f"pos={self.position}, ex={self.exercise_id})"
         )
+
+
+class ScheduledSessionStatus(models.TextChoices):
+    PLANNED = "planned", "Заплановано"
+    COMPLETED = "completed", "Завершено"
+    CANCELLED = "cancelled", "Скасовано"
+
+
+class ScheduledSession(models.Model):
+    user = models.ForeignKey(
+        "accounts.User",
+        on_delete=models.CASCADE,
+        related_name="scheduled_sessions",
+    )
+    user_program = models.ForeignKey(
+        "planning.UserProgram",
+        on_delete=models.CASCADE,
+        related_name="scheduled_sessions",
+        null=True,
+        blank=True,
+    )
+    user_program_workout = models.ForeignKey(
+        "planning.UserProgramWorkout",
+        on_delete=models.SET_NULL,
+        related_name="scheduled_sessions",
+        null=True,
+        blank=True,
+    )
+    source_workout = models.ForeignKey(
+        "catalog.Workout",
+        on_delete=models.PROTECT,
+        related_name="scheduled_sessions",
+    )
+    scheduled_at = models.DateTimeField()
+    status = models.CharField(
+        max_length=12,
+        choices=ScheduledSessionStatus.choices,
+        default=ScheduledSessionStatus.PLANNED,
+        db_default="planned",
+    )
+    reschedule_history = models.JSONField(default=list, db_default=[])
+
+    class Meta:
+        db_table = "scheduled_sessions"
+        ordering = ["scheduled_at", "id"]
+        indexes = [
+            models.Index(
+                fields=["user", "scheduled_at", "id"],
+                name="sched_sess_user_time_idx",
+            ),
+            models.Index(
+                fields=["user_program", "status", "id"],
+                name="sched_sess_prog_status_idx",
+                condition=models.Q(user_program__isnull=False),
+            ),
+        ]
+        constraints = [
+            models.CheckConstraint(
+                condition=models.Q(status__in=ScheduledSessionStatus.values),
+                name="scheduled_sessions_status_valid",
+            ),
+            models.CheckConstraint(
+                condition=models.Q(user_program_workout__isnull=True)
+                | models.Q(user_program__isnull=False),
+                name="scheduled_sessions_program_workout_requires_program",
+            ),
+            models.CheckConstraint(
+                condition=Exact(
+                    Func(F("reschedule_history"), function="jsonb_typeof"),
+                    Value("array"),
+                ),
+                name="scheduled_sessions_history_array",
+            ),
+        ]
+
+    @property
+    def is_missed(self) -> bool:
+        return session_is_missed(
+            status=self.status,
+            scheduled_at=self.scheduled_at,
+            now=timezone.now(),
+        )
+
+
+class NotificationType(models.TextChoices):
+    WORKOUT_REMINDER = "workout_reminder", "Нагадування про тренування"
+
+
+class NotificationStatus(models.TextChoices):
+    PENDING = "pending", "Очікує"
+    READ = "read", "Прочитано"
+    CANCELLED = "cancelled", "Скасовано"
+
+
+class Notification(models.Model):
+    user = models.ForeignKey(
+        "accounts.User",
+        on_delete=models.CASCADE,
+        related_name="notifications",
+    )
+    scheduled_session = models.ForeignKey(
+        "planning.ScheduledSession",
+        on_delete=models.CASCADE,
+        related_name="notifications",
+    )
+    type = models.CharField(
+        max_length=24,
+        choices=NotificationType.choices,
+        default=NotificationType.WORKOUT_REMINDER,
+        db_default="workout_reminder",
+    )
+    visible_at = models.DateTimeField()
+    status = models.CharField(
+        max_length=12,
+        choices=NotificationStatus.choices,
+        default=NotificationStatus.PENDING,
+        db_default="pending",
+    )
+    read_at = models.DateTimeField(null=True, blank=True)
+
+    class Meta:
+        db_table = "notifications"
+        ordering = ["-visible_at", "-id"]
+        indexes = [
+            models.Index(
+                fields=["user", "status", "visible_at", "id"],
+                name="notif_user_status_vis_idx",
+            )
+        ]
+        constraints = [
+            models.UniqueConstraint(
+                fields=["scheduled_session", "type"],
+                name="notifications_session_type_unique",
+            ),
+            models.CheckConstraint(
+                condition=models.Q(type__in=NotificationType.values),
+                name="notifications_type_valid",
+            ),
+            models.CheckConstraint(
+                condition=models.Q(status__in=NotificationStatus.values),
+                name="notifications_status_valid",
+            ),
+            models.CheckConstraint(
+                condition=models.Q(
+                    status=NotificationStatus.READ, read_at__isnull=False
+                )
+                | (
+                    models.Q(
+                        status__in=[
+                            NotificationStatus.PENDING,
+                            NotificationStatus.CANCELLED,
+                        ]
+                    )
+                    & models.Q(read_at__isnull=True)
+                ),
+                name="notifications_read_state",
+            ),
+        ]
+
+    @property
+    def is_current(self) -> bool:
+        return self.scheduled_session.status == ScheduledSessionStatus.PLANNED

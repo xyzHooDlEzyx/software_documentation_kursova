@@ -7,6 +7,7 @@ from django.db.migrations.recorder import MigrationRecorder
 
 OLD_SCHEMA = [("planning", "0001_initial")]
 NEW_SCHEMA = [("planning", "0002_align_user_program_with_erd")]
+PHASE5_SCHEMA = [("planning", "0003_scheduledsession_notification_and_more")]
 
 
 @pytest.fixture
@@ -95,3 +96,45 @@ def test_0002_rejects_unmappable_legacy_bonus_data(planning_0001):
     historical.bonus_points_awarded = False
     historical.save(update_fields=["bonus_points_awarded"])
     MigrationExecutor(connection).migrate(NEW_SCHEMA)
+
+
+@pytest.fixture
+def planning_0002(transactional_db):
+    """Start immediately before the Phase 5 forward migration."""
+    executor = MigrationExecutor(connection)
+    latest = executor.loader.graph.leaf_nodes("planning")
+    executor.migrate(NEW_SCHEMA)
+    try:
+        yield
+    finally:
+        MigrationExecutor(connection).migrate(latest)
+
+
+def test_0003_creates_phase5_tables_indexes_and_constraints(planning_0002):
+    executor = MigrationExecutor(connection)
+    executor.migrate(PHASE5_SCHEMA)
+
+    tables = set(connection.introspection.table_names())
+    assert {"scheduled_sessions", "notifications"} <= tables
+    with connection.cursor() as cursor:
+        session_constraints = connection.introspection.get_constraints(
+            cursor, "scheduled_sessions"
+        )
+        notification_constraints = connection.introspection.get_constraints(
+            cursor, "notifications"
+        )
+
+    assert {
+        "scheduled_sessions_status_valid",
+        "scheduled_sessions_program_workout_requires_program",
+        "scheduled_sessions_history_array",
+        "sched_sess_user_time_idx",
+        "sched_sess_prog_status_idx",
+    } <= set(session_constraints)
+    assert {
+        "notifications_session_type_unique",
+        "notifications_type_valid",
+        "notifications_status_valid",
+        "notifications_read_state",
+        "notif_user_status_vis_idx",
+    } <= set(notification_constraints)

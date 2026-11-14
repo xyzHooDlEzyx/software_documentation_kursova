@@ -1,8 +1,10 @@
-"""Serializers for personal program selection and planning REST API (G01–G06)."""
+"""Serializers for personal programs, scheduling, and reminders."""
 
+from datetime import timezone as dt_timezone
 from decimal import Decimal
 from typing import Any
 
+from django.utils.dateparse import parse_datetime
 from rest_framework import serializers
 
 from accounts.serializers import (
@@ -12,11 +14,18 @@ from accounts.serializers import (
 )
 
 from .models import (
+    Notification,
+    NotificationStatus,
+    NotificationType,
+    ScheduledSession,
+    ScheduledSessionStatus,
     UserProgram,
     UserProgramExercise,
     UserProgramStatus,
     UserProgramWorkout,
 )
+from .policies import format_utc_seconds
+from .selectors import program_progress
 
 
 class TemplateWorkoutSummarySerializer(serializers.Serializer):
@@ -77,8 +86,7 @@ class UserProgramSummarySerializer(serializers.ModelSerializer):
         read_only_fields = fields
 
     def get_progress_percent(self, obj: UserProgram) -> str:
-        # In Phase 4, no scheduled sessions exist yet; draft progress is 0.0%
-        return "0.0"
+        return program_progress(obj)["percent"]
 
     def get_bonus_earned(self, obj: UserProgram) -> bool:
         # BonusPointLedger is introduced in a later phase.
@@ -169,16 +177,12 @@ class UserProgramDetailSerializer(serializers.ModelSerializer):
         read_only_fields = fields
 
     def get_progress(self, obj: UserProgram) -> dict[str, Any]:
-        return {
-            "total_planned": 0,
-            "completed_planned": 0,
-            "percent": "0.0",
-        }
+        return program_progress(obj)
 
     def get_completion_snapshot(self, obj: UserProgram) -> dict[str, Any] | None:
         if obj.status == UserProgramStatus.COMPLETED:
             return {
-                "completed_at": obj.completed_at.isoformat(),
+                "completed_at": format_utc_seconds(obj.completed_at),
                 "total_planned_at_completion": obj.total_planned_at_completion,
                 "completed_planned_at_completion": obj.completed_planned_at_completion,
                 "progress_percent_at_completion": str(
@@ -265,3 +269,289 @@ class ReplaceWorkoutCompositionRequestSerializer(StrictSerializer):
                 "Назва тренування не може бути порожньою."
             )
         return cleaned
+
+
+class EmptyBodySerializer(StrictSerializer):
+    pass
+
+
+class ActivateProgramResponseSerializer(serializers.ModelSerializer):
+    progress = serializers.SerializerMethodField()
+    activated_at = serializers.DateTimeField(
+        format="%Y-%m-%dT%H:%M:%SZ", default_timezone=dt_timezone.utc, read_only=True
+    )
+
+    class Meta:
+        model = UserProgram
+        fields = (
+            "id",
+            "status",
+            "is_archived",
+            "activated_at",
+            "bonus_target_sessions",
+            "progress",
+        )
+        read_only_fields = fields
+
+    def get_progress(self, obj: UserProgram) -> dict[str, Any]:
+        return program_progress(obj)
+
+
+class ProgramProgressSerializer(serializers.ModelSerializer):
+    user_program_id = serializers.IntegerField(source="id", read_only=True)
+    total_planned = serializers.SerializerMethodField()
+    completed_planned = serializers.SerializerMethodField()
+    percent = serializers.SerializerMethodField()
+    bonus_earned = serializers.SerializerMethodField()
+    completion_snapshot = serializers.SerializerMethodField()
+
+    class Meta:
+        model = UserProgram
+        fields = (
+            "user_program_id",
+            "status",
+            "is_archived",
+            "total_planned",
+            "completed_planned",
+            "percent",
+            "bonus_target_sessions",
+            "bonus_earned",
+            "completion_snapshot",
+        )
+        read_only_fields = fields
+
+    def get_total_planned(self, obj):
+        return program_progress(obj)["total_planned"]
+
+    def get_completed_planned(self, obj):
+        return program_progress(obj)["completed_planned"]
+
+    def get_percent(self, obj):
+        return program_progress(obj)["percent"]
+
+    def get_bonus_earned(self, obj):
+        return False
+
+    def get_completion_snapshot(self, obj):
+        return UserProgramDetailSerializer().get_completion_snapshot(obj)
+
+
+class AwareDateTimeField(serializers.DateTimeField):
+    def to_internal_value(self, value):
+        if not isinstance(value, str):
+            self.fail("invalid", format="ISO 8601")
+        try:
+            parsed = parse_datetime(value)
+        except ValueError, OverflowError:
+            self.fail("invalid", format="ISO 8601")
+        if parsed is not None and parsed.tzinfo is None:
+            raise serializers.ValidationError(
+                "Час має містити часовий пояс або суфікс Z."
+            )
+        return super().to_internal_value(value)
+
+
+class ScheduledSessionQuerySerializer(StrictSerializer):
+    start_date = serializers.DateField(required=False)
+    end_date = serializers.DateField(required=False)
+    status = serializers.ChoiceField(
+        choices=ScheduledSessionStatus.choices, required=False
+    )
+    user_program_id = StrictIntegerField(min_value=1, required=False)
+    page = StrictIntegerField(min_value=1, required=False, default=1)
+    page_size = StrictIntegerField(
+        min_value=1, max_value=100, required=False, default=20
+    )
+
+    def validate(self, attrs):
+        start_date = attrs.get("start_date")
+        end_date = attrs.get("end_date")
+        if (start_date is None) != (end_date is None):
+            missing = "start_date" if start_date is None else "end_date"
+            raise serializers.ValidationError(
+                {missing: ["start_date і end_date потрібно передавати разом."]}
+            )
+        if start_date is not None and start_date >= end_date:
+            raise serializers.ValidationError(
+                {"end_date": ["end_date має бути пізніше за start_date."]}
+            )
+        return attrs
+
+
+class CreateScheduledSessionSerializer(StrictSerializer):
+    user_program_workout_id = StrictIntegerField(
+        min_value=1, required=False, allow_null=True
+    )
+    source_workout_id = StrictIntegerField(min_value=1, required=False, allow_null=True)
+    scheduled_at = AwareDateTimeField()
+
+    def validate(self, attrs):
+        program_workout_id = attrs.get("user_program_workout_id")
+        source_workout_id = attrs.get("source_workout_id")
+        if (program_workout_id is None) == (source_workout_id is None):
+            raise serializers.ValidationError(
+                {
+                    "non_field_errors": [
+                        "Потрібно передати рівно одне з user_program_workout_id "
+                        "або source_workout_id."
+                    ]
+                }
+            )
+        return attrs
+
+
+class RescheduleSessionSerializer(StrictSerializer):
+    scheduled_at = AwareDateTimeField()
+
+
+class StrictBooleanQueryField(serializers.ChoiceField):
+    def __init__(self, **kwargs):
+        super().__init__(choices=("true", "false"), **kwargs)
+
+    def to_internal_value(self, data):
+        return super().to_internal_value(data) == "true"
+
+
+class ReminderSerializer(serializers.ModelSerializer):
+    visible_at = serializers.DateTimeField(
+        format="%Y-%m-%dT%H:%M:%SZ", default_timezone=dt_timezone.utc, read_only=True
+    )
+    is_current = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Notification
+        fields = ("id", "visible_at", "status", "is_current")
+        read_only_fields = fields
+
+    def get_is_current(self, obj):
+        session_status = self.context.get("scheduled_session_status")
+        if session_status is not None:
+            return session_status == ScheduledSessionStatus.PLANNED
+        return obj.is_current
+
+
+class ScheduledSessionSummarySerializer(serializers.ModelSerializer):
+    scheduled_at = serializers.DateTimeField(
+        format="%Y-%m-%dT%H:%M:%SZ", default_timezone=dt_timezone.utc, read_only=True
+    )
+    is_missed = serializers.BooleanField(read_only=True)
+
+    class Meta:
+        model = ScheduledSession
+        fields = (
+            "id",
+            "scheduled_at",
+            "status",
+            "is_missed",
+            "user_program_id",
+            "user_program_workout_id",
+            "source_workout_id",
+        )
+        read_only_fields = fields
+
+
+def _serialized_session_reminder(obj: ScheduledSession) -> dict[str, Any]:
+    reminder = next(
+        (
+            item
+            for item in obj.notifications.all()
+            if item.type == NotificationType.WORKOUT_REMINDER
+        ),
+        None,
+    )
+    return ReminderSerializer(
+        reminder, context={"scheduled_session_status": obj.status}
+    ).data
+
+
+class ScheduledSessionDetailSerializer(ScheduledSessionSummarySerializer):
+    reschedule_history = serializers.ListField(read_only=True)
+    completed_session_id = serializers.SerializerMethodField()
+    reminder = serializers.SerializerMethodField()
+
+    class Meta(ScheduledSessionSummarySerializer.Meta):
+        fields = ScheduledSessionSummarySerializer.Meta.fields + (
+            "reschedule_history",
+            "completed_session_id",
+            "reminder",
+        )
+
+    def get_completed_session_id(self, obj):
+        return None
+
+    def get_reminder(self, obj):
+        return _serialized_session_reminder(obj)
+
+
+class CreatedScheduledSessionResponseSerializer(ScheduledSessionSummarySerializer):
+    reschedule_history = serializers.ListField(read_only=True)
+    reminder = serializers.SerializerMethodField()
+
+    class Meta(ScheduledSessionSummarySerializer.Meta):
+        fields = ScheduledSessionSummarySerializer.Meta.fields + (
+            "reschedule_history",
+            "reminder",
+        )
+
+    def get_reminder(self, obj):
+        return _serialized_session_reminder(obj)
+
+
+class RescheduledSessionResponseSerializer(serializers.ModelSerializer):
+    scheduled_at = serializers.DateTimeField(
+        format="%Y-%m-%dT%H:%M:%SZ", default_timezone=dt_timezone.utc, read_only=True
+    )
+    is_missed = serializers.BooleanField(read_only=True)
+    reminder = serializers.SerializerMethodField()
+
+    class Meta:
+        model = ScheduledSession
+        fields = (
+            "id",
+            "scheduled_at",
+            "status",
+            "is_missed",
+            "reschedule_history",
+            "reminder",
+        )
+        read_only_fields = fields
+
+    def get_reminder(self, obj):
+        return _serialized_session_reminder(obj)
+
+
+class NotificationQuerySerializer(StrictSerializer):
+    status = serializers.ChoiceField(
+        choices=[NotificationStatus.PENDING, NotificationStatus.READ], required=False
+    )
+    is_current = StrictBooleanQueryField(required=False)
+    page = StrictIntegerField(min_value=1, required=False, default=1)
+    page_size = StrictIntegerField(
+        min_value=1, max_value=100, required=False, default=20
+    )
+
+
+class NotificationSerializer(serializers.ModelSerializer):
+    visible_at = serializers.DateTimeField(
+        format="%Y-%m-%dT%H:%M:%SZ", default_timezone=dt_timezone.utc, read_only=True
+    )
+    read_at = serializers.DateTimeField(
+        format="%Y-%m-%dT%H:%M:%SZ",
+        default_timezone=dt_timezone.utc,
+        allow_null=True,
+        read_only=True,
+    )
+    is_current = serializers.BooleanField(read_only=True)
+
+    class Meta:
+        model = Notification
+        fields = (
+            "id",
+            "scheduled_session_id",
+            "type",
+            "visible_at",
+            "status",
+            "read_at",
+            "is_current",
+        )
+        read_only_fields = fields

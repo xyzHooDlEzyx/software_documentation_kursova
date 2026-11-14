@@ -1,15 +1,19 @@
-"""PostgreSQL integrity tests for independent personal program copies."""
+"""PostgreSQL integrity tests for personal programs and scheduling."""
 
+from datetime import timedelta
 from decimal import Decimal
 
 import pytest
 from django.contrib.auth import get_user_model
 from django.db import IntegrityError, transaction
 from django.db.models import ProtectedError
+from django.utils import timezone
 
 from accounts.models import FitnessGoal
 from catalog.models import Exercise, ExerciseCategory, ProgramTemplate, Workout
 from planning.models import (
+    Notification,
+    ScheduledSession,
     UserProgram,
     UserProgramExercise,
     UserProgramStatus,
@@ -200,3 +204,70 @@ def test_shared_catalog_references_are_protected(personal_catalog):
     for source in (template, workout, exercise):
         with pytest.raises(ProtectedError):
             source.delete()
+
+
+@pytest.mark.django_db
+def test_scheduled_session_checks_and_notification_uniqueness(personal_catalog):
+    program = make_program(personal_catalog)
+    user, _, workout, _ = personal_catalog
+    occurrence = UserProgramWorkout.objects.create(
+        user_program=program,
+        source_workout=workout,
+        position=1,
+        name=workout.name,
+        category=workout.category,
+    )
+    scheduled_at = timezone.now() + timedelta(hours=2)
+    session = ScheduledSession.objects.create(
+        user=user,
+        user_program=program,
+        user_program_workout=occurrence,
+        source_workout=workout,
+        scheduled_at=scheduled_at,
+    )
+    reminder = Notification.objects.create(
+        user=user,
+        scheduled_session=session,
+        visible_at=scheduled_at - timedelta(hours=1),
+    )
+    with pytest.raises(IntegrityError), transaction.atomic():
+        Notification.objects.create(
+            user=user,
+            scheduled_session=session,
+            visible_at=scheduled_at - timedelta(hours=1),
+        )
+    with pytest.raises(IntegrityError), transaction.atomic():
+        Notification.objects.filter(pk=reminder.pk).update(status="read", read_at=None)
+    with pytest.raises(IntegrityError), transaction.atomic():
+        ScheduledSession.objects.create(
+            user=user,
+            user_program_workout=occurrence,
+            source_workout=workout,
+            scheduled_at=scheduled_at,
+        )
+    with pytest.raises(IntegrityError), transaction.atomic():
+        ScheduledSession.objects.create(
+            user=user,
+            source_workout=workout,
+            scheduled_at=scheduled_at,
+            reschedule_history={"not": "an array"},
+        )
+
+
+@pytest.mark.django_db
+def test_user_delete_cascades_private_schedule_and_reminder(personal_catalog):
+    user, _, workout, _ = personal_catalog
+    session = ScheduledSession.objects.create(
+        user=user,
+        source_workout=workout,
+        scheduled_at=timezone.now() + timedelta(hours=2),
+    )
+    Notification.objects.create(
+        user=user,
+        scheduled_session=session,
+        visible_at=timezone.now() + timedelta(hours=1),
+    )
+    user.delete()
+    assert ScheduledSession.objects.count() == 0
+    assert Notification.objects.count() == 0
+    assert Workout.objects.filter(pk=workout.pk).exists()

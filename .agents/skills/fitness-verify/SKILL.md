@@ -31,7 +31,7 @@ docker compose up -d db
 Запускай команди з розділу `README.md` «Перевірки» без заміни settings або БД:
 
 ```bash
-backend/.venv/bin/python backend/manage.py check
+backend/.venv/bin/python backend/manage.py check --database default
 backend/.venv/bin/python backend/manage.py makemigrations --check --dry-run
 cd backend
 .venv/bin/python -m pytest

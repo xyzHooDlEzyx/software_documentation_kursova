@@ -1,11 +1,18 @@
-"""URL routes for personal program selection and planning API (G01–G06)."""
+"""URL routes for personal programs, scheduling, and reminders."""
 
 from django.urls import path
 
 from .views import (
+    NotificationDetailView,
+    NotificationListView,
+    NotificationReadView,
     ProgramRecommendationView,
+    ScheduledSessionDetailView,
+    ScheduledSessionListCreateView,
+    UserProgramActivateView,
     UserProgramDetailView,
     UserProgramListCreateView,
+    UserProgramProgressView,
     UserProgramWorkoutCompositionView,
 )
 
@@ -29,5 +36,40 @@ urlpatterns = [
         "user-programs/<int:program_id>/workouts/<int:entry_id>/",
         UserProgramWorkoutCompositionView.as_view(),
         name="user-program-workout-composition",
+    ),
+    path(
+        "user-programs/<int:program_id>/activate/",
+        UserProgramActivateView.as_view(),
+        name="user-program-activate",
+    ),
+    path(
+        "user-programs/<int:program_id>/progress/",
+        UserProgramProgressView.as_view(),
+        name="user-program-progress",
+    ),
+    path(
+        "scheduled-sessions/",
+        ScheduledSessionListCreateView.as_view(),
+        name="scheduled-session-list-create",
+    ),
+    path(
+        "scheduled-sessions/<int:session_id>/",
+        ScheduledSessionDetailView.as_view(),
+        name="scheduled-session-detail",
+    ),
+    path(
+        "notifications/",
+        NotificationListView.as_view(),
+        name="notification-list",
+    ),
+    path(
+        "notifications/<int:notification_id>/",
+        NotificationDetailView.as_view(),
+        name="notification-detail",
+    ),
+    path(
+        "notifications/<int:notification_id>/read/",
+        NotificationReadView.as_view(),
+        name="notification-read",
     ),
 ]

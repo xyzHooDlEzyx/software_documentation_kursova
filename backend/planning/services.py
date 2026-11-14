@@ -1,4 +1,4 @@
-"""Domain services for personal program selection and planning (Phase 4)."""
+"""Domain services for personal program selection and planning."""
 
 from decimal import Decimal, InvalidOperation
 from typing import Any
@@ -6,6 +6,7 @@ from typing import Any
 from django.core.exceptions import ValidationError as DjangoValidationError
 from django.db import transaction
 from django.db.models import Prefetch, QuerySet, prefetch_related_objects
+from django.utils import timezone
 from rest_framework.exceptions import NotFound, ValidationError
 
 from accounts.errors import ProfileMissing
@@ -26,11 +27,24 @@ from .errors import (
     RecommendationUnavailable,
 )
 from .models import (
+    Notification,
+    NotificationStatus,
+    NotificationType,
+    ScheduledSession,
+    ScheduledSessionStatus,
     UserProgram,
     UserProgramExercise,
     UserProgramStatus,
     UserProgramWorkout,
 )
+from .policies import (
+    can_schedule,
+    format_utc_seconds,
+    normalize_scheduled_at,
+    reminder_visible_at,
+    should_record_reschedule,
+)
+from .selectors import with_program_progress
 from .strategies import get_selection_strategy
 
 
@@ -181,7 +195,9 @@ class ProgramPlanningService:
         is_archived: bool = False,
     ) -> QuerySet[UserProgram]:
         """Return owner's UserPrograms ordered by id DESC."""
-        qs = UserProgram.objects.filter(user=user, is_archived=is_archived)
+        qs = with_program_progress(
+            UserProgram.objects.filter(user=user, is_archived=is_archived)
+        )
         if status:
             qs = qs.filter(status=status)
         return qs.order_by("-id")
@@ -203,7 +219,7 @@ class ProgramPlanningService:
         )
 
         program = (
-            UserProgram.objects.filter(user=user, pk=program_id)
+            with_program_progress(UserProgram.objects.filter(user=user, pk=program_id))
             .prefetch_related(ordered_workouts)
             .first()
         )
@@ -380,3 +396,221 @@ class ProgramPlanningService:
             )
 
         return workout
+
+    @classmethod
+    @transaction.atomic
+    def activate_user_program(cls, user: Any, program_id: int) -> UserProgram:
+        program = (
+            UserProgram.objects.select_for_update()
+            .filter(user=user, pk=program_id)
+            .first()
+        )
+        if not program:
+            raise NotFound()
+        if program.is_archived or program.status != UserProgramStatus.DRAFT:
+            raise InvalidProgramState()
+
+        initial_count = program.scheduled_sessions.exclude(
+            status=ScheduledSessionStatus.CANCELLED
+        ).count()
+        if initial_count < 1:
+            raise ValidationError(
+                {"non_field_errors": ["Для активації потрібен хоча б один слот."]}
+            )
+
+        program.status = UserProgramStatus.ACTIVE
+        program.activated_at = timezone.now()
+        program.bonus_target_sessions = max(3, initial_count)
+        program.save(update_fields=["status", "activated_at", "bonus_target_sessions"])
+        return with_program_progress(UserProgram.objects.filter(pk=program.pk)).get()
+
+    @classmethod
+    def get_program_progress(cls, user: Any, program_id: int) -> UserProgram:
+        program = with_program_progress(
+            UserProgram.objects.filter(user=user, pk=program_id)
+        ).first()
+        if not program:
+            raise NotFound()
+        return program
+
+    @classmethod
+    @transaction.atomic
+    def create_scheduled_session(
+        cls,
+        user: Any,
+        *,
+        scheduled_at,
+        user_program_workout_id: int | None,
+        source_workout_id: int | None,
+    ) -> ScheduledSession:
+        scheduled_at = normalize_scheduled_at(scheduled_at)
+        cls._validate_future_time(scheduled_at)
+        if user_program_workout_id is not None:
+            program_id = (
+                UserProgramWorkout.objects.filter(
+                    pk=user_program_workout_id, user_program__user=user
+                )
+                .values_list("user_program_id", flat=True)
+                .first()
+            )
+            if program_id is None:
+                raise NotFound()
+            program = (
+                UserProgram.objects.select_for_update()
+                .filter(pk=program_id, user=user)
+                .first()
+            )
+            if not program:
+                raise NotFound()
+            if program.is_archived or program.status == UserProgramStatus.COMPLETED:
+                raise InvalidProgramState()
+            program_workout = (
+                UserProgramWorkout.objects.filter(
+                    pk=user_program_workout_id, user_program=program
+                )
+                .select_related("source_workout")
+                .first()
+            )
+            if not program_workout:
+                raise NotFound()
+            session = ScheduledSession.objects.create(
+                user=user,
+                user_program=program,
+                user_program_workout=program_workout,
+                source_workout=program_workout.source_workout,
+                scheduled_at=scheduled_at,
+            )
+        else:
+            workout = Workout.objects.filter(
+                pk=source_workout_id, is_archived=False
+            ).first()
+            if not workout:
+                raise NotFound()
+            session = ScheduledSession.objects.create(
+                user=user,
+                source_workout=workout,
+                scheduled_at=scheduled_at,
+            )
+
+        ReminderService.create_for_session(session)
+        return cls._load_session(session.pk)
+
+    @classmethod
+    @transaction.atomic
+    def reschedule_session(
+        cls, user: Any, session_id: int, *, scheduled_at
+    ) -> ScheduledSession:
+        scheduled_at = normalize_scheduled_at(scheduled_at)
+        cls._validate_future_time(scheduled_at)
+        identity = (
+            ScheduledSession.objects.filter(user=user, pk=session_id)
+            .values("user_program_id")
+            .first()
+        )
+        if not identity:
+            raise NotFound()
+
+        if identity["user_program_id"] is not None:
+            program = (
+                UserProgram.objects.select_for_update()
+                .filter(pk=identity["user_program_id"], user=user)
+                .first()
+            )
+            if not program:
+                raise NotFound()
+            if program.is_archived or program.status == UserProgramStatus.COMPLETED:
+                raise InvalidProgramState()
+
+        session = (
+            ScheduledSession.objects.select_for_update()
+            .filter(user=user, pk=session_id)
+            .first()
+        )
+        if not session:
+            raise NotFound()
+        if session.status != ScheduledSessionStatus.PLANNED:
+            raise InvalidProgramState()
+
+        if should_record_reschedule(
+            current_scheduled_at=session.scheduled_at,
+            requested_scheduled_at=scheduled_at,
+        ):
+            previous = format_utc_seconds(session.scheduled_at)
+            session.reschedule_history = [*session.reschedule_history, previous]
+            session.scheduled_at = scheduled_at
+            session.save(update_fields=["scheduled_at", "reschedule_history"])
+            ReminderService.reschedule(session)
+        return cls._load_session(session.pk)
+
+    @staticmethod
+    def _validate_future_time(scheduled_at) -> None:
+        if not can_schedule(scheduled_at=scheduled_at, now=timezone.now()):
+            raise ValidationError(
+                {"scheduled_at": ["Час заняття має бути в майбутньому."]}
+            )
+
+    @classmethod
+    def _load_session(
+        cls, session_id: int, *, user: Any | None = None
+    ) -> ScheduledSession:
+        queryset = ScheduledSession.objects.select_related(
+            "user_program", "user_program_workout", "source_workout"
+        ).prefetch_related("notifications")
+        if user is not None:
+            queryset = queryset.filter(user=user)
+        session = queryset.filter(pk=session_id).first()
+        if not session:
+            raise NotFound()
+        return session
+
+    @classmethod
+    def get_scheduled_session(cls, user: Any, session_id: int) -> ScheduledSession:
+        return cls._load_session(session_id, user=user)
+
+
+class ReminderService:
+    """Keep the single workout reminder consistent with its slot."""
+
+    @staticmethod
+    def create_for_session(session: ScheduledSession) -> Notification:
+        return Notification.objects.create(
+            user=session.user,
+            scheduled_session=session,
+            type=NotificationType.WORKOUT_REMINDER,
+            visible_at=reminder_visible_at(session.scheduled_at),
+            status=NotificationStatus.PENDING,
+        )
+
+    @staticmethod
+    def reschedule(session: ScheduledSession) -> Notification:
+        reminder = Notification.objects.select_for_update().get(
+            scheduled_session=session,
+            type=NotificationType.WORKOUT_REMINDER,
+        )
+        reminder.visible_at = reminder_visible_at(session.scheduled_at)
+        reminder.status = NotificationStatus.PENDING
+        reminder.read_at = None
+        reminder.save(update_fields=["visible_at", "status", "read_at"])
+        return reminder
+
+    @staticmethod
+    @transaction.atomic
+    def mark_read(user: Any, notification_id: int) -> Notification:
+        reminder = (
+            Notification.objects.select_for_update()
+            .filter(
+                user=user,
+                pk=notification_id,
+                visible_at__lte=timezone.now(),
+                status__in=[NotificationStatus.PENDING, NotificationStatus.READ],
+            )
+            .select_related("scheduled_session")
+            .first()
+        )
+        if not reminder:
+            raise NotFound()
+        if reminder.status == NotificationStatus.PENDING:
+            reminder.status = NotificationStatus.READ
+            reminder.read_at = timezone.now()
+            reminder.save(update_fields=["status", "read_at"])
+        return reminder
