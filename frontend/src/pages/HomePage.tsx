@@ -12,6 +12,18 @@ const sections = [
     action: "Відкрити профіль",
   },
   {
+    to: "/schedule",
+    title: "Розклад",
+    text: "Тижневий календар запланованих занять, перенесення та нагадування.",
+    action: "Відкрити розклад",
+  },
+  {
+    to: "/notifications",
+    title: "Сповіщення",
+    text: "Актуальні й прочитані нагадування про заплановані тренування.",
+    action: "До сповіщень",
+  },
+  {
     to: "/catalog",
     title: "Бібліотека тренувань",
     text: "Кардіо, силові та йога: готові тренування і окремі вправи.",
@@ -31,7 +43,7 @@ export function HomePage() {
     <>
       <PageHeader title="Вітаємо у Фітнес-трекері" eyebrow="Особистий простір" description={`Ви увійшли як ${account?.email ?? "користувач"}.`} />
       {notice && <Alert className="mb-space-4" tone="error">{notice}</Alert>}
-      <div className="grid gap-space-4 md:grid-cols-3">
+      <div className="grid gap-space-4 md:grid-cols-2 xl:grid-cols-3">
         {sections.map((section) => (
           <Card key={section.to} className="grid content-between gap-space-4 p-space-6">
             <div className="grid gap-space-2">

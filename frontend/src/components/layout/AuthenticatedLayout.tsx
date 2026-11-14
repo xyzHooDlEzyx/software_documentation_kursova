@@ -3,6 +3,7 @@ import { Link, NavLink, Outlet } from "react-router";
 
 import type { Account } from "../../app/api";
 import { Button } from "../ui";
+import { NotificationNavLink, useUnreadNotificationCount } from "../../features/notifications/NotificationNavLink";
 import "./layout.css";
 
 export type AuthenticatedLayoutProps = {
@@ -24,7 +25,8 @@ function HomeIcon({ className = "" }: { className?: string }) {
 }
 
 function SettingsIcon({ className = "" }: { className?: string }) {
-  return <svg aria-hidden="true" className={className} viewBox="0 0 24 24" fill="none"><path d="M12 15.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7Z" stroke="currentColor" strokeWidth="1.8" /><path d="m19.4 15 .1.1a1.8 1.8 0 1 1-2.5 2.5l-.1-.1a1.8 1.8 0 0 0-3 .9v.2a1.8 1.8 0 1 1-3.6 0v-.2a1.8 1.8 0 0 0-3-.9l-.1.1a1.8 1.8 0 1 1-2.5-2.5l.1-.1a1.8 1.8 0 0 0-.9-3H3.7a1.8 1.8 0 1 1 0-3.6h.2a1.8 1.8 0 0 0 .9-3l-.1-.1a1.8 1.8 0 1 1 2.5-2.5l.1.1a1.8 1.8 0 0 0 3-.9v-.2a1.8 1.8 0 1 1 3.6 0v.2a1.8 1.8 0 0 0 3 .9l.1-.1a1.8 1.8 0 1 1 2.5 2.5l.1.1a1.8 1.8 0 0 0 .9 3h.2a1.8 1.8 0 1 1 0 3.6h-.2a1.8 1.8 0 0 0-.9 3Z" stroke="currentColor" strokeWidth="1.5" strokeLinejoin="round" /></svg>;
+  // Lucide "settings" (ISC): outer contour and inner circle share the 12,12 centre.
+  return <svg aria-hidden="true" className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z" /><circle cx="12" cy="12" r="3" /></svg>;
 }
 
 function ProfileIcon({ className = "" }: { className?: string }) {
@@ -36,7 +38,12 @@ function CatalogIcon({ className = "" }: { className?: string }) {
 }
 
 function ProgramsIcon({ className = "" }: { className?: string }) {
-  return <svg aria-hidden="true" className={className} viewBox="0 0 24 24" fill="none"><rect x="4" y="5" width="16" height="15" rx="2" stroke="currentColor" strokeWidth="1.8" /><path d="M8 3v4m8-4v4M4 10h16M8 14h3m-3 3h6" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" /></svg>;
+  // Clipboard with a checklist, so it differs from the schedule calendar.
+  return <svg aria-hidden="true" className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><rect x="8" y="2.5" width="8" height="4" rx="1" /><path d="M16 4.5h2a2 2 0 0 1 2 2V20a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6.5a2 2 0 0 1 2-2h2M12 11h4M12 16h4M8 11h.01M8 16h.01" /></svg>;
+}
+
+function ScheduleIcon({ className = "" }: { className?: string }) {
+  return <svg aria-hidden="true" className={className} viewBox="0 0 24 24" fill="none"><rect x="3.5" y="5" width="17" height="15.5" rx="2" stroke="currentColor" strokeWidth="1.8"/><path d="M7.5 3v4M16.5 3v4M3.5 10h17M8 14h3m2 0h3m-8 3h3" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round"/></svg>;
 }
 
 const navigation = [
@@ -44,6 +51,7 @@ const navigation = [
   { to: "/profile", label: "Профіль", Icon: ProfileIcon, end: false },
   { to: "/catalog", label: "Каталог", Icon: CatalogIcon, end: false },
   { to: "/programs", label: "Програми", Icon: ProgramsIcon, end: false },
+  { to: "/schedule", label: "Розклад", Icon: ScheduleIcon, end: false },
   { to: "/settings", label: "Налаштування", Icon: SettingsIcon, end: false },
 ];
 
@@ -52,6 +60,7 @@ export function AuthenticatedLayout({
   onLogout,
   logoutBusy = false,
 }: AuthenticatedLayoutProps): JSX.Element {
+  const unreadNotifications = useUnreadNotificationCount();
   return (
     <div className="flex min-h-svh bg-background">
       <a className="fixed left-space-2 top-space-2 z-50 -translate-y-[calc(100%_+_var(--space-4))] rounded-field bg-primary px-space-4 py-space-2 text-primary-foreground focus-visible:translate-y-0" href="#main-content">Пропустити до вмісту</a>
@@ -78,6 +87,7 @@ export function AuthenticatedLayout({
               <span>{label}</span>
             </NavLink>
           ))}
+          <NotificationNavLink count={unreadNotifications} variant="sidebar" />
         </nav>
         <p className="mt-auto mb-0 p-space-3 text-caption text-muted-foreground">Твій ритм. Твій прогрес.</p>
       </aside>
@@ -91,7 +101,8 @@ export function AuthenticatedLayout({
             <span className="max-w-[9rem] truncate text-small font-bold max-[480px]:max-w-[6.25rem]">Фітнес-трекер</span>
           </Link>
           <div className="ml-auto flex min-w-0 items-center gap-space-4 max-[480px]:gap-space-2">
-            <span className="max-w-[min(40vw,28rem)] truncate text-small text-muted-foreground max-[480px]:max-w-28 max-[480px]:text-caption" title={account.email}>{account.email}</span>
+            <NotificationNavLink count={unreadNotifications} variant="header" />
+            <span className="max-w-[min(40vw,28rem)] truncate text-small text-muted-foreground max-[480px]:hidden" title={account.email}>{account.email}</span>
             <Button variant="outlined" size="sm" onClick={onLogout} loading={logoutBusy}>
               Вийти
             </Button>
@@ -102,7 +113,7 @@ export function AuthenticatedLayout({
           <div className="mx-auto w-full max-w-[var(--layout-content-max-width)] px-space-4 py-space-6 sm:px-space-8 sm:py-space-8"><Outlet /></div>
         </main>
 
-        <nav className="fixed inset-x-0 bottom-0 z-30 grid min-h-[var(--layout-mobile-nav-height)] grid-cols-5 border-t border-outline bg-card pb-[env(safe-area-inset-bottom,0px)] lg:hidden" aria-label="Мобільна навігація">
+        <nav className="fixed inset-x-0 bottom-0 z-30 grid min-h-[var(--layout-mobile-nav-height)] grid-cols-6 border-t border-outline bg-card pb-[env(safe-area-inset-bottom,0px)] lg:hidden" aria-label="Мобільна навігація">
           {navigation.map(({ to, label, Icon, end }) => (
             <NavLink
               key={to}

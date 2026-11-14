@@ -1,7 +1,9 @@
 import { Link, useParams } from "react-router";
 
 import { PageHeader } from "@/components/layout";
-import { Alert, Badge, Card, LoadingState, buttonVariants } from "@/components/ui";
+import { Alert, Badge, Button, Card, LoadingState, buttonVariants } from "@/components/ui";
+import { ScheduleForm } from "@/features/schedule/ScheduleForm";
+import { useState } from "react";
 import { errorMessage, isApiError } from "@/lib/errors";
 import { EXERCISE_WORDS, plural } from "@/lib/format";
 import { categoryLabels, label } from "@/lib/labels";
@@ -12,6 +14,7 @@ import { describeParameters } from "./parameters";
 export function WorkoutDetailPage() {
   const id = Number(useParams().id);
   const workout = useResource(() => getWorkout(id), [id]);
+  const [scheduling, setScheduling] = useState(false);
   const back = <Link className={buttonVariants({ variant: "outlined", size: "sm" })} to="/catalog">До каталогу</Link>;
 
   if (workout.status === "loading") return <LoadingState text="Завантажуємо тренування…" />;
@@ -23,7 +26,8 @@ export function WorkoutDetailPage() {
   const data = workout.data;
   return (
     <>
-      <PageHeader title={data.name} eyebrow="Тренування" description={data.description || undefined}>{back}</PageHeader>
+      <PageHeader title={data.name} eyebrow="Тренування" description={data.description || undefined}>{back}<Button variant="outlined" size="sm" aria-expanded={scheduling} onClick={() => setScheduling((value) => !value)}>Запланувати</Button></PageHeader>
+      {scheduling && <Card className="mb-space-4 p-space-4 sm:p-space-6"><ScheduleForm source={{ source_workout_id: data.id }} onClose={() => setScheduling(false)} /></Card>}
       <Card className="grid gap-space-4 p-space-4 sm:p-space-6">
         <div className="flex items-center gap-space-2">
           <Badge tone="accent">{label(categoryLabels, data.category)}</Badge>

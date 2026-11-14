@@ -95,16 +95,21 @@ body {
   line-height: var(--line-height-body);
 }
 
-button,
-input,
-select,
-textarea {
-  font: inherit;
-}
+/* In @layer base so Tailwind utilities (text-*, font-*, outline-*) win;
+   an unlayered rule beats every layered utility. */
+@layer base {
+  button,
+  input,
+  select,
+  textarea {
+    font: inherit;
+  }
 
-:focus-visible {
-  outline: 3px solid var(--color-focus);
-  outline-offset: 2px;
+  /* Default focus ring; components with focus-visible:ring-* opt out via outline-none. */
+  :focus-visible {
+    outline: 3px solid var(--color-focus);
+    outline-offset: 2px;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {

@@ -29,7 +29,9 @@ export function mockApi(routes: Record<string, Handler>) {
       document.cookie = "csrftoken=token; path=/";
       return json({ csrf_token: "token" });
     }
-    const handler = routes[`${method} ${path}`] ?? (method === "GET" && path === "/api/v1/me/" ? () => json(account) : undefined);
+    const handler = routes[`${method} ${path}`]
+      ?? (method === "GET" && path === "/api/v1/me/" ? () => json(account) : undefined)
+      ?? (method === "GET" && path === "/api/v1/notifications/?status=pending&page=1&page_size=1" ? () => json({ count: 0, next: null, previous: null, results: [] }) : undefined);
     if (!handler) throw new Error(`Unexpected request ${method} ${path}`);
     return handler(call);
   });

@@ -65,6 +65,9 @@ test("register, login, save alias, and logout use the rotated CSRF cookie", asyn
     if (path === "/api/v1/me/" && (!init || init.method === "GET")) {
       return loggedIn ? json(current) : apiError("authentication_required", 401);
     }
+    if (path === "/api/v1/notifications/?status=pending&page=1&page_size=1") {
+      return json({ count: 0, next: null, previous: null, results: [] });
+    }
     csrfHeaders.push((init?.headers as Record<string, string>)["X-CSRFToken"]);
     if (path === "/api/v1/auth/register/") return json(account, 201);
     if (path === "/api/v1/auth/login/") {

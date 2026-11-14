@@ -83,6 +83,10 @@ export function updateProgram(id: number, changes: { name?: string; description?
   return request<Pick<UserProgramDetail, "id" | "name" | "description" | "status" | "is_archived">>(`/api/v1/user-programs/${id}/`, "PATCH", changes);
 }
 
+export function activateProgram(id: number) {
+  return request<Pick<UserProgramDetail, "id" | "status" | "is_archived" | "bonus_target_sessions" | "progress"> & { activated_at: string }>(`/api/v1/user-programs/${id}/activate/`, "POST", {});
+}
+
 /** G06: replaces the whole personal composition of one workout occurrence. */
 export function replaceComposition(programId: number, entryId: number, name: string, exercises: CompositionItem[]) {
   return request<ProgramWorkout>(`/api/v1/user-programs/${programId}/workouts/${entryId}/`, "PUT", { name, exercises });

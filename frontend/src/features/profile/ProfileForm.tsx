@@ -1,4 +1,5 @@
 import { useState, type FormEvent } from "react";
+import { format } from "date-fns";
 
 import { Alert, Button, Select, TextInput } from "@/components/ui";
 import { errorMessage, fieldErrors } from "@/lib/errors";
@@ -60,8 +61,7 @@ function changedFields(initial: Profile, next: ProfileInput): Partial<ProfileInp
 }
 
 function localToday() {
-  const now = new Date();
-  return new Date(now.getTime() - now.getTimezoneOffset() * 60_000).toISOString().slice(0, 10);
+  return format(new Date(), "yyyy-MM-dd");
 }
 
 export function ProfileForm({ profile, onSaved, onCancel }: { profile: Profile | null; onSaved: (profile: Profile) => void; onCancel?: () => void }) {

@@ -8,7 +8,8 @@ import { exerciseNames, fetchAllExercises } from "@/features/catalog/exerciseInd
 import { errorMessage, fieldErrors, isApiError } from "@/lib/errors";
 import { categoryLabels, goalLabels, label, programStatusLabels } from "@/lib/labels";
 import { useResource } from "@/lib/useResource";
-import { getProgram, updateProgram, type UserProgramDetail } from "./api";
+import { ScheduleForm } from "@/features/schedule/ScheduleForm";
+import { activateProgram, getProgram, updateProgram, type UserProgramDetail } from "./api";
 
 export function isProgramEditable(program: Pick<UserProgramDetail, "status" | "is_archived">) {
   return program.status !== "completed" && !program.is_archived;
@@ -61,6 +62,9 @@ export function ProgramDetailPage() {
   const exercises = useResource(() => fetchAllExercises(), []);
   const [editing, setEditing] = useState(false);
   const [message, setMessage] = useState<string>((location.state as { message?: string } | null)?.message ?? "");
+  const [activationError, setActivationError] = useState("");
+  const [activationBusy, setActivationBusy] = useState(false);
+  const [schedulingEntry, setSchedulingEntry] = useState<number | null>(null);
   const back = <Link className={buttonVariants({ variant: "outlined", size: "sm" })} to="/programs">До програм</Link>;
 
   if (program.status === "loading" && !program.data) return <LoadingState text="Завантажуємо програму…" />;
@@ -73,6 +77,15 @@ export function ProgramDetailPage() {
   const editable = isProgramEditable(data);
   const names = exerciseNames(exercises.data ?? []);
 
+  async function activate() {
+    setActivationError(""); setActivationBusy(true);
+    try { await activateProgram(data.id); setMessage("Програму активовано."); program.reload(); }
+    catch (reason) {
+      setActivationError(isApiError(reason, 400) ? "Спочатку заплануйте хоча б одне тренування цієї програми." : isApiError(reason, 409) ? "Програму вже не можна активувати в її поточному стані. Дані оновлено." : errorMessage(reason));
+      if (isApiError(reason, 409)) program.reload();
+    } finally { setActivationBusy(false); }
+  }
+
   return (
     <>
       <PageHeader title={data.name} eyebrow="Програма" description={data.description || undefined}>
@@ -81,6 +94,7 @@ export function ProgramDetailPage() {
       </PageHeader>
       <div className="grid gap-space-6">
         {message && <Alert tone="success">{message}</Alert>}
+        {activationError && <Alert tone="error">{activationError}</Alert>}
         {!editable && <Alert tone="info">Програма {data.is_archived ? "в архіві" : "завершена"}: склад і назву змінювати не можна.</Alert>}
         {editing && (
           <Card className="p-space-4 sm:p-space-6">
@@ -92,7 +106,13 @@ export function ProgramDetailPage() {
           <Badge tone="accent">{label(goalLabels, data.fitness_goal)}</Badge>
           <Badge tone="outline">Шаблон: {data.source_program_template_name_snapshot}</Badge>
           <Badge tone="outline">Прогрес: {data.progress.completed_planned}/{data.progress.total_planned} ({data.progress.percent}%)</Badge>
+          {data.status === "active" && data.bonus_target_sessions !== null && <Badge tone="accent">Бонус +50 після {data.bonus_target_sessions} завершених занять</Badge>}
         </Card>
+        {data.status === "draft" && !data.is_archived && <Card className="grid gap-space-3 p-space-4 sm:p-space-6">
+          <div><h2 className="m-0 text-title-small">Активація програми</h2><p className="mb-0 mt-space-1 text-small text-muted-foreground">Заплановано занять: {data.progress.total_planned}. Поріг бонусу визначить сервер під час активації.</p></div>
+          {data.progress.total_planned === 0 && <p className="m-0 text-small" id="activation-hint">Щоб активувати програму, спочатку заплануйте хоча б одне заняття.</p>}
+          <div><Button loading={activationBusy} disabled={data.progress.total_planned === 0} aria-describedby={data.progress.total_planned === 0 ? "activation-hint" : undefined} onClick={() => void activate()}>Активувати програму</Button></div>
+        </Card>}
         {exercises.status === "error" && <Alert tone="warning">Назви вправ не завантажились: {errorMessage(exercises.error)}</Alert>}
         <ol className="m-0 grid list-none gap-space-4 p-0">
           {data.workouts.map((workout) => (
@@ -104,8 +124,9 @@ export function ProgramDetailPage() {
                     <h2 className="m-0 text-title-small font-bold">{workout.name}</h2>
                     <Badge tone="accent">{label(categoryLabels, workout.category)}</Badge>
                   </div>
-                  {editable && <Link className={buttonVariants({ variant: "outlined", size: "sm" })} to={`/programs/${data.id}/workouts/${workout.entry_id}`}>Змінити склад</Link>}
+                  {editable && <div className="flex flex-wrap gap-space-2"><Button variant="outlined" size="sm" aria-expanded={schedulingEntry === workout.entry_id} onClick={() => setSchedulingEntry(schedulingEntry === workout.entry_id ? null : workout.entry_id)}>Запланувати</Button><Link className={buttonVariants({ variant: "outlined", size: "sm" })} to={`/programs/${data.id}/workouts/${workout.entry_id}`}>Змінити склад</Link></div>}
                 </div>
+                {schedulingEntry === workout.entry_id && <div className="rounded-field border border-outline bg-muted p-space-3"><ScheduleForm source={{ user_program_workout_id: workout.entry_id }} onCreated={() => program.reload()} onClose={() => setSchedulingEntry(null)} /></div>}
                 <ol className="m-0 grid list-none gap-space-1 p-0 text-small">
                   {workout.exercises.map((item) => (
                     <li key={item.position} className="flex justify-between gap-space-3 border-b border-outline py-space-2 last:border-0">

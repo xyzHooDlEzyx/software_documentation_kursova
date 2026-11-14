@@ -15,7 +15,7 @@ export const buttonVariants = cva(
         danger: "bg-destructive text-destructive-foreground hover:bg-destructive/90",
       },
       size: {
-        sm: "h-8 px-3 text-xs",
+        sm: "h-9 px-3 text-sm",
         md: "h-11 px-4 text-sm",
         lg: "h-13 px-5 text-base",
       },

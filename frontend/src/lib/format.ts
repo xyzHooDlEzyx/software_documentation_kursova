@@ -1,21 +1,29 @@
-const dateFormatter = new Intl.DateTimeFormat("uk-UA", { day: "2-digit", month: "2-digit", year: "numeric" });
-const dateTimeFormatter = new Intl.DateTimeFormat("uk-UA", {
-  day: "2-digit",
-  month: "2-digit",
-  year: "numeric",
-  hour: "2-digit",
-  minute: "2-digit",
-  timeZone: "Europe/Kyiv",
-});
+import { TZDate, tz } from "@date-fns/tz";
+import { format } from "date-fns";
+import { uk } from "date-fns/locale/uk";
 
-/** Formats an ISO date (YYYY-MM-DD) without shifting it through UTC. */
+import { KYIV } from "./kyivDateTime";
+
+const inKyiv = tz(KYIV);
+
+/** Formats an ISO date (YYYY-MM-DD) without shifting it through the machine zone. */
 export function formatDate(isoDate: string) {
   const [year, month, day] = isoDate.split("-").map(Number);
-  return dateFormatter.format(new Date(year, month - 1, day));
+  return format(new TZDate(year, month - 1, day, KYIV), "dd.MM.yyyy", { in: inKyiv });
 }
 
 export function formatDateTime(isoDateTime: string) {
-  return dateTimeFormatter.format(new Date(isoDateTime));
+  return format(new TZDate(isoDateTime, KYIV), "dd.MM.yyyy, HH:mm", { in: inKyiv });
+}
+
+export function formatTime(isoDateTime: string) {
+  return format(new TZDate(isoDateTime, KYIV), "HH:mm", { in: inKyiv });
+}
+
+export function formatWeekday(isoDate: string, width: "short" | "long") {
+  const [year, month, day] = isoDate.split("-").map(Number);
+  const text = format(new TZDate(year, month - 1, day, KYIV), width === "short" ? "EEEEEE" : "EEEE", { in: inKyiv, locale: uk });
+  return text.charAt(0).toLocaleUpperCase("uk-UA") + text.slice(1);
 }
 
 /** API decimals arrive as strings; show them with a decimal comma. */

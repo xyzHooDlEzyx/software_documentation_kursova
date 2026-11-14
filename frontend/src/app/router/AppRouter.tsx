@@ -15,6 +15,10 @@ import { CompositionEditorPage } from "../../features/programs/CompositionEditor
 import { ProgramDetailPage } from "../../features/programs/ProgramDetailPage";
 import { ProgramsPage } from "../../features/programs/ProgramsPage";
 import { RecommendationPage } from "../../features/programs/RecommendationPage";
+import { CalendarPage } from "../../features/schedule/CalendarPage";
+import { SessionDetailPage } from "../../features/schedule/SessionDetailPage";
+import { NotificationsPage } from "../../features/notifications/NotificationsPage";
+import { NotificationDetailPage } from "../../features/notifications/NotificationDetailPage";
 import { Alert, Button, LoadingState } from "../../components/ui";
 import { RequireAuth } from "./RequireAuth";
 
@@ -46,6 +50,10 @@ export function AppRouter() {
         <Route path="/programs/recommendation" element={<RecommendationPage />} />
         <Route path="/programs/:id" element={<ProgramDetailPage />} />
         <Route path="/programs/:id/workouts/:entryId" element={<CompositionEditorPage />} />
+        <Route path="/schedule" element={<CalendarPage />} />
+        <Route path="/schedule/:id" element={<SessionDetailPage />} />
+        <Route path="/notifications" element={<NotificationsPage />} />
+        <Route path="/notifications/:id" element={<NotificationDetailPage />} />
         <Route path="/settings" element={<SettingsPage />} />
       </Route>
       <Route path="*" element={<NotFoundPage />} />

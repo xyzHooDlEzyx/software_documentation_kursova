@@ -30,6 +30,19 @@ export const programStatusLabels: Record<string, string> = {
   completed: "Завершена",
 };
 
+export const scheduledSessionStatusLabels: Record<string, string> = {
+  planned: "Заплановано",
+  completed: "Завершено",
+  cancelled: "Скасовано",
+  missed: "Пропущено",
+};
+
+export const notificationStatusLabels: Record<string, string> = {
+  pending: "Непрочитане",
+  read: "Прочитане",
+  cancelled: "Скасоване",
+};
+
 export function label(map: Record<string, string>, code: string | null | undefined) {
   if (!code) return "—";
   return map[code] ?? code;
