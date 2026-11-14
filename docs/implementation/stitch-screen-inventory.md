@@ -1,6 +1,6 @@
 # Інвентар Google Stitch і план інтеграції React
 
-Стан перевірки: 01.11.2026. Це аудит **референсів**, а не затвердження макетів або свідчення готовності API. Пріоритет мають [вимоги](../analysis/requirements.md), [бізнес-правила](../analysis/business-rules.md), [REST-контракт](../architecture/rest-api.md) і [план фаз](./implementation-plan.md). Статус `CANDIDATE` означає придатну основу після узгодження з контрактом; `NEEDS_REVIEW` — невирішене рішення щодо вигляду, стану або даних; `VARIANT` — корисний стан чи адаптація тієї самої сторінки. Жоден експорт не позначено як формально схвалений.
+Стан перевірки: 01.11.2026. Це аудит **референсів**, а не затвердження макетів або свідчення готовності API. Пріоритет мають [вимоги](../analysis/requirements.md), [бізнес-правила](../analysis/business-rules.md), [REST-контракт](../architecture/rest-api.md) і локальний план інкрементів (не в Git). Статус `CANDIDATE` означає придатну основу після узгодження з контрактом; `NEEDS_REVIEW` — невирішене рішення щодо вигляду, стану або даних; `VARIANT` — корисний стан чи адаптація тієї самої сторінки. Жоден експорт не позначено як формально схвалений.
 
 ## A. Експорти й поточний застосунок
 
@@ -8,7 +8,7 @@
 
 Усі 40 HTML-файлів прочитано як джерела структури, текстів і дій. Візуально переглянуто 38 наявних PNG (частину через контактні аркуші). **C07 і C09 оцінено лише за HTML**. PNG є знімками референсу, а не готовими UI-ресурсами. Підрахунок логічних сторінок: **37**; три додаткові файли — D12 (порожній стан історії ваги), M01 (мобільний вхід) і M02 (мобільна комбінація профілю та ваги). Застарілі версії між трьома архівами не доведені; `desktop_16` і суфікс `(2)` не означають хронології. Редакційний дефект окремого екрана не робить його «старою версією».
 
-Після аудиту React 19/TypeScript/Vite доповнено React Router 7, Tailwind CSS v4 і конфігурацією shadcn/ui для наявного застосунку. Зараз є маршрути `/login`, `/register`, `/` і `/settings`, спільні public/authenticated layouts та UI-примітиви. `frontend/src/app/api.ts` використовує відносні `/api/v1/`, `credentials: "same-origin"`, A01 для cookie `csrftoken`, `X-CSRFToken` для небезпечних методів і повторне читання cookie після login. Vite проксіює `/api/v1` до Django `:8000`. **Реалізовані лише A01–A06**; A07/A08 і доменні операції нижче описані контрактом, але не працюють. Імена/прізвища — необов'язкові поля Profile, не поля register. R02/R03 — Django Admin, не React.
+Після аудиту React 19/TypeScript/Vite доповнено React Router 7, Tailwind CSS v4 і конфігурацією shadcn/ui для наявного застосунку. Зараз працюють auth/reset/settings, `/profile`, `/catalog`, `/catalog/workouts/:id`, `/programs`, `/programs/recommendation`, `/programs/:id` і `/programs/:id/workouts/:entryId`; є спільні public/authenticated layouts, UI-примітиви та `frontend/src/styles/tokens.css`. `frontend/src/app/api.ts` використовує відносні `/api/v1/`, `credentials: "same-origin"`, A01 для cookie `csrftoken`, `X-CSRFToken` для небезпечних методів і повторне читання cookie після login. Vite проксіює `/api/v1` до Django `:8000`. Реалізовано A01–A08, P01–P04, C01–C04 і G01–G06; решта доменних операцій нижче лишається контрактом. Імена/прізвища — необов'язкові поля Profile, не поля register. Канал R02/R03 ще не узгоджено.
 
 ## B. Повний інвентар HTML
 
@@ -17,24 +17,24 @@
 | ID | Екран (HTML title / головний зміст) | Source HTML | Варіант | Статус | Група | API | Фаза API → UI |
 |---|---|---|---|---|---|---|---|
 | D00 | Головна панель / Головна | `design-reference/stitch_web_platform/code.html` | root desktop | NEEDS_REVIEW | — | A05, R01, M01, S01 | 8 → 9 |
-| D01 | Відновлення доступу / новий пароль і підтвердження | `design-reference/stitch_web_platform/desktop_1/code.html` | desktop | NEEDS_REVIEW | — | A08 | 1+ → 9 |
-| D02 | Відновлення пароля / запит листа | `design-reference/stitch_web_platform/desktop_2/code.html` | desktop | CANDIDATE | — | A07 | 1+ → 9 |
-| D03 | Мій профіль / огляд | `design-reference/stitch_web_platform/desktop_3/code.html` | desktop | CANDIDATE | profile | A05, P01 | 2 → 9 |
-| D04 | Вхід до кабінету / login | `design-reference/stitch_web_platform/desktop_4/code.html` | desktop | NEEDS_REVIEW | login | A01, A03 | 1 → 9 |
-| D05 | Каталог тренувань / пошук | `design-reference/stitch_web_platform/desktop_5/code.html` | desktop | CANDIDATE | — | C01, C03 | 3 → 9 |
-| D06 | Реєстрація / email, пароль | `design-reference/stitch_web_platform/desktop_6/code.html` | desktop | NEEDS_REVIEW | — | A01, A02 | 1 → 9 |
+| D01 | Відновлення доступу / новий пароль і підтвердження | `design-reference/stitch_web_platform/desktop_1/code.html` | desktop | IMPLEMENTED (`/reset-password/:uid/:token`); ref NEEDS_REVIEW | — | A08 | 1+ → 9 |
+| D02 | Відновлення пароля / запит листа | `design-reference/stitch_web_platform/desktop_2/code.html` | desktop | IMPLEMENTED (`/forgot-password`); ref CANDIDATE | — | A07 | 1+ → 9 |
+| D03 | Мій профіль / огляд | `design-reference/stitch_web_platform/desktop_3/code.html` | desktop | IMPLEMENTED (`/profile`); ref CANDIDATE | profile | A05, P01 | 2 → 9 |
+| D04 | Вхід до кабінету / login | `design-reference/stitch_web_platform/desktop_4/code.html` | desktop | IMPLEMENTED (`/login`); ref NEEDS_REVIEW | login | A01, A03 | 1 → 9 |
+| D05 | Каталог тренувань / пошук | `design-reference/stitch_web_platform/desktop_5/code.html` | desktop | IMPLEMENTED (`/catalog`); ref CANDIDATE | — | C01, C03 | 3 → 9 |
+| D06 | Реєстрація / email, пароль | `design-reference/stitch_web_platform/desktop_6/code.html` | desktop | IMPLEMENTED (`/register`); ref NEEDS_REVIEW | — | A01, A02 | 1 → 9 |
 | D07 | Присідання зі штангою / деталі вправи | `design-reference/stitch_web_platform/desktop_7/code.html` | desktop | NEEDS_REVIEW | — | C02 | 3 → 9 |
-| D08 | Редагування профілю / фітнес-поля | `design-reference/stitch_web_platform/desktop_8/code.html` | desktop | NEEDS_REVIEW | — | P01–P03 | 2 → 9 |
-| D09 | Історія ваги / графік і журнал | `design-reference/stitch_web_platform/desktop_9/code.html` | desktop | CANDIDATE | weight | P01, P03–P05 | 2/8 → 9 |
-| D10 | Каталог вправ / фільтри | `design-reference/stitch_web_platform/desktop_10/code.html` | desktop | CANDIDATE | — | C01, C02 | 3 → 9 |
-| D11 | Деталі тренування / послідовність вправ | `design-reference/stitch_web_platform/desktop_11/code.html` | desktop | CANDIDATE | — | C04 | 3 → 9 |
+| D08 | Редагування профілю / фітнес-поля | `design-reference/stitch_web_platform/desktop_8/code.html` | desktop | IMPLEMENTED (`/profile`); ref NEEDS_REVIEW | — | P01–P03 | 2 → 9 |
+| D09 | Історія ваги / графік і журнал | `design-reference/stitch_web_platform/desktop_9/code.html` | desktop | IMPLEMENTED (`/profile`); ref CANDIDATE | weight | P01, P03–P05 | 2/8 → 9 |
+| D10 | Каталог вправ / фільтри | `design-reference/stitch_web_platform/desktop_10/code.html` | desktop | IMPLEMENTED (`/catalog`); ref CANDIDATE | — | C01, C02 | 3 → 9 |
+| D11 | Деталі тренування / послідовність вправ | `design-reference/stitch_web_platform/desktop_11/code.html` | desktop | IMPLEMENTED (`/catalog/workouts/:id`); ref CANDIDATE | — | C04 | 3 → 9 |
 | D12 | Історія ваги / порожній стан | `design-reference/stitch_web_platform/desktop_12/code.html` | desktop | VARIANT | weight | P04, P05 | 2/8 → 9 |
 | M01 | Вхід / мобільна адаптація | `design-reference/stitch_web_platform/mobile_1/code.html` | mobile | VARIANT | login | A01, A03 | 1 → 9 |
 | M02 | Мій профіль та історія ваги / мобільний складений вигляд | `design-reference/stitch_web_platform/mobile_2/code.html` | mobile | VARIANT, NEEDS_REVIEW | profile, weight | A05, P01, P03–P05 | 2/8 → 9 |
 | A01 | Деталі запланованого тренування | `design-reference/stitch_web_platform(1)/stitch_web_platform/desktop_1/code.html` | desktop | CANDIDATE | — | S03, S04, S05, E01 | 5/7 → 9 |
-| A02 | Редагування персональної програми / відкритий picker | `design-reference/stitch_web_platform(1)/stitch_web_platform/desktop_2/code.html` | desktop | CANDIDATE | — | G04–G06, C02 | 4 → 9 |
-| A03 | Рекомендована програма / прийняття | `design-reference/stitch_web_platform(1)/stitch_web_platform/desktop_3/code.html` | desktop | CANDIDATE | — | G01, G03 | 4 → 9 |
-| A04 | Мої програми / список | `design-reference/stitch_web_platform(1)/stitch_web_platform/desktop_4/code.html` | desktop | CANDIDATE | — | G02 | 4 → 9 |
+| A02 | Редагування персональної програми / відкритий picker | `design-reference/stitch_web_platform(1)/stitch_web_platform/desktop_2/code.html` | desktop | IMPLEMENTED (`/programs/:id/workouts/:entryId`); ref CANDIDATE | — | G04–G06, C02 | 4 → 9 |
+| A03 | Рекомендована програма / прийняття | `design-reference/stitch_web_platform(1)/stitch_web_platform/desktop_3/code.html` | desktop | IMPLEMENTED (`/programs/recommendation`); ref CANDIDATE | — | G01, G03 | 4 → 9 |
+| A04 | Мої програми / список | `design-reference/stitch_web_platform(1)/stitch_web_platform/desktop_4/code.html` | desktop | IMPLEMENTED (`/programs`); ref CANDIDATE | — | G02 | 4 → 9 |
 | A05 | Календар тренувань / місяць і день | `design-reference/stitch_web_platform(1)/stitch_web_platform/desktop_5/code.html` | desktop | CANDIDATE | — | S01, S03 | 5 → 9 |
 | A06 | Перенесення тренування / форма | `design-reference/stitch_web_platform(1)/stitch_web_platform/desktop_6/code.html` | desktop | CANDIDATE | — | S03, S04 | 5 → 9 |
 | A07 | Тренування завершено / результат | `design-reference/stitch_web_platform(1)/stitch_web_platform/desktop_7/code.html` | desktop | CANDIDATE | — | E01 response, E03 | 7/8 → 9 |
@@ -44,7 +44,7 @@
 | A11 | Моя статистика / підсумки | `design-reference/stitch_web_platform(1)/stitch_web_platform/desktop_11/code.html` | desktop | CANDIDATE | — | R01, P05 | 8 → 9 |
 | A12 | Запланувати тренування / дата й джерело | `design-reference/stitch_web_platform(1)/stitch_web_platform/desktop_12/code.html` | desktop | CANDIDATE | — | G04 або C04, S02 | 5 → 9 |
 | A13 | Історія тренувань / фільтри | `design-reference/stitch_web_platform(1)/stitch_web_platform/desktop_13/code.html` | desktop | CANDIDATE | — | E02 | 8 → 9 |
-| A14 | Деталі моєї програми / стан і склад | `design-reference/stitch_web_platform(1)/stitch_web_platform/desktop_14/code.html` | desktop | NEEDS_REVIEW | — | G04, G07–G09, S01 | 5/7 → 9 |
+| A14 | Деталі моєї програми / стан і склад | `design-reference/stitch_web_platform(1)/stitch_web_platform/desktop_14/code.html` | desktop | IMPLEMENTED (`/programs/:id`) для G04; ref NEEDS_REVIEW | — | G04, G07–G09, S01 | 5/7 → 9 |
 | A15 | Мої бали / підсумок | `design-reference/stitch_web_platform(1)/stitch_web_platform/desktop_15/code.html` | desktop | CANDIDATE | — | M01, M02 | 8 → 9 |
 | A16 | Історія нарахування балів | `design-reference/stitch_web_platform(1)/stitch_web_platform/desktop_16/code.html` | desktop | CANDIDATE | — | M02 | 8 → 9 |
 | C01 | Каталог челенджів | `design-reference/stitch_web_platform(2)/stitch_web_platform/desktop_1/code.html` | desktop | NEEDS_REVIEW | — | H01 | 6/8 → 9 |
@@ -55,7 +55,7 @@
 | C06 | Мої сповіщення / список | `design-reference/stitch_web_platform(2)/stitch_web_platform/desktop_6/code.html` | desktop | CANDIDATE | — | N01, N03 | 5 → 9 |
 | C07 | Деталі сповіщення | `design-reference/stitch_web_platform(2)/stitch_web_platform/desktop_7/code.html` | desktop, PNG немає | NEEDS_REVIEW | — | N02, N03 | 5 → 9 |
 | C08 | Мої челенджі | `design-reference/stitch_web_platform(2)/stitch_web_platform/desktop_8/code.html` | desktop | NEEDS_REVIEW | — | H04 | 8 → 9 |
-| C09 | Налаштування акаунта / публічний рейтинг | `design-reference/stitch_web_platform(2)/stitch_web_platform/desktop_9/code.html` | desktop, PNG немає | NEEDS_REVIEW | — | A05, A06 | 1 → 9 |
+| C09 | Налаштування акаунта / публічний рейтинг | `design-reference/stitch_web_platform(2)/stitch_web_platform/desktop_9/code.html` | desktop, PNG немає | IMPLEMENTED (`/settings`); ref NEEDS_REVIEW | — | A05, A06 | 1 → 9 |
 
 ## C. Вибрані основи для сторінок
 
@@ -103,25 +103,25 @@
 
 ## D. Відсутні MVP-сторінки
 
-**0 доведено відсутніх окремих React-сторінок**, якщо D08 використати і для першого P02, і для P03, а D01 — для success/expired-token станів. Окремий екран для кожної REST-операції не потрібний. Це не означає готовність усіх станів: потрібно спроєктувати P02 empty/first-profile, A08 invalid/expired link, порожні колекції, 401/403/404/409 та помилки форм. Для D07 вирішити, чи detail отримує вибрану вправу зі списку C02; окремої детальної API-операції немає. R02/R03 і CRUD shared каталогу належать Django Admin та **не є пропущеними React-сторінками**.
+Для реалізованих A/P/C/G-зрізів **0 доведено відсутніх окремих React-сторінок**: D08 використано для P02/P03, а D01 — для станів A08. Окремий екран для кожної REST-операції не потрібний; повнота порожніх і помилкових станів лишається предметом UI-перевірки. Для D07 вирішити, чи detail отримує вибрану вправу зі списку C02; окремої детальної API-операції немає. Канал R02/R03 ще не узгоджено, тому ці звіти не позначено ні готовими React-сторінками, ні готовими сторінками Django Admin.
 
 ## E. Спільні компоненти й структура
 
 Мінімальний каркас: `AppShell` з responsive `Sidebar`/top bar/mobile navigation, `PageHeader`/breadcrumb, `ContentContainer`; `Button`, `Card`, `Badge`, `Field` (input/select/checkbox), `Modal`/`ConfirmDialog`, `Alert`, `EmptyState`, `LoadingState`, пагінація. Доменно перевикористовувати тільки повторювані `WorkoutCard`, `ProgramCard`, `SessionCard`, `ExerciseResultFields`, `WeightHistoryChart`, `PointsSummary`, `NotificationCard`. Achievement/Challenge cards варто виділити після підтвердження їхніх реальних полів. Візуальні джерела: оболонка D00/D03/A04/C06, форми D04/D06/D08/A12, картки D05/D10/A04/C01, діалоги A02/A09/C03, графіки D09/A11.
 
-Пропозиція без негайної перебудови: лишити `frontend/src/app/api.ts` точкою входу HTTP; додавати DTO і API-функції у `app/` або `features/<feature>/api.ts`, сторінки в `pages/` чи `features/<feature>/`, спільні елементи в `components/`, токени в `styles/`. `App.tsx` і наявний auth-зріз змінювати лише малими інтеграційними кроками; маршрутизатор не додавати до появи потреби в реальних deep links A08/деталей. Session bootstrap через A05, A01 перед unsafe-діями, `credentials:"same-origin"` та CSRF header зберегти. Server state перечитувати після mutation, особливо S05→G08; локальний state — лише введення/відкриті діалоги. Не показувати hardcoded Stitch-дані як реальні дані користувача; до появи endpoint показувати явний недоступний стан або не відкривати маршрут.
+Фактична структура: `frontend/src/app/api.ts` є єдиною HTTP-точкою, доменні DTO і API-функції лежать у `features/<feature>/api.ts`, спільні елементи — у `components/`, токени — у `styles/tokens.css`, а маршрути — у `app/router/AppRouter.tsx`. Session bootstrap через A05, A01 перед unsafe-діями, `credentials:"same-origin"` та CSRF header зберігаються. Server state перечитувати після mutation, особливо S05→G08; локальний state — лише введення/відкриті діалоги. Не показувати hardcoded Stitch-дані як реальні дані користувача; до появи endpoint показувати явний недоступний стан або не відкривати маршрут.
 
 ## F. Nordic Vitality: токени
 
 Три `DESIGN.md` ідентичні, тож **конфліктів між архівами немає**. Усередині самого документа YAML-палітра й prose розходяться: YAML `primary #002620`, `secondary #006b54`, `background #e8fef6`, `on-surface #0c1f1a`; prose називає `#173C35`, `#27866C`, `#F6F8F5`, `#182B26`. У HTML переважають YAML-класи, але A13 візуально світліший; остаточний canvas/кнопку треба звірити на перших інтегрованих екранах. До узгодження не змішувати випадково обидві палітри в одному компоненті.
 
-Майбутній `styles/tokens.css` може мати семантичні `--color-background`, `--color-surface`, `--color-surface-raised`, `--color-text`, `--color-text-muted`, `--color-primary`, `--color-primary-hover`, `--color-accent-lime`, `--color-accent-orange`, `--color-success/warning/error/info`, `--color-border`, `--color-focus`; шкали `--space-1/2/4/6/8`, `--radius-sm/md/lg/pill`, `--shadow-card/hover/modal`, `--font-ui`. Початкові значення для screen-accurate prototype брати з YAML: surface `#e8fef6`, white container `#ffffff`, primary `#002620`, primary-container `#173c35`, secondary `#006b54`, text `#0c1f1a`, error `#ba1a1a`. Prose lime `#C5EA78` й orange `#F4A261` — акценти, не заміна semantic success/error. Manrope із системним fallback; перевірити українську кирилицю й контраст.
+Наявний `frontend/src/styles/tokens.css` містить семантичні токени кольорів, відступів, радіусів, тіней і шрифту. Для нових екранів слід перевикористовувати ці змінні, а не дублювати палітру зі Stitch. Manrope із системним fallback; перевірити українську кирилицю й контраст.
 
 Сітка 8px із 4px кроком для дрібних елементів; desktop sidebar 260px, header 72px, 12 колонок/24px gutters/32px margins; tablet 8 колонок/16px gutters; mobile одна або дві колонки/16px margins, bottom nav 56px. Cards 16px radius, inputs/buttons 10–12px, badges pill. Картки — тонка межа і легка тінь, modals — виразніша тінь/overlay. Стани primary/secondary/outline/destructive/focus/disabled задавати семантичними варіантами. Брейкпойнти спершу перевірити в HTML і viewport-тестах, не вважати кожен `sm:/md:/lg:` доказом якісної мобільної версії.
 
 ## G. Мапа інтеграції API
 
-`G` = гість, `U` = автентифікований власник; усі приватні ID перевіряє backend, чужий і відсутній ресурс повертають однаковий 404. Кожна mutation потребує CSRF; `U` додатково потребує auth session. 401 веде до входу, 403 CSRF — до безпечного оновлення cookie, 400 показує `fields`, 404/409 мають окремі повідомлення. Нижче `GET → mutation` позначає дані й дію; «—» означає read-only. API ID деталізовані в [REST-контракті](../architecture/rest-api.md), не нові маршрути. Фаза в B — найраніший backend зріз, React доводиться в 9-й; A07/A08 — додаткове незавершене завдання фази 1.
+`G` = гість, `U` = автентифікований власник; усі приватні ID перевіряє backend, чужий і відсутній ресурс повертають однаковий 404. Кожна mutation потребує CSRF; `U` додатково потребує auth session. 401 веде до входу, 403 CSRF — до безпечного оновлення cookie, 400 показує `fields`, 404/409 мають окремі повідомлення. Нижче `GET → mutation` позначає дані й дію; «—» означає read-only. API ID деталізовані в [REST-контракті](../architecture/rest-api.md), не нові маршрути. Фаза в B — найраніший backend зріз; A07/A08 і React-зрізи фаз 1–4 уже реалізовано.
 
 | Сторінки / джерела | GET → mutation | Права, параметри й суттєві помилки |
 |---|---|---|
@@ -129,9 +129,9 @@
 | D02 reset request, D01 reset confirm | A01 → A07/A08 | G; email або `uid,token,new_password`; 200 без enumeration, 400 invalid/expired token чи password; прибрати token з URL і сторонні ресурси |
 | D03 профіль, D08 форма, M02 адаптація | A05/P01 → P02 або P03 | U; P02 лише без Profile; сім обов'язкових fitness полів і optional first/last; 404 profile_missing, 409 profile_exists, 400 межі; email read-only |
 | D09/D12/M02 вага | P01/P04/P05 → P03 | U; P04 `page,page_size`, P05 `start_date,end_date` Kyiv, P03 `weight_kg` decimal-string; 400 period/value, 404 no Profile; порожні точки `[]` |
-| D05 workout catalog | C01/C03 → — | G/U; `category,search,page,page_size`; 400 filter, 429 |
-| D10 exercise catalog, D07 exercise detail | C01/C02 → — | G/U; C02 `category,search,page,page_size`; 400 filter; D07 без окремого detail endpoint, потрібен доступний елемент C02 |
-| D11 workout detail | C04 → — | G/U; `workout id`; 404 hidden/missing; no catalog mutation |
+| D05 workout catalog | C01/C03 → — | U у поточному backend; `category,search,page,page_size`; 400 filter, 429 |
+| D10 exercise catalog, D07 exercise detail | C01/C02 → — | U у поточному backend; C02 `category,search,page,page_size`; 400 filter; D07 без окремого detail endpoint, потрібен доступний елемент C02 |
+| D11 workout detail | C04 → — | U у поточному backend; `workout id`; 404 hidden/missing; no catalog mutation |
 | A03 recommendation | G01 → G03 | U + Profile; `program_template_id` поточної рекомендації; 404 profile/recommendation, 409 stale ID |
 | A04 programs | G02 → — | U; `status`, `archived`, `page,page_size`; 400 filter, 401 |
 | A02 editor | G04/C02 → G05/G06 | U owner; program/entry IDs, full nonempty exercises array; 400 composition, 404 foreign, 409 completed/archived |
@@ -150,7 +150,7 @@
 | C03 leaderboard, C09 settings | A05/L01 → A06 | U; L01 `period,anchor_date,page,page_size`, A06 `public_alias,leaderboard_opt_in`; 400 alias/period, 403 CSRF; public list лише alias/points/rank |
 | C06 notifications, C07 detail | N01/N02 → N03 | U owner; N01 `status,is_current,page,page_size`; N02/N03 notification ID; 404 foreign/invisible/cancelled; read лише за явною дією, retry 200 |
 
-R02/R03 споживає лише Django Admin з окремим permission. API-операції C01–C04 catalog GET доступні гостю; це не привід надавати гостьовий доступ до власних програм чи фактів. Уся пагінація та фільтри обмежені саме задокументованими параметрами. Decimal-значення передавати рядками; дати періоду тлумачити в `Europe/Kyiv` з `[start,end)`. Наявний `api.ts` підтримує тільки GET/POST/PATCH; майбутній G06 PUT вимагатиме розширення того самого CSRF-aware клієнта.
+Канал R02/R03 ще не узгоджено. Поточний backend вимагає сесію для C01–C04, хоча контракт ще містить гостьовий доступ як проєктний варіант. Уся пагінація та фільтри обмежені саме задокументованими параметрами. Decimal-значення передавати рядками; дати періоду тлумачити в `Europe/Kyiv` з `[start,end)`. Наявний `api.ts` підтримує GET/POST/PATCH/PUT; G06 використовує той самий CSRF-aware клієнт.
 
 ## H. Конфлікти й технічні ризики
 
@@ -158,7 +158,7 @@ R02/R03 споживає лише Django Admin з окремим permission. API
 |---|---|---|
 | Високий | D06 | Підказка «Мін. 8 символів» суперечить Django `MinimumLengthValidator` 12; форма не має активних name/consent полів, і їх не слід додавати через HTML-коментарі. Показувати валідатори сервера. |
 | Високий | D04/M01 | «Запам'ятати мене» не має контрактного параметра; cookie в backend уже має 7-денний строк. Прибрати нефункціональний toggle або окремо погодити зміну сесійної політики. |
-| Високий | D01/D02 | A07/A08 ще не реалізовані. A07 не розкриває існування email; A08 token не має потрапляти в логи, referer, сторонні fonts/scripts на reset route. |
+| Високий | D01/D02 | A07/A08 реалізовані; зберігати generic-відповідь A07 і не допускати token A08 у логи, referer чи сторонні fonts/scripts на reset route. |
 | Високий | D08/D09/D12 | Email не змінюється P03, `age` read-only; новий `WeightEntry` створює P02/P03 лише при реальній зміні ваги. Графік і порожній стан з persisted P04/P05, не з намальованих точок. |
 | Високий | A02/A14/A01/A09 | `draft/active/completed` — status, `is_archived` окремо; G07, G09, E01, S05 залежать від server-state і lock. Прогрес та бонус не обчислювати з карток; після S05 перечитати G08. |
 | Високий | A07/A08/A10/A15/A16 | E01 використовує фактичні вправи й один idempotency key для повтору тієї самої спроби; calories/points/server snapshot є авторитетними. Історичні факти не редагуються, bonus +50 лише окремим ledger-записом за умовами BR. |
@@ -174,11 +174,11 @@ R02/R03 споживає лише Django Admin з окремим permission. API
 
 ## I. Порядок малих інтеграційних зрізів
 
-1. **Foundation без доменних mock.** Узгодити palette-конфлікт на D04/D06/D03, винести мінімальні токени/поле/кнопку/alert і responsive auth layout. Чинний A01–A06 frontend зберегти; D04/M01/D06 підключити до нього, перевірити cookies/CSRF, 400/401/403, mobile/keyboard. Це перший рекомендований batch, бо API вже існує.
-2. **Reset A07/A08 (додаток фази 1).** Після backend реалізації D02/D01 з безпечним token route, generic confirmation, invalid/expired state та throttling. Не завантажувати зовнішні ресурси на token route.
-3. **Профіль/вага (фаза 2).** D03/D08/M02, D09/D12 з P01–P04; P05 chart підключити у фазі 8. Перший профіль через P02 на тій самій формі; перевірити відсутній профіль і persisted вагу.
-4. **Read-only каталог (фаза 3).** D05/D10/D11, рішення D07 без нового API; типізовані DTO, фільтри, пагінація й 404.
-5. **Програми (фаза 4).** A03/A04/A02/A14 тільки G01–G06; activation/сесійні кнопки з'являються з фазою 5. Перевірити stale recommendation і owner 404.
+1. **Foundation без доменних mock — реалізовано.** Є токени, спільні поля/кнопки/alerts, responsive auth layout і A01–A06 frontend.
+2. **Reset A07/A08 — реалізовано.** D02/D01 працюють через безпечний token route, generic confirmation, invalid/expired state та throttling.
+3. **Профіль/вага (фаза 2) — реалізовано для P01–P04.** D03/D08/D09 працюють на `/profile`; P05 лишається фазою 8.
+4. **Read-only каталог (фаза 3) — реалізовано.** D05/D10 працюють на `/catalog`, D11 — на `/catalog/workouts/:id`; D07 лишається без окремого API.
+5. **Програми (фаза 4) — реалізовано для G01–G06.** A03/A04/A02/A14 працюють на маршрутах `/programs*`; activation/сесійні дії лишаються фазою 5.
 6. **Планування й нагадування (фаза 5).** A05/A12/A01/A06/C06/C07, G07, S01–S04, N01–N03. Після state mutation перечитати canonical GET; окремо перевірити Kyiv DST та видимість reminder.
 7. **Execution (фаза 7).** A08/A07/A09 із E01/S05/G09 разом після транзакційної backend готовності фази 6. Перевірити idempotency, 409, rollback, повторне S05=200 і G08 refresh.
 8. **Read projections (фаза 8), UI polish (фаза 9).** A10/A13/A11/D00/A15/A16/C03/C09 й P05/E02–E03/M01–M02/L01/R01. Achievement/challenge екрани C01/C02/C04/C05/C08 лише після BR-021/022 gate та API. Завершити маршрути, responsive/a11y, E2E з реальною PostgreSQL, без показу демоданих як persisted.
