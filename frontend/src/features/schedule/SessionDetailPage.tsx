@@ -1,4 +1,4 @@
-import { useEffect, useState, type FormEvent } from "react";
+import { useEffect, useRef, useState, type FormEvent } from "react";
 import { Link, useParams } from "react-router";
 
 import { PageHeader } from "@/components/layout";
@@ -8,7 +8,8 @@ import { formatDateTime } from "@/lib/format";
 import { kyivDateTimeInput, kyivLocalToUtcIso, kyivToday } from "@/lib/kyivDateTime";
 import { label, notificationStatusLabels, scheduledSessionStatusLabels } from "@/lib/labels";
 import { useResource } from "@/lib/useResource";
-import { getSession, rescheduleSession } from "./api";
+import { getProgram, getProgramProgress } from "@/features/programs/api";
+import { cancelSession, getSession, rescheduleSession } from "./api";
 import { clearSessionNameCache, resolveSessionNames, type SessionNames } from "./names";
 
 export function reminderDescription(reminder: { visible_at: string; status: string; is_current: boolean }, now = new Date()) {
@@ -27,6 +28,9 @@ export function SessionDetailPage() {
   const [error, setError] = useState("");
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [message, setMessage] = useState("");
+  const [confirmCancel, setConfirmCancel] = useState(false);
+  const [cancelBusy, setCancelBusy] = useState(false);
+  const confirmContainerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     clearSessionNameCache();
@@ -38,6 +42,24 @@ export function SessionDetailPage() {
     setDate(input.date); setTime(input.time);
     void resolveSessionNames([session.data]).then((resolved) => setNames(resolved.get(session.data!.id) ?? null));
   }, [session.data]);
+
+  useEffect(() => { if (confirmCancel) confirmContainerRef.current?.querySelector("button")?.focus(); }, [confirmCancel]);
+
+  async function cancel() {
+    setError(""); setMessage(""); setCancelBusy(true);
+    try {
+      await cancelSession(id);
+      clearSessionNameCache();
+      const current = await getSession(id);
+      session.setData(current);
+      if (current.user_program_id) await Promise.allSettled([getProgram(current.user_program_id), getProgramProgress(current.user_program_id)]);
+      setConfirmCancel(false);
+      setMessage("Заняття скасовано.");
+    } catch (reason) {
+      setError(isApiError(reason, 409) ? "Заняття вже завершено або програму закрито. Дані оновлено." : errorMessage(reason));
+      if (isApiError(reason, 409)) session.reload();
+    } finally { setCancelBusy(false); }
+  }
 
   async function submit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault(); setError(""); setMessage(""); setErrors({});
@@ -59,7 +81,7 @@ export function SessionDetailPage() {
   const data = session.data!;
   const displayStatus = data.is_missed ? "missed" : data.status;
   return <>
-    <PageHeader title={names?.workout ?? `Тренування #${data.source_workout_id}`} eyebrow="Заплановане тренування" description={formatDateTime(data.scheduled_at)}>
+    <PageHeader title={names?.workout ?? `Тренування #${data.source_workout_id}`} eyebrow={data.status === "completed" ? "Завершене тренування" : data.status === "cancelled" ? "Скасоване тренування" : "Заплановане тренування"} description={formatDateTime(data.scheduled_at)}>
       <Link className={buttonVariants({ variant: "outlined", size: "sm" })} to="/schedule">До розкладу</Link>
     </PageHeader>
     <div className="grid gap-space-4 lg:grid-cols-[minmax(0,1fr)_minmax(18rem,0.7fr)]">
@@ -76,14 +98,24 @@ export function SessionDetailPage() {
           {data.reschedule_history.length ? <ul className="mb-0 grid gap-space-1">{data.reschedule_history.map((item) => <li key={item}>{formatDateTime(item)}</li>)}</ul> : <p className="mb-0 text-muted-foreground">Час ще не переносили.</p>}
         </Card>
       </div>
-      {data.status === "planned" && <Card className="h-fit p-space-4 sm:p-space-6">
-        <h2 className="mt-0 text-title-small">Перенести тренування</h2>
-        <form className="grid gap-space-3" onSubmit={(event) => void submit(event)} noValidate>
-          <TextInput id="reschedule-date" label="Нова дата" type="date" min={kyivToday()} value={date} onChange={(event) => setDate(event.target.value)} />
-          <TextInput id="reschedule-time" label="Новий час (Київ)" type="time" value={time} onChange={(event) => setTime(event.target.value)} error={errors.scheduled_at} />
-          <div><Button type="submit" loading={busy}>Перенести</Button></div>
-        </form>
-      </Card>}
+      {data.status === "planned" && <div className="grid h-fit gap-space-4">
+        <Card className="grid gap-space-3 p-space-4 sm:p-space-6">
+          <h2 className="m-0 text-title-small">Дії із заняттям</h2>
+          <div className="flex flex-wrap gap-space-2"><Link className={buttonVariants({ variant: "primary", size: "md" })} to={`/schedule/${data.id}/complete`}>Завершити тренування</Link><Button variant="outlined" onClick={() => setConfirmCancel(true)}>Скасувати заняття</Button></div>
+          {confirmCancel && <div ref={confirmContainerRef} className="grid gap-space-3 rounded-field border border-status-warning/30 bg-status-warning/10 p-space-3" role="group" aria-labelledby="cancel-title">
+            <div><h3 id="cancel-title" className="m-0 text-base font-bold">Скасувати це заняття?</h3><p className="mb-0 mt-space-1 text-small">Запис залишиться в розкладі зі станом «Скасовано».</p></div>
+            <div className="flex flex-wrap gap-space-2"><Button loading={cancelBusy} onClick={() => void cancel()}>Так, скасувати</Button><Button variant="outlined" disabled={cancelBusy} onClick={() => setConfirmCancel(false)}>Не скасовувати</Button></div>
+          </div>}
+        </Card>
+        <Card className="p-space-4 sm:p-space-6">
+          <h2 className="mt-0 text-title-small">Перенести тренування</h2>
+          <form className="grid gap-space-3" onSubmit={(event) => void submit(event)} noValidate>
+            <TextInput id="reschedule-date" label="Нова дата" type="date" min={kyivToday()} value={date} onChange={(event) => setDate(event.target.value)} />
+            <TextInput id="reschedule-time" label="Новий час (Київ)" type="time" value={time} onChange={(event) => setTime(event.target.value)} error={errors.scheduled_at} />
+            <div><Button type="submit" loading={busy}>Перенести</Button></div>
+          </form>
+        </Card>
+      </div>}
     </div>
   </>;
 }

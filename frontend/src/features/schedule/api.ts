@@ -43,3 +43,7 @@ export function getSession(id: number) {
 export function rescheduleSession(id: number, scheduled_at: string) {
   return request<ScheduledSessionDetail>(`/api/v1/scheduled-sessions/${id}/`, "PATCH", { scheduled_at });
 }
+
+export function cancelSession(id: number) {
+  return request<Pick<ScheduledSessionDetail, "id" | "status" | "reminder">>(`/api/v1/scheduled-sessions/${id}/cancel/`, "POST", {});
+}

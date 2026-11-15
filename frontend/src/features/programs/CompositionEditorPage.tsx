@@ -6,6 +6,7 @@ import { Alert, Badge, Button, Card, LoadingState, Select, TextInput, buttonVari
 import type { Exercise } from "@/features/catalog/api";
 import { fetchAllExercises } from "@/features/catalog/exerciseIndex";
 import { errorMessage, isApiError } from "@/lib/errors";
+import { decimalInput } from "@/lib/format";
 import { categoryLabels, label } from "@/lib/labels";
 import { useResource } from "@/lib/useResource";
 import { getProgram, replaceComposition, type CompositionItem, type ProgramWorkout } from "./api";
@@ -17,7 +18,6 @@ let rowKey = 0;
 const nextKey = () => (rowKey += 1);
 
 /** "15.00" → "15", "4.500" → "4.5": API decimals shown without trailing zeros. */
-const trimDecimal = (value: string | null) => (value === null ? "" : String(Number(value)));
 
 function toRow(item: ProgramWorkout["exercises"][number]): Row {
   return {
@@ -25,9 +25,9 @@ function toRow(item: ProgramWorkout["exercises"][number]): Row {
     exerciseId: String(item.exercise_id),
     sets: item.recommended_sets?.toString() ?? "",
     reps: item.recommended_reps?.toString() ?? "",
-    load: trimDecimal(item.recommended_load_kg),
-    duration: trimDecimal(item.recommended_duration_min),
-    distance: trimDecimal(item.recommended_distance_km),
+    load: decimalInput(item.recommended_load_kg),
+    duration: decimalInput(item.recommended_duration_min),
+    distance: decimalInput(item.recommended_distance_km),
   };
 }
 

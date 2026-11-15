@@ -1,6 +1,6 @@
 import { beforeEach, expect, test, vi } from "vitest";
 
-import { ApiError, login, logout } from "./api";
+import { ApiError, login, logout, request } from "./api";
 
 beforeEach(() => {
   document.cookie = "csrftoken=; Max-Age=0; path=/";
@@ -57,4 +57,20 @@ test("401 on a protected endpoint calls the handler, auth endpoints do not", asy
 test("network failure while fetching the CSRF cookie becomes a typed network error", async () => {
   vi.stubGlobal("fetch", vi.fn(async () => { throw new TypeError("Failed to fetch"); }));
   await expect(login("a@example.test", "secret")).rejects.toMatchObject({ status: 0, code: "network_error" });
+});
+
+test("request merges an extra idempotency header with JSON and CSRF headers", async () => {
+  document.cookie = "csrftoken=ready; path=/";
+  vi.stubGlobal("fetch", vi.fn(async (_input: RequestInfo | URL, init?: RequestInit) => {
+    expect(init?.headers).toMatchObject({
+      Accept: "application/json",
+      "Content-Type": "application/json",
+      "X-CSRFToken": "ready",
+      "Idempotency-Key": "8e1af87d-5516-4f64-bc87-74806c61cc28",
+    });
+    return new Response(JSON.stringify({ id: 1 }), { status: 201 });
+  }));
+  await request("/api/v1/completed-sessions/", "POST", {}, {
+    headers: { "Idempotency-Key": "8e1af87d-5516-4f64-bc87-74806c61cc28" },
+  });
 });

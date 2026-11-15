@@ -1,4 +1,4 @@
-import { fireEvent, render, screen, within } from "@testing-library/react";
+import { fireEvent, render, screen, waitFor, within } from "@testing-library/react";
 import { afterEach, beforeEach, expect, test, vi } from "vitest";
 
 import App from "@/App";
@@ -182,4 +182,48 @@ test("a 401 from a protected page returns the user to login", async () => {
   mockApi({ "GET /api/v1/user-programs/?archived=false&page=1": () => apiError("authentication_required", 401) });
   render(<App />);
   expect(await screen.findByRole("button", { name: "Увійти" })).toBeInTheDocument();
+});
+
+test("G09 planned_sessions_exist explains that slots must be cancelled and links to schedule", async () => {
+  window.history.replaceState(null, "", "/programs/41");
+  mockApi({
+    "GET /api/v1/user-programs/41/": () => json(program),
+    "GET /api/v1/exercises/?page=1&page_size=100": () => json(strengthExercises),
+    "POST /api/v1/user-programs/41/archive/": () => apiError("planned_sessions_exist", 409),
+  });
+  render(<App />);
+  fireEvent.click(await screen.findByRole("button", { name: "Архівувати програму" }));
+  expect(screen.getByRole("button", { name: "Так, архівувати" })).toHaveFocus();
+  fireEvent.click(screen.getByRole("button", { name: "Так, архівувати" }));
+  expect(await screen.findByText(/Спочатку скасуйте заплановані заняття/)).toBeInTheDocument();
+  expect(screen.getByRole("link", { name: "Перейти до розкладу" })).toHaveAttribute("href", "/schedule?user_program_id=41");
+});
+
+test("an archived program is read-only and hides edit, schedule, activation and archive actions", async () => {
+  window.history.replaceState(null, "", "/programs/41");
+  mockApi({
+    "GET /api/v1/user-programs/41/": () => json({ ...program, is_archived: true }),
+    "GET /api/v1/exercises/?page=1&page_size=100": () => json(strengthExercises),
+  });
+  render(<App />);
+  expect(await screen.findByText(/Програма в архіві/)).toBeInTheDocument();
+  expect(screen.queryByRole("button", { name: "Перейменувати" })).not.toBeInTheDocument();
+  expect(screen.queryByRole("button", { name: "Запланувати" })).not.toBeInTheDocument();
+  expect(screen.queryByRole("button", { name: "Активувати програму" })).not.toBeInTheDocument();
+  expect(screen.queryByRole("button", { name: "Архівувати програму" })).not.toBeInTheDocument();
+  expect(screen.queryByRole("link", { name: "Змінити склад" })).not.toBeInTheDocument();
+});
+
+test("the archive filter requests the real archived field", async () => {
+  window.history.replaceState(null, "", "/programs");
+  const empty = { count: 0, next: null, previous: null, results: [] };
+  const { calls } = mockApi({
+    "GET /api/v1/user-programs/?archived=false&page=1": () => json(empty),
+    "GET /api/v1/user-programs/?archived=true&page=1": () => json(empty),
+  });
+  render(<App />);
+  const archive = await screen.findByRole("button", { name: "Архів" });
+  fireEvent.click(archive);
+  await waitFor(() => expect(calls.some((call) => call.path === "/api/v1/user-programs/?archived=true&page=1")).toBe(true));
+  expect(archive).toHaveAttribute("aria-pressed", "true");
 });

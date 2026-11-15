@@ -26,7 +26,7 @@ export function WorkoutDetailPage() {
   const data = workout.data;
   return (
     <>
-      <PageHeader title={data.name} eyebrow="Тренування" description={data.description || undefined}>{back}<Button variant="outlined" size="sm" aria-expanded={scheduling} onClick={() => setScheduling((value) => !value)}>Запланувати</Button></PageHeader>
+      <PageHeader title={data.name} eyebrow="Тренування" description={data.description || undefined}>{back}<Button variant="outlined" size="sm" aria-expanded={scheduling} onClick={() => setScheduling((value) => !value)}>Запланувати</Button><Link className={buttonVariants({ variant: "primary", size: "sm" })} to={`/catalog/workouts/${data.id}/complete`}>Завершити тренування</Link></PageHeader>
       {scheduling && <Card className="mb-space-4 p-space-4 sm:p-space-6"><ScheduleForm source={{ source_workout_id: data.id }} onClose={() => setScheduling(false)} /></Card>}
       <Card className="grid gap-space-4 p-space-4 sm:p-space-6">
         <div className="flex items-center gap-space-2">

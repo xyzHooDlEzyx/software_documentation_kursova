@@ -55,9 +55,28 @@ export type UserProgramDetail = {
   source_program_template_name_snapshot: string;
   bonus_target_sessions: number | null;
   progress: { total_planned: number; completed_planned: number; percent: string };
-  completion_snapshot: Record<string, unknown> | null;
+  completion_snapshot: CompletionSnapshot | null;
   bonus_earned: boolean;
   workouts: ProgramWorkout[];
+};
+
+export type CompletionSnapshot = {
+  completed_at: string;
+  total_planned_at_completion: number;
+  completed_planned_at_completion: number;
+  progress_percent_at_completion: string;
+};
+
+export type ProgramProgress = {
+  user_program_id: number;
+  status: string;
+  is_archived: boolean;
+  total_planned: number;
+  completed_planned: number;
+  percent: string;
+  bonus_target_sessions: number | null;
+  bonus_earned: boolean;
+  completion_snapshot: CompletionSnapshot | null;
 };
 
 export type CompositionItem = RecommendedParameters & { position: number; exercise_id: number };
@@ -85,6 +104,14 @@ export function updateProgram(id: number, changes: { name?: string; description?
 
 export function activateProgram(id: number) {
   return request<Pick<UserProgramDetail, "id" | "status" | "is_archived" | "bonus_target_sessions" | "progress"> & { activated_at: string }>(`/api/v1/user-programs/${id}/activate/`, "POST", {});
+}
+
+export function getProgramProgress(id: number) {
+  return request<ProgramProgress>(`/api/v1/user-programs/${id}/progress/`, "GET");
+}
+
+export function archiveProgram(id: number) {
+  return request<Pick<UserProgramDetail, "id" | "status" | "is_archived" | "bonus_earned">>(`/api/v1/user-programs/${id}/archive/`, "POST", {});
 }
 
 /** G06: replaces the whole personal composition of one workout occurrence. */

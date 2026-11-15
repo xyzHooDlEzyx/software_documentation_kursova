@@ -98,7 +98,11 @@ export function withQuery(path: ApiPath, params: Record<string, string | number 
   return (text ? `${path}?${text}` : path) as ApiPath;
 }
 
-export async function request<T>(path: ApiPath, method: HttpMethod, body?: object): Promise<T> {
+export type RequestOptions = {
+  headers?: Record<string, string>;
+};
+
+export async function request<T>(path: ApiPath, method: HttpMethod, body?: object, options: RequestOptions = {}): Promise<T> {
   const unsafe = method !== "GET";
   if (unsafe && !csrfCookie()) {
     try {
@@ -108,7 +112,7 @@ export async function request<T>(path: ApiPath, method: HttpMethod, body?: objec
       throw new ApiError(0, "network_error", {}, "Немає зв’язку із сервером.");
     }
   }
-  const headers: Record<string, string> = { Accept: "application/json" };
+  const headers: Record<string, string> = { Accept: "application/json", ...options.headers };
   if (body !== undefined) headers["Content-Type"] = "application/json";
   if (unsafe) {
     // Read the cookie on every mutation: Django rotates it after login.

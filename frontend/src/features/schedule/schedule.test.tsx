@@ -119,6 +119,37 @@ test("reschedule patches the same slot and re-reads its detail", async () => {
   expect(calls.find((call) => call.method === "PATCH")?.body).toEqual({ scheduled_at: "2027-01-16T09:00:00Z" });
 });
 
+test("cancel confirmation posts S05 and re-reads S03 before showing the cancelled state", async () => {
+  window.history.replaceState(null, "", "/schedule/92");
+  let detailLoads = 0;
+  let programLoads = 0;
+  const planned = { id: 92, scheduled_at: "2027-01-15T08:30:00Z", status: "planned", is_missed: false, user_program_id: 41, user_program_workout_id: 501, source_workout_id: 8, reschedule_history: [], completed_session_id: null, reminder: { id: 5, visible_at: "2027-01-15T07:30:00Z", status: "pending", is_current: true } };
+  const cancelled = { ...planned, status: "cancelled", reminder: { ...planned.reminder, is_current: false } };
+  const { calls } = mockApi({
+    "GET /api/v1/scheduled-sessions/92/": () => { detailLoads += 1; return json(detailLoads === 1 ? planned : cancelled); },
+    "GET /api/v1/user-programs/41/": () => {
+      programLoads += 1;
+      return json({ ...baseProgram, workouts: [{ ...baseProgram.workouts[0], name: programLoads === 1 ? "Старий блок" : "Оновлений блок" }] });
+    },
+    "GET /api/v1/user-programs/41/progress/": () => json({ user_program_id: 41, status: "active", is_archived: false, total_planned: 0, completed_planned: 0, percent: "0.0", bonus_target_sessions: 3, bonus_earned: false, completion_snapshot: null }),
+    "POST /api/v1/scheduled-sessions/92/cancel/": () => json({ id: 92, status: "cancelled", reminder: cancelled.reminder }),
+  });
+  render(<App />);
+  expect(await screen.findByRole("heading", { name: "Старий блок" })).toBeInTheDocument();
+  fireEvent.click(screen.getByRole("button", { name: "Скасувати заняття" }));
+  expect(screen.getByRole("button", { name: "Так, скасувати" })).toHaveFocus();
+  fireEvent.click(screen.getByRole("button", { name: "Так, скасувати" }));
+  expect(await screen.findByText("Заняття скасовано.")).toBeInTheDocument();
+  expect(detailLoads).toBe(2);
+  expect(programLoads).toBeGreaterThanOrEqual(2);
+  expect(calls.some((call) => call.path.endsWith("/progress/"))).toBe(true);
+  expect(await screen.findByRole("heading", { name: "Оновлений блок" })).toBeInTheDocument();
+  expect(calls.some((call) => call.method === "POST" && call.path.endsWith("/cancel/"))).toBe(true);
+  expect(screen.getByText("Скасовано")).toBeInTheDocument();
+  expect(screen.queryByRole("button", { name: "Скасувати заняття" })).not.toBeInTheDocument();
+  expect(screen.queryByRole("link", { name: "Завершити тренування" })).not.toBeInTheDocument();
+});
+
 test("activation is disabled without slots and maps 400/409 responses", async () => {
   window.history.replaceState(null, "", "/programs/41");
   const noSlots = { ...baseProgram, progress: { ...baseProgram.progress, total_planned: 0 } };

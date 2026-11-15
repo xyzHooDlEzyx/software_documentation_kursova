@@ -10,7 +10,7 @@ export function apiError(code: string, status: number, fields: Record<string, st
   return json({ error: { code, message, fields, request_id: "req-test" } }, status);
 }
 
-export type Call = { method: string; path: string; body: unknown };
+export type Call = { method: string; path: string; body: unknown; headers: Headers };
 type Handler = (call: Call) => Response | Promise<Response>;
 
 /**
@@ -23,7 +23,7 @@ export function mockApi(routes: Record<string, Handler>) {
     const path = String(input);
     const method = init?.method ?? "GET";
     const body = typeof init?.body === "string" ? JSON.parse(init.body) : undefined;
-    const call = { method, path, body };
+    const call = { method, path, body, headers: new Headers(init?.headers) };
     calls.push(call);
     if (path === "/api/v1/auth/csrf/") {
       document.cookie = "csrftoken=token; path=/";

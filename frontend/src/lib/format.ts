@@ -43,3 +43,8 @@ export function plural(count: number, [one, few, many]: [string, string, string]
 }
 
 export const EXERCISE_WORDS: [string, string, string] = ["вправа", "вправи", "вправ"];
+
+/** Decimal string from the API ("20.00") -> value for an input field ("20"). */
+export function decimalInput(value: string | null | undefined) {
+  return value === null || value === undefined || value === "" ? "" : String(Number(value));
+}
