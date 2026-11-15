@@ -8,8 +8,8 @@
 > - **Phase 3 (Shared Catalog і Admin publication):** `COMPLETE` (C01–C04, моделі, atomic publication, seed_catalog; див. §O).
 > - **Phase 4 (Selection і персональний склад):** `COMPLETE` (G01–G06, Strategy, персональні копії; див. §P).
 > - **Phase 5 (Schedule, activation і reminder core):** `COMPLETE` (G07–G08, S01–S04, N01–N03; див. §Q).
-> - **Phases 6–8:** `NOT_STARTED`; Business Decision Gate пройдено 14.11.2026 (D-2026-11-14), production seed п'яти Achievement і залежні BR-021/022 evaluators/handlers більше не заблоковані; S05/G09/E01 свідомо лишаються Phase 7.
-> - **Перша незавершена фаза:** **Phase 6 реалізовано, але PostgreSQL-перевірка недоступна; наступна функціональна фаза — Phase 7**.
+> - **Phases 6–7:** реалізовано; Business Decision Gate пройдено 14.11.2026 (D-2026-11-14). PostgreSQL-перевірка Phase 7 недоступна в sandbox.
+> - **Перша незавершена функціональна фаза:** **Phase 8**; перед її закриттям reviewer має виконати PostgreSQL suite Phase 7.
 > *(Нижче збережено оригінальний історичний аудит-бейзлайн від старту робіт; останні підтверджені дані наведено в матриці §B, таблиці §D та розділах верифікації §L–§Q).*
 
 Дата аудиту: 2026-11-01. Обсяг: фактичний стан Phases 0–8; Phases 9–10 розглянуто окремо. Це огляд без змін коду, схеми, даних чи контракту. Статуси нижче стосуються перевіреної реалізації, а не наміру в документації.
@@ -106,14 +106,13 @@ Phase 9: React/Vite foundation існує (`frontend/vite.config.ts:6-25`), ал
 - **DoD:** код і тести покривають перелічені FK/UQ/CHECK, XOR, bonus uniqueness, policy boundaries, seed, Observer rollback/optional semantics і per-user race, конкурентний H03 join, фактичну H03 progress-проєкцію та admin action permissions; runtime PostgreSQL-доказ отримано (267 passed).
 - **Evidence:** `backend/execution/`, `backend/engagement/`, `backend/config/api_urls.py`, Phase 6 tests поруч із apps.
 
-### Phase 7 — E01, S05 і G09 atomic scenarios — NOT_STARTED
+### Phase 7 — E01, S05 і G09 atomic scenarios — IMPLEMENTED_UNVERIFIED
 
-- **Implemented:** нічого у Phase 7.
-- **Missing:** WorkoutCompletionService, Template Method processors, dispatcher/handlers, shared program-completion operation, E01/S05/G09, idempotency, locks, snapshots, ledger/bonus, rollback і race tests.
-- **Defects:** немає реалізованого сценарію.
-- **Unverified:** транзакційні гарантії AR-01–AR-04 не можуть бути продемонстровані.
-- **DoD (`implementation-plan.md:261-266`):** committed retry, conflict, no double points, Profile precondition, duration ≤300, frozen target, S05 repeat, G09 rules, required rollback, immutable history, concurrent connections — нічого не виконано. Публікація E01 залежить від Phases 4–6 і реалізованих required handlers; gate вже пройдено.
-- **Evidence:** `backend/config/api_urls.py:5`, `docs/analysis/business-rules.md:30-33`, `docs/implementation/implementation-plan.md:263-266`.
+- **Implemented:** `WorkoutCompletionService`; Template Method `ExerciseResultProcessor` із strength/cardio/yoga hooks; E01 з canonical JSON SHA-256 і UUID v4 idempotency; S05/G09; одна `evaluate_program_completion`; snapshots, kcal, workout/program ledger, reminder transition та required Observer handlers в одній транзакції. G02/G04/G08 читають `bonus_earned` з ledger.
+- **Locks:** програмний шлях завжди `UserProgram → ScheduledSession → Notification/ledger`; standalone блокує слот; required handlers додатково серіалізують оцінювання на User.
+- **Schema:** нової міграції немає — Phase 6 вже містить ERD-поля та UQ для ключа, слота й бонусу; `makemigrations --check --dry-run` повертає `No changes detected`.
+- **Tests authored:** 19 Phase 7 cases: processor/category/tracks-distance; E01 snapshots, ledger, retry/conflict, header errors, server-owned field, Profile, standalone і required-handler rollback; S05 reminder boundaries, zero denominator/retry; G09 planned→S05→archive; PostgreSQL races same slot/two keys, same key, two final program slots і G09/S02.
+- **Verification:** Django system check PASS; PostgreSQL pytest **NOT RUN** у sandbox без доступу до PostgreSQL. Тому атомарність і race-гарантії мають статус authored/code-reviewed, а не runtime-verified.
 
 ### Phase 8 — Read APIs, statistics, reports і leaderboard — NOT_STARTED
 

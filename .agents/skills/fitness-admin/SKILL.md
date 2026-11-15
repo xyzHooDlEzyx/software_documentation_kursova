@@ -60,15 +60,19 @@ Action має перевіряти queryset, model permission і допусти�
 
 Не вставляй бізнес-правила в `ModelAdmin`; посилай service на канонічний `BR`.
 
-## Майбутні соціальні моделі
+## Соціальні моделі та адмін-звіти
 
-Admin для запланованих `Achievement` і `Challenge` ще не реалізовано, як і самі
-моделі в `backend/engagement/`. До Business Decision Gate `BR-021`/`BR-022` не
-створюй production definitions або форми, що фіксують запропоновані критерії.
+`BR-021`/`BR-022` підтверджено власником (D-2026-11-14). `backend/engagement/admin.py`
+реалізує `Challenge` (add/change, publish/unpublish через actions з
+`permissions=["change"]`, без delete; критерій участі read-only після першого
+учасника) і view-only `Achievement` (п'ять визначень створює міграція, не admin).
+Спільна база — `config.admin.AdministratorModelAdmin`. Приватні
+`CompletedSession`, `ExerciseResult`, `PointTransaction`, `UserAchievement`,
+`ChallengeParticipation` в admin не реєструй.
 
-Після рішення власника: спочатку `fitness-requirements`, потім schema/service,
-permissions migration і лише тоді admin. Для composition/архівації застосуй ті
-самі aggregate, readonly і service-guard принципи, якщо їх підтвердить модель.
+Звіти `R02`/`R03` (D-2026-11-14) — custom read-only Django Admin views з окремим
+permission для групи `Administrator`, не REST і не React. Нові права додавай
+міграцією за зразком `accounts.0004` / `engagement.0004`.
 
 ## Тести
 

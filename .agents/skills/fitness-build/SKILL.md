@@ -19,7 +19,7 @@ dependency order, phase і DoD. Він навмисно untracked: не дода
 ## Порядок роботи
 
 1. **Вимоги — `fitness-requirements`.** Визнач ID, статуси, acceptance criteria і
-   gate. На `OPEN`/`CONFLICT` або залежній частині `BR-021`/`BR-022` зупинись.
+   gate. На `OPEN`/`CONFLICT` зупинись і попроси рішення власника.
 2. **Модель — `fitness-model`.** Перевір Domain Model, Use Case і GoF. Змінюй
    діаграми лише коли зріз справді змінює модель.
 3. **База — `fitness-database`.** Спершу ERD, потім ORM, пряма міграція,

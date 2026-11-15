@@ -6,7 +6,7 @@
 
 | Частина | Реалізовано | Ще не реалізовано |
 |---|---|---|
-| Backend (REST) | 34 з 47 REST-операцій контракту (ще 2 — адмін-звіти R02/R03 у Django Admin): A01–A08, P01–P04, C01–C04, G01–G08, S01–S04, N01–N03 і челенджі H01–H03; реалізовано Phase 6 policies та каркас **Observer** | S05/G09, E01–E03, M01–M04, H04, L01, P05, R01–R03; **Template Method** належить Phase 7 |
+| Backend (REST) | 37 з 47 REST-операцій контракту (ще 2 — адмін-звіти R02/R03 у Django Admin): A01–A08, P01–P04, C01–C04, G01–G09, S01–S05, E01, N01–N03 і H01–H03; Phase 7 реалізує **Template Method** та production wiring **Observer** | E02–E03, M01–M04, H04, L01, P05, R01–R03 |
 | БД | 20 з 20 таблиць ERD, включно з immutable execution snapshots, ledger, досягненнями й челенджами | прикладні сценарії наступних фаз не потребують нових базових сутностей ERD |
 | Адмін-частина | Django Admin: каталог, деактивація користувачів, створення/редагування та publish/unpublish челенджів, view-only визначення досягнень; права групи `Administrator` створюються міграціями | звіти R02/R03 |
 | Frontend | реєстрація, вхід, вихід, відновлення пароля, налаштування рейтингу; профіль та історія ваги (P01–P04), каталог тренувань і вправ (C01–C04), рекомендація, персональні програми, активація й прогрес (G01–G08), тижневий розклад і планування (S01–S04), нагадування з непрочитаним badge (N01–N03) | скасування слотів і архівація програм (S05/G09), виконання тренувань, статистика, соціальні функції, звіти |
@@ -127,8 +127,11 @@ DJANGO_EMAIL_BACKEND=django.core.mail.backends.console.EmailBackend
 | G06 | `PUT user-programs/{id}/workouts/{entry_id}/` | Сесія, лише власні програми |
 | G07 | `POST user-programs/{id}/activate/` | Сесія, CSRF, лише власні програми |
 | G08 | `GET user-programs/{id}/progress/` | Сесія, лише власні програми |
+| G09 | `POST user-programs/{id}/archive/` | Сесія, CSRF, лише власні програми |
 | S01 / S02 | `GET` / `POST scheduled-sessions/` | Сесія (POST — CSRF), лише власні слоти |
 | S03 / S04 | `GET` / `PATCH scheduled-sessions/{id}/` | Сесія (PATCH — CSRF), лише власні слоти |
+| S05 | `POST scheduled-sessions/{id}/cancel/` | Сесія, CSRF, лише власні слоти |
+| E01 | `POST completed-sessions/` | Сесія, CSRF, профіль та `Idempotency-Key` UUID v4 |
 | N01 | `GET notifications/` | Сесія, лише власні видимі нагадування |
 | N02 | `GET notifications/{id}/` | Сесія, лише власні видимі нагадування |
 | N03 | `POST notifications/{id}/read/` | Сесія, CSRF, лише власні видимі нагадування |
