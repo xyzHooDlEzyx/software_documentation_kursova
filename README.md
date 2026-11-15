@@ -6,9 +6,9 @@
 
 | Частина | Реалізовано | Ще не реалізовано |
 |---|---|---|
-| Backend (REST) | 31 з 49 операцій контракту: автентифікація й відновлення пароля (A01–A08), профіль та історія ваги (P01–P04), каталог вправ і тренувань (C01–C04), рекомендація шаблону через **Strategy** і персональні програми (G01–G08), розклад (S01–S04) та нагадування (N01–N03) | скасування слотів і архівація програм (S05/G09), виконання тренувань (Observer, Template Method), бали, досягнення, рейтинг, челенджі, статистика, звіти R01–R03 |
-| БД | 13 з 20 таблиць ERD: `users`, `profiles`, `weight_entries`, каталог (`exercises`, `workouts`, `workout_exercises`, `program_templates`, `program_template_workouts`), персональні програми й планування (`user_programs`, `user_program_workouts`, `user_program_exercises`, `scheduled_sessions`, `notifications`) | таблиці виконання, балів, досягнень і челенджів |
-| Адмін-частина | Django Admin: каталог (створення, редагування, публікація, архівація), деактивація користувачів; група `Administrator` створюється міграцією | звіти для адміністратора, досягнення й челенджі |
+| Backend (REST) | 34 з 47 REST-операцій контракту (ще 2 — адмін-звіти R02/R03 у Django Admin): A01–A08, P01–P04, C01–C04, G01–G08, S01–S04, N01–N03 і челенджі H01–H03; реалізовано Phase 6 policies та каркас **Observer** | S05/G09, E01–E03, M01–M04, H04, L01, P05, R01–R03; **Template Method** належить Phase 7 |
+| БД | 20 з 20 таблиць ERD, включно з immutable execution snapshots, ledger, досягненнями й челенджами | прикладні сценарії наступних фаз не потребують нових базових сутностей ERD |
+| Адмін-частина | Django Admin: каталог, деактивація користувачів, створення/редагування та publish/unpublish челенджів, view-only визначення досягнень; права групи `Administrator` створюються міграціями | звіти R02/R03 |
 | Frontend | реєстрація, вхід, вихід, відновлення пароля, налаштування рейтингу; профіль та історія ваги (P01–P04), каталог тренувань і вправ (C01–C04), рекомендація, персональні програми, активація й прогрес (G01–G08), тижневий розклад і планування (S01–S04), нагадування з непрочитаним badge (N01–N03) | скасування слотів і архівація програм (S05/G09), виконання тренувань, статистика, соціальні функції, звіти |
 
 Документація: [вимоги](docs/analysis/requirements.md), [Use Case діаграма](docs/analysis/use-case-diagram.md), [бізнес-правила](docs/analysis/business-rules.md), [доменна модель](docs/architecture/domain-model.md), [ERD](docs/architecture/erd.md), [REST API](docs/architecture/rest-api.md), [принципи й GoF](docs/architecture/design-principles.md), [діаграма класів](docs/diagrams/class-diagram.drawio), [рев'ю стану](docs/review/senior-review-2026-11-14.md).
@@ -105,7 +105,7 @@ DJANGO_EMAIL_BACKEND=django.core.mail.backends.console.EmailBackend
 
 ## REST API (реалізовані операції)
 
-Префікс — `/api/v1/`. Повний контракт усіх 49 операцій: [docs/architecture/rest-api.md](docs/architecture/rest-api.md).
+Префікс — `/api/v1/`. Повний контракт (47 REST-операцій і 2 адмін-звіти): [docs/architecture/rest-api.md](docs/architecture/rest-api.md).
 
 | ID | Метод і шлях | Доступ |
 |---|---|---|
@@ -132,6 +132,9 @@ DJANGO_EMAIL_BACKEND=django.core.mail.backends.console.EmailBackend
 | N01 | `GET notifications/` | Сесія, лише власні видимі нагадування |
 | N02 | `GET notifications/{id}/` | Сесія, лише власні видимі нагадування |
 | N03 | `POST notifications/{id}/read/` | Сесія, CSRF, лише власні видимі нагадування |
+| H01 | `GET challenges/` | Сесія; лише опубліковані визначення |
+| H02 | `GET challenges/{id}/` | Сесія; прихований/неіснуючий ID повертає 404 |
+| H03 | `POST challenges/{id}/join/` | Сесія, CSRF; повтор повертає 200, після завершення — 409 |
 
 Безпека: session-автентифікація (`sessionid` HttpOnly), CSRF для всіх змінних запитів, вільний CORS не використовується. Реєстрація не виконує автоматичний вхід; мінімальна довжина пароля — 12 символів. Ліміти запитів налаштовуються змінними `DJANGO_THROTTLE_*`. `DJANGO_NUM_PROXIES` — кількість довірених reverse proxy перед Django: `0` (типово) означає, що IP береться з `REMOTE_ADDR`, а заголовок `X-Forwarded-For` від клієнта ігнорується.
 

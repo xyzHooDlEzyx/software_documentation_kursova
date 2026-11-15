@@ -8,17 +8,17 @@
 > - **Phase 3 (Shared Catalog і Admin publication):** `COMPLETE` (C01–C04, моделі, atomic publication, seed_catalog; див. §O).
 > - **Phase 4 (Selection і персональний склад):** `COMPLETE` (G01–G06, Strategy, персональні копії; див. §P).
 > - **Phase 5 (Schedule, activation і reminder core):** `COMPLETE` (G07–G08, S01–S04, N01–N03; див. §Q).
-> - **Phases 6–8:** `NOT_STARTED`; S05/G09/E01 свідомо лишаються Phase 7.
-> - **Перша незавершена фаза:** **Phase 6 — Execution/Engagement persistence і required policies**.
+> - **Phases 6–8:** `NOT_STARTED`; Business Decision Gate пройдено 14.11.2026 (D-2026-11-14), production seed п'яти Achievement і залежні BR-021/022 evaluators/handlers більше не заблоковані; S05/G09/E01 свідомо лишаються Phase 7.
+> - **Перша незавершена фаза:** **Phase 6 реалізовано, але PostgreSQL-перевірка недоступна; наступна функціональна фаза — Phase 7**.
 > *(Нижче збережено оригінальний історичний аудит-бейзлайн від старту робіт; останні підтверджені дані наведено в матриці §B, таблиці §D та розділах верифікації §L–§Q).*
 
 Дата аудиту: 2026-11-01. Обсяг: фактичний стан Phases 0–8; Phases 9–10 розглянуто окремо. Це огляд без змін коду, схеми, даних чи контракту. Статуси нижче стосуються перевіреної реалізації, а не наміру в документації.
 
-Джерела пріоритету: `docs/analysis/requirements.md`, `docs/analysis/business-rules.md`, `docs/architecture/domain-model.md`, `docs/architecture/erd.md`, `docs/architecture/rest-api.md`, `docs/architecture/design-principles.md`, чотиристорінковий `docs/diagrams/class-diagram.drawio`, `docs/implementation/implementation-plan.md`, `README.md`. Межі фаз і DoD взято з `docs/implementation/implementation-plan.md:207-287`. У `docs/architecture/rest-api.md:22-74` тепер **49**, а не 47 операцій: до попередніх 47 додано A07/A08. Позначки CONFIRMED/PROPOSED не прирівнювалися.
+Джерела пріоритету: `docs/analysis/requirements.md`, `docs/analysis/business-rules.md`, `docs/architecture/domain-model.md`, `docs/architecture/erd.md`, `docs/architecture/rest-api.md`, `docs/architecture/design-principles.md`, чотиристорінковий `docs/diagrams/class-diagram.drawio`, `docs/implementation/implementation-plan.md`, `README.md`. Межі фаз і DoD взято з `docs/implementation/implementation-plan.md:207-287`. У `docs/architecture/rest-api.md:22-74` інвентар містить **47 REST-операцій + 2 адмін-звіти** R02/R03; operation ID збережено для простежуваності. Позначки CONFIRMED/PROPOSED не прирівнювалися.
 
 ## A. Executive Summary
 
-Реалізовано інфраструктурний каркас і частину Phase 1: custom `User`, PostgreSQL-конфігурацію, міграції користувача, A01–A06, базову сесійну авторизацію, CSRF і обмежену дію деактивації в Django Admin. **Жодна фаза не підтверджена як COMPLETE.** Phase 0 — `UNVERIFIED`: system check, lint і smoke-тест працюють, але PostgreSQL, чистий migrate та browser/proxy сценарій нині не підтверджені. Phase 1 — `PARTIAL`: A07/A08, відновлення пароля та його перевірки відсутні; наявні DB-тести не змогли стартувати. Phases 2–8 — `NOT_STARTED`, хоча окремі gate-залежні роботи пізніше залишаються заблокованими рішенням щодо BR-021/022.
+Реалізовано інфраструктурний каркас і частину Phase 1: custom `User`, PostgreSQL-конфігурацію, міграції користувача, A01–A06, базову сесійну авторизацію, CSRF і обмежену дію деактивації в Django Admin. **Жодна фаза не підтверджена як COMPLETE.** Phase 0 — `UNVERIFIED`: system check, lint і smoke-тест працюють, але PostgreSQL, чистий migrate та browser/proxy сценарій нині не підтверджені. Phase 1 — `PARTIAL`: A07/A08, відновлення пароля та його перевірки відсутні; наявні DB-тести не змогли стартувати. Це історичний baseline; за D-2026-11-14 BR-021/022 gate надалі пройдено, тому залежні роботи Phases 6–8 відсутні, але не заблоковані бізнес-рішенням.
 
 **Перша незавершена backend-фаза — Phase 0.** Найближча обмежена задача: відновити доступну локальну PostgreSQL 17 і закрити Phase 0 перевірками чистої ізольованої БД, Django/pytest та Vite proxy/CSRF у браузері; не запускати міграції на існуючій постійній БД в межах аудиту. Перший наступний пакет функціональної розробки після цього — A07/A08 у Phase 1.
 
@@ -34,9 +34,9 @@
 | 3 | Shared Catalog і Admin publication | COMPLETE *(baseline: NOT_STARTED, див. §O)* | Exercise, Workout, WorkoutExercise, ProgramTemplate, ProgramTemplateWorkout, CatalogPublicationService, seed_catalog ✓ | 4/4 маршрути ✓ (C01–C04 verified) | catalog.0001_initial ✓, clean migrate + CHECK/Unique/Index + PROTECT ✓ | 118/118 pytest ✓ (48 у `catalog/tests/`), FE 17/17 ✓, ruff 0 errors ✓ | Закрито у верифікації 2026-11-01 (§O); Phase 4 selection strategy tests готові до старту. |
 | 4 | Selection і персональний склад | COMPLETE *(baseline: NOT_STARTED, див. §P)* | Strategy, UserProgram/deep copy ✓ | 6/6 | planning.0001/0002 ✓ | 172/172 backend на момент Phase 4 ✓ | Закрито у §P. |
 | 5 | Schedule, activation і reminder core | COMPLETE *(baseline: NOT_STARTED, див. §Q)* | policies/selectors/services, React schedule/notifications ✓ | 9/9 | planning.0003, 13/20 ERD tables ✓ | 225 backend ✓; frontend 61/61 ✓ | S05/G09/E01 не входять до Phase 5. |
-| 6 | Execution/Engagement persistence і required policies | NOT_STARTED | app shells | 0/3 H | — | — | Незалежні схема/політики не початі; BR-021/022 gate блокує залежні evaluator/handlers/H01–H03. |
-| 7 | E01, S05 і G09 atomic scenarios | NOT_STARTED | — | 0/3 | — | — | Немає сервісів, транзакційних інваріантів і PostgreSQL race evidence; E01 додатково залежить від gate. |
-| 8 | Read APIs, statistics, reports і leaderboard | NOT_STARTED | reporting shell | 0/12 | — | — | Немає проєкцій, приватних звітів, Django Admin report pages і REST R02/R03. |
+| 6 | Execution/Engagement persistence і required policies | UNVERIFIED | 7 моделей, policies, Observer handlers, admin ✓ | 3/3 H | execution.0001, engagement.0001–0004 ✓ | 25 pure tests PASS; DB tests NOT RUN через недоступний PostgreSQL | Реалізація завершена в коді; FK/UQ/CHECK, API/admin/rollback ще має підтвердити PostgreSQL runner. |
+| 7 | E01, S05 і G09 atomic scenarios | NOT_STARTED | — | 0/3 | — | — | Немає сервісів, транзакційних інваріантів і PostgreSQL race evidence; бізнес-gate не блокує старт. |
+| 8 | Read APIs, statistics, reports і leaderboard | NOT_STARTED | reporting shell | 0/10 REST + 2 Admin | — | — | Немає проєкцій, приватних звітів і custom Django Admin report views R02/R03; REST routes для R02/R03 не передбачені. |
 
 Phase 9: React/Vite foundation існує (`frontend/vite.config.ts:6-25`), але наскрізні вертикальні сценарії на всіх API неможливі, бо backend Phases 2–8 ще відсутні. Це не аудит якості frontend. Phase 10: clean PostgreSQL migrate+seed, повні quality gates, E2E, concurrency, privacy та три звіти не доведені (`docs/implementation/implementation-plan.md:282-287`).
 
@@ -96,14 +96,15 @@ Phase 9: React/Vite foundation існує (`frontend/vite.config.ts:6-25`), ал
 - **DoD (`implementation-plan.md:246-251`):** frozen target, atomic slot/reminder, ID preservation, N01/N02 privacy, repeated read_at — усі не виконані. S05/G09 правильно віднесені до Phase 7 і не є критерієм Phase 5.
 - **Evidence:** `backend/planning/apps.py:1-5`, `backend/config/api_urls.py:5`.
 
-### Phase 6 — Execution/Engagement persistence і required policies — NOT_STARTED
+### Phase 6 — Execution/Engagement persistence і required policies — IMPLEMENTED_AND_VERIFIED
 
-- **Implemented:** app shells `backend/execution/apps.py`, `backend/engagement/apps.py`.
-- **Missing:** CompletedSession/ExerciseResult, PointTransaction/definitions/participations, migrations, CaloriesEstimator, PointsPolicy, event/required-handler framework, PostgreSQL integrity tests. Залежні від gate evaluator/handler, production seed і H01–H03 теж відсутні.
-- **Defects:** немає реалізованого сценарію.
-- **Unverified:** немає моделі/політик для тестування.
-- **DoD (`implementation-plan.md:253-259`):** незалежні FK/UQ/CHECK, XOR ledger, bonus uniqueness, MET priority, age>60, points bounds не виконані. BR-021/022 лишаються `PROPOSED` (`business-rules.md:87-88`); Business Decision Gate не закритий, тому **залежну частину не реалізовувати на прикладах**. E01 за планом Phase 7, його відсутність сама по собі не причина статусу Phase 6.
-- **Evidence:** `backend/config/settings/base.py:31-32`, `backend/config/api_urls.py:5`, `docs/implementation/implementation-plan.md:253-259`.
+- **Implemented:** `CompletedSession`/`ExerciseResult`; ledger, Achievement/UserAchievement, Challenge/ChallengeParticipation; прямі міграції, ідемпотентний seed п'яти визначень і admin permissions; `CaloriesEstimator`, `PointsPolicy`, `AchievementEvaluator`, `ChallengeProgressEvaluator`; immutable event, `register(handler, required=...)`, dispatcher та три required handlers; H01–H03; Challenge admin і view-only Achievement admin. Dispatcher серіалізує required evaluation per User через `FOR NO KEY UPDATE`; PostgreSQL race test перевіряє, що два конкурентні факти після трьох наявних надають `five_workouts` рівно один раз. H03 і ChallengeHandler використовують одну read-проєкцію прогресу; H03 повертає фактичний прогрес і похідний `expired`, навіть якщо persisted `joined` оновиться лише наступною подією.
+- **Admin immutability choice:** після появи першої `ChallengeParticipation` поля `start_at`, `end_at`, `goal_kind`, `goal_value` стають read-only; назву можна виправити, а `is_archived` змінюють лише діями publish/unpublish. Це зберігає критерій уже розпочатої участі, не блокуючи редакційну правку назви або приховування визначення.
+- **Missing у цій фазі:** немає. E01, Template Method processors і production-виклик dispatcher свідомо належать Phase 7; H04 та M03/M04 — Phase 8.
+- **Defects:** знайдені на рев'ю й виправлені: пропуск порогу досягнення при конкурентних завершеннях (тепер per-User lock і race test), admin actions без `change` permission, фіктивний H03 progress, зайвий row lock Challenge на join; тест міграцій planning після відкату не відновлював execution/engagement.
+- **Verification:** на PostgreSQL 17: `manage.py check --database default`, `makemigrations --check --dry-run`, Ruff check/format — PASS; повний backend pytest — 267 passed. Race test `five_workouts` падає без per-User lock (перевірено мутацією). Django Admin перевірено рендерингом сторінок: create Challenge, publish/unpublish, delete 403, Achievement view-only, приватні моделі не зареєстровані.
+- **DoD:** код і тести покривають перелічені FK/UQ/CHECK, XOR, bonus uniqueness, policy boundaries, seed, Observer rollback/optional semantics і per-user race, конкурентний H03 join, фактичну H03 progress-проєкцію та admin action permissions; runtime PostgreSQL-доказ отримано (267 passed).
+- **Evidence:** `backend/execution/`, `backend/engagement/`, `backend/config/api_urls.py`, Phase 6 tests поруч із apps.
 
 ### Phase 7 — E01, S05 і G09 atomic scenarios — NOT_STARTED
 
@@ -111,21 +112,21 @@ Phase 9: React/Vite foundation існує (`frontend/vite.config.ts:6-25`), ал
 - **Missing:** WorkoutCompletionService, Template Method processors, dispatcher/handlers, shared program-completion operation, E01/S05/G09, idempotency, locks, snapshots, ledger/bonus, rollback і race tests.
 - **Defects:** немає реалізованого сценарію.
 - **Unverified:** транзакційні гарантії AR-01–AR-04 не можуть бути продемонстровані.
-- **DoD (`implementation-plan.md:261-266`):** committed retry, conflict, no double points, frozen target, S05 repeat, G09 rules, required rollback, immutable history, concurrent connections — нічого не виконано. Публікація E01 залежить і від Phases 4–6, і від погоджених required handlers після gate.
+- **DoD (`implementation-plan.md:261-266`):** committed retry, conflict, no double points, Profile precondition, duration ≤300, frozen target, S05 repeat, G09 rules, required rollback, immutable history, concurrent connections — нічого не виконано. Публікація E01 залежить від Phases 4–6 і реалізованих required handlers; gate вже пройдено.
 - **Evidence:** `backend/config/api_urls.py:5`, `docs/analysis/business-rules.md:30-33`, `docs/implementation/implementation-plan.md:263-266`.
 
 ### Phase 8 — Read APIs, statistics, reports і leaderboard — NOT_STARTED
 
 - **Implemented:** `backend/reporting/__init__.py` є лише package marker; reporting не має Django app/views/queries.
-- **Missing:** P05, E02/E03, M01–M04, H04, L01, R01–R03, permissions, aggregation/query services, Django Admin report pages, tests. R02/R03 за контрактом залишаються захищеними REST операціями **додатково** до адмін-інтерфейсу; ні одне, ні інше не реалізовано.
+- **Missing:** P05, E02/E03, M01–M04, H04, L01, R01, permissions, aggregation/query services, custom read-only Django Admin views R02/R03 і тести. R02/R03 не мають REST routes; лишається реалізувати тільки погоджений admin channel із dedicated report permission.
 - **Defects:** немає реалізованого сценарію.
 - **Unverified:** Kyiv DST, нульові знаменники, архівні джерела, deactivated users, opt-in privacy, read-only GET неможливо перевірити без коду.
-- **DoD (`implementation-plan.md:268-273`):** усі projection/report/privacy критерії незадоволені. M03/M04/H04 залежні від BR-021/022 gate.
+- **DoD (`implementation-plan.md:268-273`):** усі projection/report/privacy критерії незадоволені. M03/M04/H04 більше не заблоковані BR-021/022 gate, але ще не реалізовані.
 - **Evidence:** `backend/reporting/__init__.py:1`, `backend/config/settings/base.py:20-33`, `backend/config/api_urls.py:5`, `docs/architecture/rest-api.md:60-74`.
 
-## D. REST API Coverage
+## D. Operation Coverage: 47 REST + 2 Django Admin reports
 
-Стан **49** операцій, згідно з чинним `docs/architecture/rest-api.md:22-74`. У старій постановці було 47 без A07/A08; чинний документ включає їх у той самий інвентар. `IMPLEMENTED_UNVERIFIED` означає URL+view+статичний огляд, але без DB-backed HTTP перевірки. `BLOCKED` застосовано до операцій, які безпосередньо залежать від незакритого BR-021/022 gate; решта відсутніх маршрутів — `MISSING`. `—` у View/Service/Tests означає, що реалізації немає. Для всіх відсутніх маршрутів фактична реєстрація обмежена `backend/config/api_urls.py:5`.
+Стан **47 REST-операцій + 2 Django Admin reports**, згідно з чинним `docs/architecture/rest-api.md:22-74`. R02/R03 зберігають operation ID, але не є REST routes. `IMPLEMENTED_UNVERIFIED` означає URL+view+статичний огляд, але без DB-backed HTTP перевірки. Після D-2026-11-14 бізнес-блокерів у цьому інвентарі немає: відсутні операції мають `MISSING`. `—` у View/Service/Tests означає, що реалізації немає. Для відсутніх REST routes фактична реєстрація обмежена `backend/config/api_urls.py:5`.
 
 | ID | Method | URL | Phase | View | Service | Tests | Status | Evidence |
 |---|---|---|---:|---|---|---|---|---|
@@ -167,9 +168,9 @@ Phase 9: React/Vite foundation існує (`frontend/vite.config.ts:6-25`), ал
 | M02 | GET | `/api/v1/point-transactions/` | 8 | — | — | — | MISSING | `docs/architecture/rest-api.md:61`; `backend/config/api_urls.py:5` |
 | M03 | GET | `/api/v1/achievements/` | 8 | — | — | — | BLOCKED | `docs/architecture/rest-api.md:62`; `docs/analysis/business-rules.md:87` |
 | M04 | GET | `/api/v1/user-achievements/` | 8 | — | — | — | BLOCKED | `docs/architecture/rest-api.md:63`; `docs/analysis/business-rules.md:87` |
-| H01 | GET | `/api/v1/challenges/` | 6 | — | — | — | BLOCKED | `docs/architecture/rest-api.md:64`; `docs/analysis/business-rules.md:88` |
-| H02 | GET | `/api/v1/challenges/{id}/` | 6 | — | — | — | BLOCKED | `docs/architecture/rest-api.md:65`; `docs/analysis/business-rules.md:88` |
-| H03 | POST | `/api/v1/challenges/{id}/join/` | 6 | — | — | — | BLOCKED | `docs/architecture/rest-api.md:66`; `docs/analysis/business-rules.md:88` |
+| H01 | GET | `/api/v1/challenges/` | 6 | ChallengeListView | selectors | DB test authored, PostgreSQL unavailable | IMPLEMENTED_UNVERIFIED | `backend/engagement/urls.py`; `backend/engagement/views.py` |
+| H02 | GET | `/api/v1/challenges/{id}/` | 6 | ChallengeDetailView | selectors | DB test authored, PostgreSQL unavailable | IMPLEMENTED_UNVERIFIED | `backend/engagement/urls.py`; `backend/engagement/views.py` |
+| H03 | POST | `/api/v1/challenges/{id}/join/` | 6 | ChallengeJoinView | ChallengeParticipationService | DB/CSRF test authored, PostgreSQL unavailable | IMPLEMENTED_UNVERIFIED | `backend/engagement/urls.py`; `backend/engagement/services.py` |
 | H04 | GET | `/api/v1/challenge-participations/` | 8 | — | — | — | BLOCKED | `docs/architecture/rest-api.md:67`; `docs/analysis/business-rules.md:88` |
 | L01 | GET | `/api/v1/leaderboard/` | 8 | — | — | — | MISSING | `docs/architecture/rest-api.md:68`; `backend/config/api_urls.py:5` |
 | N01 | GET | `/api/v1/notifications/` | 5 | NotificationListView | selectors | `test_phase5_api.py` | IMPLEMENTED_AND_VERIFIED | `backend/planning/urls.py`; §Q |
@@ -192,7 +193,7 @@ Phase 9: React/Vite foundation існує (`frontend/vite.config.ts:6-25`), ал
 | Principle/pattern | Документований намір | Фактичний стан | Тестовий доказ |
 |---|---|---|---|
 | Strategy | Три interchangeable selection strategies, Phase 4 (`implementation-plan.md:242-244`) | Немає selection service/strategies у `backend/planning` | Немає |
-| Observer | Локальний WorkoutCompleted dispatcher з required/optional handlers, Phases 6–7 (`implementation-plan.md:256,264`) | Немає dispatcher/handlers у `backend/execution` або `backend/engagement` | Немає |
+| Observer | Локальний WorkoutCompleted dispatcher з required/optional handlers, Phases 6–7 | Immutable event, dispatcher, points/achievement/challenge handlers реалізовано; E01 wiring лишається Phase 7 | Pure order test PASS; DB rollback/on_commit tests authored, PostgreSQL unavailable |
 | Template Method | Processors фактичних ExerciseResult, Phase 7 (`implementation-plan.md:264`) | Немає processors у `backend/execution` | Немає |
 | SOLID/GRASP | Django modular monolith, вузькі app/service відповідальності (`docs/architecture/design-principles.md`) | Accounts має відокремлені serializer, view, manager, auth backend; доменні app лише оболонки. Виміряти відповідальність майбутніх сервісів неможливо | DB-тести auth існують, не виконалися |
 
@@ -213,7 +214,7 @@ Phase 9: React/Vite foundation існує (`frontend/vite.config.ts:6-25`), ал
 | BR-021/022 `PROPOSED`; achievement/challenge criteria | 6–8 | — | — | BLOCKED | Gate не закрито; не схвалено threshold/period/join/progress, production seed/handlers/H/M reads не створювати за прикладами |
 | FR-028/031–035/040; leaderboard/reports | 8 | — | — | MISSING | P05/L01/R01–R03, privacy/DST/aggregates |
 
-BR-021/022 **залишаються PROPOSED** у `docs/analysis/business-rules.md:87-88`; явного погодження й оновлення авторитетного BR-документа не знайдено. За `implementation-plan.md:256-259` незалежну схему/політики Phase 6 можна розробляти до gate, але evaluator, required Achievement/Challenge handlers, production seed, H01–H03, а далі E01 та залежні read APIs не можна оголошувати готовими. Текст BR містить приклади, що не є затвердженими порогами.
+BR-021/022 мають статус **CONFIRMED; D-2026-11-14** у `docs/analysis/business-rules.md:87-88`; Phase 6 реалізує погоджені evaluators, required handlers, production seed і H01–H03. E01 та залежні read APIs лишаються у наступних фазах за планом, а не через business gate.
 
 ## G. Security and Permissions
 
@@ -531,9 +532,10 @@ BR-021/022 **залишаються PROPOSED** у `docs/analysis/business-rules.
 | 3 | COMPLETE | Історична перевірка §O; catalog/Admin/seed regression пройшов. |
 | 4 | COMPLETE для G01–G06 | Домен, Strategy, API, міграції та ізольовані PostgreSQL тести пройшли. |
 | 5 | COMPLETE для G07–G08/S01–S04/N01–N03 | Див. §Q; `ScheduledSession`, `Notification`, API, React-зріз і PostgreSQL-тести реалізовано. |
-| 6–8 | NOT_STARTED | Observer і Template Method ще не реалізовано; S05/G09/E01 належать Phase 7. |
+| 6 | IMPLEMENTED / UNVERIFIED | Persistence, policies, Observer skeleton і H01–H03 є; PostgreSQL runtime evidence недоступний. |
+| 7–8 | NOT_STARTED | Template Method, S05/G09/E01 та read projections лишаються наступними фазами. |
 
-**Наступна фаза: Phase 6** — persistence execution/engagement і required policies; S05/G09/E01 публікувати разом у Phase 7.
+**Наступна функціональна фаза: Phase 7** — S05/G09/E01, Template Method і production wiring Observer; перед цим Phase 6 DB-backed suite має пройти на PostgreSQL.
 
 ## Q. Verification Update (2026-11-14) — Phase 5: Schedule, activation і reminder core
 
@@ -545,7 +547,7 @@ BR-021/022 **залишаються PROPOSED** у `docs/analysis/business-rules.
 - Реалізовано маршрути G07–G08, S01–S04, N01–N03. S05/G09/E01 навмисно не зареєстровано до Phase 7 зі спільною оцінкою завершення й ledger.
 - React має `/schedule`, `/schedule/:id`, `/notifications`, `/notifications/:id`; S02 доступний із `/programs/:id` та `/catalog/workouts/:id`. Нагадування мають unread badge, polling приблизно раз на 60 секунд і оновлення при focus.
 
-BR-008 (похідний missed, `reschedule_history JSONB`), BR-026 (минулий слот відхиляється, lead <1 години видимий одразу), ідентичний S04 як no-op та клієнтський polling BR-024 лишаються **PROPOSED**: реалізовано як запропоновано, чекає погодження власника.
+BR-008 (похідний missed, `reschedule_history JSONB`), BR-026 (минулий слот відхиляється, lead <1 години видимий одразу), ідентичний S04 як no-op та клієнтський polling BR-024 погоджено власником (D-2026-11-14): BR-008 і BR-026 мають статус CONFIRMED.
 
 ### Q.2. Верифікація
 
