@@ -20,9 +20,11 @@ from catalog.models import (
     WorkoutExercise,
 )
 from catalog.services import CatalogPublicationService
+from engagement.ledger import award_program_completion_bonus
 
 from .errors import (
     InvalidProgramState,
+    PlannedSessionsExist,
     RecommendationMismatch,
     RecommendationUnavailable,
 )
@@ -44,6 +46,7 @@ from .policies import (
     reminder_visible_at,
     should_record_reschedule,
 )
+from .program_completion import evaluate_program_completion
 from .selectors import with_program_progress
 from .strategies import get_selection_strategy
 
@@ -435,6 +438,78 @@ class ProgramPlanningService:
 
     @classmethod
     @transaction.atomic
+    def archive_user_program(cls, user: Any, program_id: int) -> UserProgram:
+        program = (
+            UserProgram.objects.select_for_update()
+            .filter(user=user, pk=program_id)
+            .first()
+        )
+        if not program:
+            raise NotFound()
+        if program.is_archived:
+            return program
+        if program.status == UserProgramStatus.ACTIVE:
+            raise InvalidProgramState()
+        if (
+            program.status == UserProgramStatus.DRAFT
+            and program.scheduled_sessions.filter(
+                status=ScheduledSessionStatus.PLANNED
+            ).exists()
+        ):
+            raise PlannedSessionsExist()
+        program.is_archived = True
+        program.save(update_fields=["is_archived"])
+        return program
+
+    @classmethod
+    @transaction.atomic
+    def cancel_scheduled_session(cls, user: Any, session_id: int) -> ScheduledSession:
+        identity = (
+            ScheduledSession.objects.filter(user=user, pk=session_id)
+            .values("user_program_id")
+            .first()
+        )
+        if not identity:
+            raise NotFound()
+        program = None
+        if identity["user_program_id"] is not None:
+            program = (
+                UserProgram.objects.select_for_update()
+                .filter(user=user, pk=identity["user_program_id"])
+                .first()
+            )
+            if not program:
+                raise NotFound()
+        session = (
+            ScheduledSession.objects.select_for_update()
+            .filter(user=user, pk=session_id)
+            .first()
+        )
+        if not session:
+            raise NotFound()
+        if session.status == ScheduledSessionStatus.CANCELLED:
+            return cls._load_session(session.pk)
+        if session.status == ScheduledSessionStatus.COMPLETED:
+            raise InvalidProgramState()
+        if program and (
+            program.is_archived or program.status == UserProgramStatus.COMPLETED
+        ):
+            raise InvalidProgramState()
+
+        cancelled_at = timezone.now()
+        session.status = ScheduledSessionStatus.CANCELLED
+        session.save(update_fields=["status"])
+        ReminderService.close(session)
+        if program:
+            evaluation = evaluate_program_completion(program, completed_at=cancelled_at)
+            if evaluation.bonus_eligible:
+                award_program_completion_bonus(
+                    user_id=user.pk, user_program_id=program.pk
+                )
+        return cls._load_session(session.pk)
+
+    @classmethod
+    @transaction.atomic
     def create_scheduled_session(
         cls,
         user: Any,
@@ -594,10 +669,22 @@ class ReminderService:
         return reminder
 
     @staticmethod
+    def close(session: ScheduledSession) -> Notification:
+        reminder = Notification.objects.select_for_update().get(
+            scheduled_session=session,
+            type=NotificationType.WORKOUT_REMINDER,
+        )
+        if timezone.now() < reminder.visible_at:
+            reminder.status = NotificationStatus.CANCELLED
+            reminder.read_at = None
+            reminder.save(update_fields=["status", "read_at"])
+        return reminder
+
+    @staticmethod
     @transaction.atomic
     def mark_read(user: Any, notification_id: int) -> Notification:
         reminder = (
-            Notification.objects.select_for_update()
+            Notification.objects.select_for_update(of=("self",))
             .filter(
                 user=user,
                 pk=notification_id,

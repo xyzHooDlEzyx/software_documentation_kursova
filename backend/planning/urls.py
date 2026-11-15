@@ -7,9 +7,11 @@ from .views import (
     NotificationListView,
     NotificationReadView,
     ProgramRecommendationView,
+    ScheduledSessionCancelView,
     ScheduledSessionDetailView,
     ScheduledSessionListCreateView,
     UserProgramActivateView,
+    UserProgramArchiveView,
     UserProgramDetailView,
     UserProgramListCreateView,
     UserProgramProgressView,
@@ -43,6 +45,11 @@ urlpatterns = [
         name="user-program-activate",
     ),
     path(
+        "user-programs/<int:program_id>/archive/",
+        UserProgramArchiveView.as_view(),
+        name="user-program-archive",
+    ),
+    path(
         "user-programs/<int:program_id>/progress/",
         UserProgramProgressView.as_view(),
         name="user-program-progress",
@@ -56,6 +63,11 @@ urlpatterns = [
         "scheduled-sessions/<int:session_id>/",
         ScheduledSessionDetailView.as_view(),
         name="scheduled-session-detail",
+    ),
+    path(
+        "scheduled-sessions/<int:session_id>/cancel/",
+        ScheduledSessionCancelView.as_view(),
+        name="scheduled-session-cancel",
     ),
     path(
         "notifications/",

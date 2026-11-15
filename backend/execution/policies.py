@@ -43,7 +43,7 @@ class CaloriesEstimator:
         workout_met_value: Decimal | None = None,
     ) -> CalorieEstimate:
         if weight_kg is None:
-            raise ExecutionDomainError("A historical weight entry is required.")
+            raise ExecutionDomainError("Немає історичного запису ваги для розрахунку.")
         local_date = completed_at.astimezone(KYIV_TZ).date()
         if cls.age_on(birth_date, local_date) >= 60:
             return CalorieEstimate(None, cls.UNSUPPORTED_AGE)
@@ -52,7 +52,7 @@ class CaloriesEstimator:
         total = Decimal("0")
         for segment in segments:
             if segment.duration_min <= 0:
-                raise ExecutionDomainError("Segment duration must be positive.")
+                raise ExecutionDomainError("Тривалість сегмента має бути додатною.")
             covered += segment.duration_min
             if segment.met_value is None:
                 return CalorieEstimate(None, cls.MISSING_MET)
@@ -60,7 +60,9 @@ class CaloriesEstimator:
                 segment.met_value * weight_kg * segment.duration_min / Decimal("60")
             )
         if covered > duration_min:
-            raise ExecutionDomainError("Segment duration exceeds session duration.")
+            raise ExecutionDomainError(
+                "Сума тривалостей сегментів перевищує тривалість заняття."
+            )
         remainder = duration_min - covered
         if remainder:
             if workout_met_value is None:
@@ -74,7 +76,9 @@ class CaloriesEstimator:
 def validate_duration(duration_min: Decimal | int) -> Decimal:
     value = Decimal(duration_min)
     if value <= 0 or value > 300:
-        raise ExecutionDomainError("Duration must be greater than 0 and at most 300.")
+        raise ExecutionDomainError(
+            "Тривалість має бути більшою за 0 і не перевищувати 300 хвилин."
+        )
     return value
 
 

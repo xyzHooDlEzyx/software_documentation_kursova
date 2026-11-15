@@ -20,3 +20,11 @@ class InvalidProgramState(APIException):
     status_code = status.HTTP_409_CONFLICT
     default_detail = "Неможливо змінити програму в поточному стані."
     default_code = "invalid_state"
+
+
+class PlannedSessionsExist(APIException):
+    status_code = status.HTTP_409_CONFLICT
+    default_detail = (
+        "Перед архівацією програми необхідно скасувати заплановані заняття."
+    )
+    default_code = "planned_sessions_exist"

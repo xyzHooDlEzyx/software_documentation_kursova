@@ -28,6 +28,14 @@ from .policies import format_utc_seconds
 from .selectors import program_progress
 
 
+def _bonus_earned(obj: UserProgram) -> bool:
+    from engagement.models import PointKind
+
+    return obj.point_transactions.filter(
+        point_kind=PointKind.PROGRAM_COMPLETION
+    ).exists()
+
+
 class TemplateWorkoutSummarySerializer(serializers.Serializer):
     position = serializers.IntegerField(read_only=True)
     workout_id = serializers.IntegerField(source="workout.id", read_only=True)
@@ -89,8 +97,7 @@ class UserProgramSummarySerializer(serializers.ModelSerializer):
         return program_progress(obj)["percent"]
 
     def get_bonus_earned(self, obj: UserProgram) -> bool:
-        # BonusPointLedger is introduced in a later phase.
-        return False
+        return _bonus_earned(obj)
 
 
 class CreateUserProgramRequestSerializer(StrictSerializer):
@@ -192,7 +199,7 @@ class UserProgramDetailSerializer(serializers.ModelSerializer):
         return None
 
     def get_bonus_earned(self, obj: UserProgram) -> bool:
-        return False
+        return _bonus_earned(obj)
 
 
 class UpdateUserProgramRequestSerializer(StrictSerializer):
@@ -330,7 +337,7 @@ class ProgramProgressSerializer(serializers.ModelSerializer):
         return program_progress(obj)["percent"]
 
     def get_bonus_earned(self, obj):
-        return False
+        return _bonus_earned(obj)
 
     def get_completion_snapshot(self, obj):
         return UserProgramDetailSerializer().get_completion_snapshot(obj)
@@ -518,6 +525,31 @@ class RescheduledSessionResponseSerializer(serializers.ModelSerializer):
 
     def get_reminder(self, obj):
         return _serialized_session_reminder(obj)
+
+
+class CancelledSessionResponseSerializer(serializers.ModelSerializer):
+    reminder = serializers.SerializerMethodField()
+
+    class Meta:
+        model = ScheduledSession
+        fields = ("id", "status", "reminder")
+        read_only_fields = fields
+
+    def get_reminder(self, obj):
+        data = _serialized_session_reminder(obj)
+        return {key: data[key] for key in ("id", "status", "is_current")}
+
+
+class ArchiveProgramResponseSerializer(serializers.ModelSerializer):
+    bonus_earned = serializers.SerializerMethodField()
+
+    class Meta:
+        model = UserProgram
+        fields = ("id", "status", "is_archived", "bonus_earned")
+        read_only_fields = fields
+
+    def get_bonus_earned(self, obj):
+        return _bonus_earned(obj)
 
 
 class NotificationQuerySerializer(StrictSerializer):

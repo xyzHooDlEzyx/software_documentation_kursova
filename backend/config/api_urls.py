@@ -7,4 +7,5 @@ urlpatterns = [
     path("", include("catalog.urls")),
     path("", include("planning.urls")),
     path("", include("engagement.urls")),
+    path("", include("execution.urls")),
 ]

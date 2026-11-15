@@ -8,6 +8,7 @@ from execution.models import CompletedSession, ExerciseResult
 from execution.policies import PointsPolicy
 
 from .events import WorkoutCompleted
+from .ledger import award_program_completion_bonus
 from .models import (
     Achievement,
     AchievementCode,
@@ -34,13 +35,8 @@ class PointsLedgerHandler:
             defaults={"user_id": event.user_id, "points": points},
         )
         if event.program_completed and event.user_program_id is not None:
-            PointTransaction.objects.get_or_create(
-                user_program_id=event.user_program_id,
-                point_kind=PointKind.PROGRAM_COMPLETION,
-                defaults={
-                    "user_id": event.user_id,
-                    "points": PointsPolicy.PROGRAM_COMPLETION_BONUS,
-                },
+            award_program_completion_bonus(
+                user_id=event.user_id, user_program_id=event.user_program_id
             )
 
 
@@ -102,7 +98,7 @@ class ChallengeHandler:
     def handle(self, event: WorkoutCompleted) -> None:
         current_time = timezone.now()
         participations = list(
-            ChallengeParticipation.objects.select_for_update()
+            ChallengeParticipation.objects.select_for_update(of=("self",))
             .select_related("challenge")
             .filter(user_id=event.user_id, status=ParticipationStatus.JOINED)
         )

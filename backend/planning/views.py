@@ -19,6 +19,8 @@ from .selectors import (
 )
 from .serializers import (
     ActivateProgramResponseSerializer,
+    ArchiveProgramResponseSerializer,
+    CancelledSessionResponseSerializer,
     CreatedScheduledSessionResponseSerializer,
     CreateScheduledSessionSerializer,
     CreateUserProgramRequestSerializer,
@@ -192,6 +194,16 @@ class UserProgramProgressView(APIView):
         )
 
 
+class UserProgramArchiveView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request, program_id: int):
+        serializer = EmptyBodySerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        program = ProgramPlanningService.archive_user_program(request.user, program_id)
+        return Response(ArchiveProgramResponseSerializer(program).data)
+
+
 class ScheduledSessionListCreateView(APIView):
     """S01/S02 — list calendar slots or atomically create a slot and reminder."""
 
@@ -267,6 +279,18 @@ class ScheduledSessionDetailView(APIView):
             RescheduledSessionResponseSerializer(session).data,
             status=status.HTTP_200_OK,
         )
+
+
+class ScheduledSessionCancelView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request, session_id: int):
+        serializer = EmptyBodySerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        session = ProgramPlanningService.cancel_scheduled_session(
+            request.user, session_id
+        )
+        return Response(CancelledSessionResponseSerializer(session).data)
 
 
 class NotificationListView(APIView):
