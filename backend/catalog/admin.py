@@ -24,6 +24,8 @@ from django.db import transaction
 from django.forms import all_valid
 from django.http import HttpResponse
 
+from config.admin import AdministratorModelAdmin, is_active_staff
+
 from .models import (
     Exercise,
     ProgramTemplate,
@@ -32,31 +34,6 @@ from .models import (
     WorkoutExercise,
 )
 from .services import CatalogPublicationService
-
-
-def is_active_staff(request) -> bool:
-    user = request.user
-    return bool(user and user.is_active and user.is_staff)
-
-
-class CatalogBaseModelAdmin(admin.ModelAdmin):
-    """Requires active staff plus Django model permissions; no physical deletion."""
-
-    def has_module_permission(self, request):
-        return is_active_staff(request) and super().has_module_permission(request)
-
-    def has_view_permission(self, request, obj=None):
-        return is_active_staff(request) and super().has_view_permission(request, obj)
-
-    def has_add_permission(self, request):
-        return is_active_staff(request) and super().has_add_permission(request)
-
-    def has_change_permission(self, request, obj=None):
-        return is_active_staff(request) and super().has_change_permission(request, obj)
-
-    def has_delete_permission(self, request, obj=None):
-        # Physical deletion of catalog entries is prohibited (BR-003).
-        return False
 
 
 class MetNullableFormMixin:
@@ -99,7 +76,7 @@ class WorkoutAdminForm(MetNullableFormMixin, forms.ModelForm):
 
 
 @admin.register(Exercise)
-class ExerciseAdmin(CatalogBaseModelAdmin):
+class ExerciseAdmin(AdministratorModelAdmin):
     form = ExerciseAdminForm
     readonly_fields = ("is_archived",)
     list_display = (
@@ -115,7 +92,7 @@ class ExerciseAdmin(CatalogBaseModelAdmin):
     search_fields = ("name", "met_activity_code")
     actions = ["archive_selected"]
 
-    @admin.action(description="Архівувати обрані вправи")
+    @admin.action(permissions=["change"], description="Архівувати обрані вправи")
     def archive_selected(self, request, queryset):
         archived_count = 0
         for exercise in queryset:
@@ -179,7 +156,7 @@ class WorkoutExerciseInline(CatalogTabularInline):
     ordering = ("position",)
 
 
-class AtomicCompositeAdmin(CatalogBaseModelAdmin):
+class AtomicCompositeAdmin(AdministratorModelAdmin):
     """ModelAdmin that validates aggregate invariants atomically across inlines."""
 
     def validate_aggregate(self, instance):
@@ -338,7 +315,7 @@ class WorkoutAdmin(AtomicCompositeAdmin):
     def validate_aggregate(self, instance):
         CatalogPublicationService.validate_persisted_workout(instance)
 
-    @admin.action(description="Архівувати обрані тренування")
+    @admin.action(permissions=["change"], description="Архівувати обрані тренування")
     def archive_selected(self, request, queryset):
         archived_count = 0
         for workout in queryset:
@@ -385,7 +362,9 @@ class ProgramTemplateAdmin(AtomicCompositeAdmin):
     def validate_aggregate(self, instance):
         CatalogPublicationService.validate_persisted_program_template(instance)
 
-    @admin.action(description="Архівувати обрані шаблони програм")
+    @admin.action(
+        permissions=["change"], description="Архівувати обрані шаблони програм"
+    )
     def archive_selected(self, request, queryset):
         archived_count = 0
         for template in queryset:

@@ -14,7 +14,9 @@ PHASE5_SCHEMA = [("planning", "0003_scheduledsession_notification_and_more")]
 def planning_0001(transactional_db):
     """Use the historical planning schema, then restore the current test schema."""
     executor = MigrationExecutor(connection)
-    latest = executor.loader.graph.leaf_nodes("planning")
+    # All apps: rolling planning back also unapplies apps that depend on it
+    # (execution, engagement), so restoring only planning would drop their tables.
+    latest = executor.loader.graph.leaf_nodes()
     executor.migrate(OLD_SCHEMA)
     old_apps = executor.loader.project_state(OLD_SCHEMA).apps
 
@@ -102,7 +104,9 @@ def test_0002_rejects_unmappable_legacy_bonus_data(planning_0001):
 def planning_0002(transactional_db):
     """Start immediately before the Phase 5 forward migration."""
     executor = MigrationExecutor(connection)
-    latest = executor.loader.graph.leaf_nodes("planning")
+    # All apps: rolling planning back also unapplies apps that depend on it
+    # (execution, engagement), so restoring only planning would drop their tables.
+    latest = executor.loader.graph.leaf_nodes()
     executor.migrate(NEW_SCHEMA)
     try:
         yield

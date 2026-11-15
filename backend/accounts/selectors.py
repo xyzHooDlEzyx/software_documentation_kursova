@@ -1,12 +1,11 @@
 from datetime import date, datetime, time
 from datetime import timezone as dt_timezone
-from zoneinfo import ZoneInfo
 
 from django.db.models import QuerySet
 
-from .models import User, WeightEntry
+from config.timezones import KYIV_TZ
 
-KYIV_TZ = ZoneInfo("Europe/Kyiv")
+from .models import User, WeightEntry
 
 
 def kyiv_date_range_to_utc(

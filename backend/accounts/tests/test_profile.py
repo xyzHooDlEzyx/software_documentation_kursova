@@ -2,7 +2,6 @@ from concurrent.futures import ThreadPoolExecutor
 from datetime import date, datetime
 from datetime import timezone as dt_timezone
 from decimal import Decimal
-from zoneinfo import ZoneInfo
 
 import pytest
 from django.contrib import admin
@@ -23,7 +22,6 @@ from accounts.services import ProfileService
 
 User = get_user_model()
 PASSWORD = "CorrectHorse2026!"
-KYIV_TZ = ZoneInfo("Europe/Kyiv")
 PROFILE_URL = "/api/v1/profile/"
 WEIGHT_ENTRIES_URL = "/api/v1/weight-entries/"
 

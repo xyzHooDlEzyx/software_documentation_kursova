@@ -1,13 +1,13 @@
 """REST API views for personal programs, sessions, and reminders."""
 
 from rest_framework import status
-from rest_framework.exceptions import NotFound, ValidationError
+from rest_framework.exceptions import NotFound
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
-from rest_framework.utils.urls import replace_query_param
 from rest_framework.views import APIView
 
 from catalog.serializers import EmptyQuerySerializer
+from config.api import extract_query_data, paginate_queryset
 
 from .selectors import (
     filter_notifications_by_current,
@@ -43,56 +43,13 @@ from .serializers import (
 from .services import ProgramPlanningService, ProgramSelectionService, ReminderService
 
 
-def _extract_query_data(request) -> dict:
-    return {k: v[0] if len(v) == 1 else v for k, v in request.query_params.lists()}
-
-
-def _paginate_queryset(request, queryset, *, page: int, page_size: int, serializer_cls):
-    total_count = queryset.count()
-    if total_count == 0:
-        if page > 1:
-            raise ValidationError(
-                {"page": ["Сторінка виходить за межі наявних результатів."]}
-            )
-        return Response(
-            {"count": 0, "next": None, "previous": None, "results": []},
-            status=status.HTTP_200_OK,
-        )
-
-    offset = (page - 1) * page_size
-    if offset >= total_count:
-        raise ValidationError(
-            {"page": ["Сторінка виходить за межі наявних результатів."]}
-        )
-
-    items = list(queryset[offset : offset + page_size])
-    base_url = request.build_absolute_uri()
-    next_url = (
-        replace_query_param(base_url, "page", page + 1)
-        if offset + page_size < total_count
-        else None
-    )
-    previous_url = (
-        None if page == 1 else replace_query_param(base_url, "page", page - 1)
-    )
-    return Response(
-        {
-            "count": total_count,
-            "next": next_url,
-            "previous": previous_url,
-            "results": serializer_cls(items, many=True).data,
-        },
-        status=status.HTTP_200_OK,
-    )
-
-
 class ProgramRecommendationView(APIView):
     """G01 — GET /api/v1/program-recommendation/ (Strategy recommendation)."""
 
     permission_classes = [IsAuthenticated]
 
     def get(self, request):
-        query_serializer = EmptyQuerySerializer(data=_extract_query_data(request))
+        query_serializer = EmptyQuerySerializer(data=extract_query_data(request))
         query_serializer.is_valid(raise_exception=True)
 
         template, reason = ProgramSelectionService.recommend_program_template(
@@ -114,7 +71,7 @@ class UserProgramListCreateView(APIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request):
-        query_serializer = ProgramListQuerySerializer(data=_extract_query_data(request))
+        query_serializer = ProgramListQuerySerializer(data=extract_query_data(request))
         query_serializer.is_valid(raise_exception=True)
         validated = query_serializer.validated_data
 
@@ -123,7 +80,7 @@ class UserProgramListCreateView(APIView):
             status=validated.get("status"),
             is_archived=validated.get("archived", False),
         )
-        return _paginate_queryset(
+        return paginate_queryset(
             request,
             queryset,
             page=validated["page"],
@@ -155,7 +112,7 @@ class UserProgramDetailView(APIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request, program_id: int):
-        query_serializer = EmptyQuerySerializer(data=_extract_query_data(request))
+        query_serializer = EmptyQuerySerializer(data=extract_query_data(request))
         query_serializer.is_valid(raise_exception=True)
 
         program = ProgramPlanningService.get_user_program_detail(
@@ -227,7 +184,7 @@ class UserProgramProgressView(APIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request, program_id: int):
-        serializer = EmptyQuerySerializer(data=_extract_query_data(request))
+        serializer = EmptyQuerySerializer(data=extract_query_data(request))
         serializer.is_valid(raise_exception=True)
         program = ProgramPlanningService.get_program_progress(request.user, program_id)
         return Response(
@@ -241,7 +198,7 @@ class ScheduledSessionListCreateView(APIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request):
-        serializer = ScheduledSessionQuerySerializer(data=_extract_query_data(request))
+        serializer = ScheduledSessionQuerySerializer(data=extract_query_data(request))
         serializer.is_valid(raise_exception=True)
         data = serializer.validated_data
         queryset = owner_sessions(request.user)
@@ -260,7 +217,7 @@ class ScheduledSessionListCreateView(APIView):
                 end_date=data["end_date"],
             )
         queryset = queryset.order_by("scheduled_at", "id")
-        return _paginate_queryset(
+        return paginate_queryset(
             request,
             queryset,
             page=data["page"],
@@ -290,7 +247,7 @@ class ScheduledSessionDetailView(APIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request, session_id: int):
-        query = EmptyQuerySerializer(data=_extract_query_data(request))
+        query = EmptyQuerySerializer(data=extract_query_data(request))
         query.is_valid(raise_exception=True)
         session = ProgramPlanningService.get_scheduled_session(request.user, session_id)
         return Response(
@@ -318,7 +275,7 @@ class NotificationListView(APIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request):
-        serializer = NotificationQuerySerializer(data=_extract_query_data(request))
+        serializer = NotificationQuerySerializer(data=extract_query_data(request))
         serializer.is_valid(raise_exception=True)
         data = serializer.validated_data
         queryset = visible_notifications(request.user)
@@ -329,7 +286,7 @@ class NotificationListView(APIView):
                 queryset, is_current=data["is_current"]
             )
         queryset = queryset.order_by("-visible_at", "-id")
-        return _paginate_queryset(
+        return paginate_queryset(
             request,
             queryset,
             page=data["page"],
@@ -344,7 +301,7 @@ class NotificationDetailView(APIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request, notification_id: int):
-        query = EmptyQuerySerializer(data=_extract_query_data(request))
+        query = EmptyQuerySerializer(data=extract_query_data(request))
         query.is_valid(raise_exception=True)
         reminder = get_visible_notification(request.user, notification_id)
         return Response(

@@ -1,7 +1,6 @@
 from collections.abc import Mapping
 from datetime import date
 from typing import Any
-from zoneinfo import ZoneInfo
 
 from django.conf import settings
 from django.contrib.auth import get_user_model, password_validation
@@ -15,12 +14,12 @@ from django.utils.encoding import force_bytes, force_str
 from django.utils.http import urlsafe_base64_decode, urlsafe_base64_encode
 from rest_framework.exceptions import NotAuthenticated, ValidationError
 
+from config.timezones import KYIV_TZ
+
 from .errors import ProfileExists, ProfileMissing, ResetTokenInvalidOrExpired
 from .models import Profile, WeightEntry
 
 User = get_user_model()
-
-KYIV_TZ = ZoneInfo("Europe/Kyiv")
 
 
 class PasswordResetService:
