@@ -8,7 +8,7 @@
 
 Усі 40 HTML-файлів прочитано як джерела структури, текстів і дій. Візуально переглянуто 38 наявних PNG (частину через контактні аркуші). **C07 і C09 оцінено лише за HTML**. PNG є знімками референсу, а не готовими UI-ресурсами. Підрахунок логічних сторінок: **37**; три додаткові файли — D12 (порожній стан історії ваги), M01 (мобільний вхід) і M02 (мобільна комбінація профілю та ваги). Застарілі версії між трьома архівами не доведені; `desktop_16` і суфікс `(2)` не означають хронології. Редакційний дефект окремого екрана не робить його «старою версією».
 
-Після аудиту React 19/TypeScript/Vite доповнено React Router 7, Tailwind CSS v4 і конфігурацією shadcn/ui для наявного застосунку. Зараз працюють auth/reset/settings, `/profile`, `/catalog`, `/catalog/workouts/:id`, `/programs`, `/programs/recommendation`, `/programs/:id`, `/programs/:id/workouts/:entryId`, `/schedule`, `/schedule/:id`, `/notifications` і `/notifications/:id`; є спільні public/authenticated layouts, UI-примітиви та `frontend/src/styles/tokens.css`. `frontend/src/app/api.ts` використовує відносні `/api/v1/`, `credentials: "same-origin"`, A01 для cookie `csrftoken`, `X-CSRFToken` для небезпечних методів і повторне читання cookie після login. Vite проксіює `/api/v1` до Django `:8000`. Реалізовано A01–A08, P01–P04, C01–C04, G01–G08, S01–S04 і N01–N03; S05/G09/E01 свідомо не опубліковано до Phase 7. Імена/прізвища — необов'язкові поля Profile, не поля register. Канал R02/R03 ще не узгоджено.
+Після аудиту React 19/TypeScript/Vite доповнено React Router 7, Tailwind CSS v4 і конфігурацією shadcn/ui для наявного застосунку. Зараз працюють auth/reset/settings, `/profile`, `/catalog`, `/catalog/workouts/:id`, `/programs`, `/programs/recommendation`, `/programs/:id`, `/programs/:id/workouts/:entryId`, `/schedule`, `/schedule/:id`, `/notifications` і `/notifications/:id`; є спільні public/authenticated layouts, UI-примітиви та `frontend/src/styles/tokens.css`. `frontend/src/app/api.ts` використовує відносні `/api/v1/`, `credentials: "same-origin"`, A01 для cookie `csrftoken`, `X-CSRFToken` для небезпечних методів і повторне читання cookie після login. Vite проксіює `/api/v1` до Django `:8000`. Реалізовано A01–A08, P01–P04, C01–C04, G01–G08, S01–S04 і N01–N03; S05/G09/E01 свідомо не опубліковано до Phase 7. Імена/прізвища — необов'язкові поля Profile, не поля register. R02/R03 визначено як custom read-only Django Admin views; React-екрани та REST routes для них не створюються (D-2026-11-14).
 
 ## B. Повний інвентар HTML
 
@@ -91,8 +91,8 @@
 | Деталі програми | A14 | — | G04/G08 та контекстні G07/G09 | Середня; `<title>`/H1 помилково «Мій баланс», уточнити копірайт; G09 лише після допустимого стану |
 | Мої бали | A15 | — | M01 summary + M02 recent | Висока; жодних локальних балів |
 | Історія балів | A16 | — | M02 | Висока; бонус +50 — окрема ledger-транзакція за BR |
-| Каталог челенджів | C01 | — | H01 | Середня; критерії BR-022 ще не підтверджено |
-| Каталог досягнень | C02 | — | M03 | Середня; критерії BR-021 ще не підтверджено |
+| Каталог челенджів | C01 | — | H01 | Середня; правила BR-022 підтверджено D-2026-11-14, звірити UI з реальним API |
+| Каталог досягнень | C02 | — | M03 | Середня; рівно п'ять умов BR-021 підтверджено D-2026-11-14 |
 | Рейтинг | C03 | — | L01 з A06 modal | Середня; видимі лише public_alias/points/rank; перевірити приватність |
 | Деталі челенджу | C04 | — | H02/H03 | Середня; прогрес і пороги тільки з backend після gate |
 | Мої досягнення | C05 | — | M04 | Середня; snapshot нагороди, пороги не хардкодити |
@@ -103,7 +103,7 @@
 
 ## D. Відсутні MVP-сторінки
 
-Для реалізованих A/P/C/G/S/N-зрізів **0 доведено відсутніх окремих React-сторінок**: D08 використано для P02/P03, D01 — для станів A08, а A12 вбудовано у деталі програми й тренування каталогу. Окремий екран для кожної REST-операції не потрібний; повнота порожніх і помилкових станів лишається предметом UI-перевірки. Для D07 вирішити, чи detail отримує вибрану вправу зі списку C02; окремої детальної API-операції немає. Канал R02/R03 ще не узгоджено, тому ці звіти не позначено ні готовими React-сторінками, ні готовими сторінками Django Admin.
+Для реалізованих A/P/C/G/S/N-зрізів **0 доведено відсутніх окремих React-сторінок**: D08 використано для P02/P03, D01 — для станів A08, а A12 вбудовано у деталі програми й тренування каталогу. Окремий екран для кожної REST-операції не потрібний; повнота порожніх і помилкових станів лишається предметом UI-перевірки. Для D07 вирішити, чи detail отримує вибрану вправу зі списку C02; окремої детальної API-операції немає. R02/R03 свідомо не входять до React inventory: це майбутні custom read-only Django Admin views без REST routes (D-2026-11-14).
 
 ## E. Спільні компоненти й структура
 
@@ -141,16 +141,16 @@
 | A01 scheduled detail | S03 → переходи до S04/S05/E01 | U owner; slot ID; 404 foreign; для action серверний status/is_missed, не локальна дата як істина |
 | A06 reschedule | S03 → S04 | U owner; `scheduled_at`; 400 time, 404, 409 closed/cancelled; той самий ID |
 | A09 cancel | S03 → S05; потім G08 | U owner; `{}`; 404 чужий, 409 лише нове недозволене скасування; retry already-cancelled = 200 |
-| A08 completion form, A07 result | S03 або C04 → E01; результат E01/E03 | U; `Idempotency-Key` UUID v4, duration decimal-string, фактичні `results`; 400 form/key, 404 source, 409 state/key race; бали/kcal лише з E01 |
+| A08 completion form, A07 result | S03 або C04 → E01; результат E01/E03 | U з Profile; `Idempotency-Key` UUID v4, duration decimal-string `>0` і `≤300`, фактичні `results`; 400 form/key, 404 source або `profile_missing`, 409 state/key race; для `profile_missing` показати «Вкажіть вагу в профілі»; бали/kcal лише з E01 |
 | A13 history, A10 historical detail | E02/E03 → — | U owner; E02 `start_date,end_date,source_workout_id,page,page_size`; 400 filter, 404 foreign fact; snapshots immutable |
 | A11 statistics, D00 dashboard | R01/P05 та за потреби M01/S01 → — | U; R01/P05 обов'язкові Kyiv `start_date,end_date`; 400 period; нулі/no-data, не фіктивні кроки чи сон |
 | A15 points, A16 transaction history | M01/M02 → — | U; M01 optional `start_date,end_date` парою, M02 також `point_kind,page,page_size`; 400 filter; ledger authoritative |
-| C02 achievement catalog, C05 my achievements | M03/M04 → — | U; `page,page_size`; BR-021 gate, read-only; no user-triggered unlock |
-| C01 challenge catalog, C04 detail, C08 my challenges | H01/H02/H04 → H03 на C04 | U; H01 `state,page,page_size`, H04 `status,page,page_size`; H03 `{}`, 200 retry, 404 hidden, 409 expired; BR-022 gate |
+| C02 achievement catalog, C05 my achievements | M03/M04 → — | U; `page,page_size`; рівно п'ять BR-021 definitions, read-only; no user-triggered unlock, no points |
+| C01 challenge catalog, C04 detail, C08 my challenges | H01/H02/H04 → H03 на C04 | U; H01 `state,page,page_size`, H04 `status,page,page_size`; H03 `{}`, 200 retry, 404 hidden, 409 expired; BR-022 confirmed, no public challenge leaderboard |
 | C03 leaderboard, C09 settings | A05/L01 → A06 | U; L01 `period,anchor_date,page,page_size`, A06 `public_alias,leaderboard_opt_in`; 400 alias/period, 403 CSRF; public list лише alias/points/rank |
 | C06 notifications, C07 detail | N01/N02 → N03 | U owner; N01 `status,is_current,page,page_size`; N02/N03 notification ID; 404 foreign/invisible/cancelled; read лише за явною дією, retry 200 |
 
-Канал R02/R03 ще не узгоджено. Поточний backend вимагає сесію для C01–C04, хоча контракт ще містить гостьовий доступ як проєктний варіант. Уся пагінація та фільтри обмежені саме задокументованими параметрами. Decimal-значення передавати рядками; дати періоду тлумачити в `Europe/Kyiv` з `[start,end)`. Наявний `api.ts` підтримує GET/POST/PATCH/PUT; G06 використовує той самий CSRF-aware клієнт.
+R02/R03 реалізовуються поза React як custom read-only Django Admin views із dedicated report permission; не додавати їх до `api.ts` або router. Поточний backend вимагає сесію для C01–C04, хоча контракт ще містить гостьовий доступ як проєктний варіант. Уся пагінація та фільтри обмежені саме задокументованими параметрами. Decimal-значення передавати рядками; дати періоду тлумачити в `Europe/Kyiv` з `[start,end)`. Наявний `api.ts` підтримує GET/POST/PATCH/PUT; G06 використовує той самий CSRF-aware клієнт.
 
 ## H. Конфлікти й технічні ризики
 
@@ -161,8 +161,8 @@
 | Високий | D01/D02 | A07/A08 реалізовані; зберігати generic-відповідь A07 і не допускати token A08 у логи, referer чи сторонні fonts/scripts на reset route. |
 | Високий | D08/D09/D12 | Email не змінюється P03, `age` read-only; новий `WeightEntry` створює P02/P03 лише при реальній зміні ваги. Графік і порожній стан з persisted P04/P05, не з намальованих точок. |
 | Високий | A02/A14/A01/A09 | `draft/active/completed` — status, `is_archived` окремо; G07, G09, E01, S05 залежать від server-state і lock. Прогрес та бонус не обчислювати з карток; після S05 перечитати G08. |
-| Високий | A07/A08/A10/A15/A16 | E01 використовує фактичні вправи й один idempotency key для повтору тієї самої спроби; calories/points/server snapshot є авторитетними. Історичні факти не редагуються, bonus +50 лише окремим ledger-записом за умовами BR. |
-| Високий | C01/C02/C04/C05/C08 | Критерії BR-021/022 ще `PROPOSED` і проходять Business Decision Gate фази 6. Будь-які числа, нагороди, дати й progress у HTML — демо; не вшивати їх як правила. |
+| Високий | A07/A08/A10/A15/A16 | E01 використовує фактичні вправи й один idempotency key для повтору тієї самої спроби; Profile обов'язковий, тривалість ≤300; calories/points/server snapshot є авторитетними. Для kcal null не показувати `null`/reason code, а «Калорії для цього тренування не розраховуються». Історичні факти не редагуються, bonus +50 лише окремим ledger-записом за умовами BR. |
+| Високий | C01/C02/C04/C05/C08 | Business Decision Gate пройдено 14.11.2026: використовувати тільки підтверджені BR-021/022 умови з API. Макетні числа, нагороди, дати й progress в HTML лишаються демо й не є persisted даними. |
 | Високий | C03/C09 | Opt-in й непорожній public alias обов'язкові для публічного списку. Не виводити email, first/last name, приватний Profile або чужу історію. |
 | Високий | C06/C07 | N01/N02 GET не позначають read; N03 тільки явна дія. `is_current=false` і `status=read` — різні ознаки; невидимий/cancelled reminder дає 404. |
 | Середній | D00/A11 | Макетні метрики на кшталт steps, pulse, sleep та графіки можуть не мати джерела в R01/P05/M01/S01. Прибрати чи замінити підтриманими даними, не вигадувати endpoint. |
@@ -181,6 +181,6 @@
 5. **Програми (фаза 4) — реалізовано для G01–G06.** A03/A04/A02/A14 працюють на маршрутах `/programs*`; activation/сесійні дії лишаються фазою 5.
 6. **Планування й нагадування (фаза 5) — реалізовано.** A05/A12/A01/A06/C06/C07 працюють через G07/G08, S01–S04 і N01–N03; клієнт підтримує Kyiv DST, unread badge, polling приблизно раз на 60 секунд і refresh при focus. S05/G09/E01 лишаються Phase 7.
 7. **Execution (фаза 7).** A08/A07/A09 із E01/S05/G09 разом після транзакційної backend готовності фази 6. Перевірити idempotency, 409, rollback, повторне S05=200 і G08 refresh.
-8. **Read projections (фаза 8), UI polish (фаза 9).** A10/A13/A11/D00/A15/A16/C03/C09 й P05/E02–E03/M01–M02/L01/R01. Achievement/challenge екрани C01/C02/C04/C05/C08 лише після BR-021/022 gate та API. Завершити маршрути, responsive/a11y, E2E з реальною PostgreSQL, без показу демоданих як persisted.
+8. **Read projections (фаза 8), UI polish (фаза 9).** A10/A13/A11/D00/A15/A16/C03/C09 й P05/E02–E03/M01–M02/L01/R01. Achievement/challenge екрани C01/C02/C04/C05/C08 — після відповідних API; BR-021/022 gate вже пройдено. R02/R03 залишаються тільки в Django Admin. Завершити маршрути, responsive/a11y, E2E з реальною PostgreSQL, без показу демоданих як persisted.
 
 Для кожного зрізу: один реальний API-flow, loading/empty/error/success, доступ/owner, mobile+desktop viewport, keyboard і типізований payload; тестувати ту саму поведінку, а не повторювати статичний макет. Ніяких iframe, копій CDN-скриптів або нових бібліотек у межах цього аудиту.
