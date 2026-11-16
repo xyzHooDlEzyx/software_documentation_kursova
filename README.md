@@ -170,10 +170,10 @@ npm run typecheck
 npm run lint
 npm test
 npm run build
-npx prettier --check <змінені файли>
+npm run format:check
 ```
 
-Frontend-код форматує Prettier (`frontend/.prettierrc.json`): `npm run format -- <файли>` для файлів, які змінюєте.
+Frontend-код форматує Prettier (`frontend/.prettierrc.json`, `.prettierignore`): `npm run format -- <файли>` або `npx prettier --write .` у `frontend/`.
 
 Backend-тести працюють на окремій тестовій базі PostgreSQL (SQLite не використовується), тому `.env` має бути завантажений, а роль БД — мати право `CREATEDB`.
 

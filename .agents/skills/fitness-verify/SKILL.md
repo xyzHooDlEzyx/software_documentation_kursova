@@ -57,9 +57,9 @@ npm run typecheck
 npm run lint
 npm test
 npm run build
+npm run format:check
 ```
 
-Для створених або змінених frontend-файлів також `npx prettier --check <файли>`.
 
 Не замінюй повний комплекс одним тестовим файлом. Під час діагностики можна
 спочатку запустити вузький тест, але перед статусом Done потрібен повний блок.
