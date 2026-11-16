@@ -6,9 +6,9 @@
 
 | Частина | Реалізовано | Ще не реалізовано |
 |---|---|---|
-| Backend (REST) | 37 з 47 REST-операцій контракту (ще 2 — адмін-звіти R02/R03 у Django Admin): A01–A08, P01–P04, C01–C04, G01–G09, S01–S05, E01, N01–N03 і H01–H03; Phase 7 реалізує **Template Method** та production wiring **Observer** | E02–E03, M01–M04, H04, L01, P05, R01–R03 |
+| Backend (REST) | 47 з 47 REST-операцій контракту та 2 адмін-звіти R02/R03; Phase 8 додає owner-scoped read projections, статистику й leaderboard | PostgreSQL runtime-перевірка Phase 8 у reviewer environment |
 | БД | 20 з 20 таблиць ERD, включно з immutable execution snapshots, ledger, досягненнями й челенджами | прикладні сценарії наступних фаз не потребують нових базових сутностей ERD |
-| Адмін-частина | Django Admin: каталог, деактивація користувачів, створення/редагування та publish/unpublish челенджів, view-only визначення досягнень; права групи `Administrator` створюються міграціями | звіти R02/R03 |
+| Адмін-частина | Django Admin: каталог, деактивація, челенджі, view-only досягнення та агреговані R02/R03 з period filter, таблицею, inline SVG і CSV | — |
 | Frontend | реєстрація, вхід, вихід, відновлення пароля, налаштування рейтингу; профіль та історія ваги (P01–P04), каталог тренувань і вправ (C01–C04), рекомендація, персональні програми, активація й прогрес (G01–G08), тижневий розклад і планування (S01–S04), нагадування з непрочитаним badge (N01–N03) | скасування слотів і архівація програм (S05/G09), виконання тренувань, статистика, соціальні функції, звіти |
 
 Документація: [вимоги](docs/analysis/requirements.md), [Use Case діаграма](docs/analysis/use-case-diagram.md), [бізнес-правила](docs/analysis/business-rules.md), [доменна модель](docs/architecture/domain-model.md), [ERD](docs/architecture/erd.md), [REST API](docs/architecture/rest-api.md), [принципи й GoF](docs/architecture/design-principles.md), [діаграма класів](docs/diagrams/class-diagram.drawio), [рев'ю стану](docs/review/senior-review-2026-11-14.md).
@@ -69,7 +69,7 @@ backend/.venv/bin/python backend/manage.py seed_catalog
 backend/.venv/bin/python backend/manage.py createsuperuser
 ```
 
-- `migrate` створює всі таблиці та групу `Administrator` із правами на каталог і деактивацію користувачів.
+- `migrate` створює всі таблиці та групу `Administrator` із правами на каталог, деактивацію користувачів і агреговані звіти (`reporting.view_reports`).
 - `seed_catalog` заповнює каталог вправ, тренувань і опублікованих шаблонів програм. Без нього каталог і рекомендації програм будуть порожні.
 - `createsuperuser` створює технічного суперкористувача. Робочих адміністраторів він призначає в Django Admin: позначка `is_staff` + група `Administrator`.
 
@@ -118,6 +118,7 @@ DJANGO_EMAIL_BACKEND=django.core.mail.backends.console.EmailBackend
 | A08 | `POST auth/password-reset/confirm/` | Публічний, CSRF, rate limit |
 | P01 / P02 / P03 | `GET` / `POST` / `PATCH profile/` | Сесія |
 | P04 | `GET weight-entries/` | Сесія |
+| P05 / R01 | `GET statistics/weight-chart/`, `GET statistics/overview/` | Сесія, обов'язковий Kyiv-період; R01 містить continuous weekly activity |
 | C01 | `GET categories/` | Сесія |
 | C02 | `GET exercises/` | Сесія |
 | C03 / C04 | `GET workouts/`, `GET workouts/{id}/` | Сесія |
@@ -132,12 +133,26 @@ DJANGO_EMAIL_BACKEND=django.core.mail.backends.console.EmailBackend
 | S03 / S04 | `GET` / `PATCH scheduled-sessions/{id}/` | Сесія (PATCH — CSRF), лише власні слоти |
 | S05 | `POST scheduled-sessions/{id}/cancel/` | Сесія, CSRF, лише власні слоти |
 | E01 | `POST completed-sessions/` | Сесія, CSRF, профіль та `Idempotency-Key` UUID v4 |
+| E02 / E03 | `GET completed-sessions/`, `GET completed-sessions/{id}/` | Сесія, лише власні незмінні факти |
+| M01 / M02 | `GET points/summary/`, `GET point-transactions/` | Сесія, власний ledger |
+| M03 / M04 | `GET achievements/`, `GET user-achievements/` | Сесія |
 | N01 | `GET notifications/` | Сесія, лише власні видимі нагадування |
 | N02 | `GET notifications/{id}/` | Сесія, лише власні видимі нагадування |
 | N03 | `POST notifications/{id}/read/` | Сесія, CSRF, лише власні видимі нагадування |
 | H01 | `GET challenges/` | Сесія; лише опубліковані визначення |
 | H02 | `GET challenges/{id}/` | Сесія; прихований/неіснуючий ID повертає 404 |
 | H03 | `POST challenges/{id}/join/` | Сесія, CSRF; повтор повертає 200, після завершення — 409 |
+| H04 | `GET challenge-participations/` | Сесія, лише власні участі |
+| L01 | `GET leaderboard/` | Сесія; публічні лише alias, points і rank |
+
+## Адміністративні звіти
+
+Після входу staff-користувача з permission `reporting.view_reports` звіти доступні з індексу Django Admin:
+
+- R02: `/admin/reports/workout-popularity/`;
+- R03: `/admin/reports/average-activity/`.
+
+Обидва вимагають `start_date` і `end_date`, показують лише агрегати, inline SVG без JavaScript і дають CSV у UTF-8 з BOM. Міграція `reporting.0002_administrator_report_permission` додає permission групі `Administrator`; сам `is_staff` доступу не дає.
 
 Безпека: session-автентифікація (`sessionid` HttpOnly), CSRF для всіх змінних запитів, вільний CORS не використовується. Реєстрація не виконує автоматичний вхід; мінімальна довжина пароля — 12 символів. Ліміти запитів налаштовуються змінними `DJANGO_THROTTLE_*`. `DJANGO_NUM_PROXIES` — кількість довірених reverse proxy перед Django: `0` (типово) означає, що IP береться з `REMOTE_ADDR`, а заголовок `X-Forwarded-For` від клієнта ігнорується.
 
@@ -155,7 +170,10 @@ npm run typecheck
 npm run lint
 npm test
 npm run build
+npx prettier --check <змінені файли>
 ```
+
+Frontend-код форматує Prettier (`frontend/.prettierrc.json`): `npm run format -- <файли>` для файлів, які змінюєте.
 
 Backend-тести працюють на окремій тестовій базі PostgreSQL (SQLite не використовується), тому `.env` має бути завантажений, а роль БД — мати право `CREATEDB`.
 

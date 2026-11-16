@@ -1,15 +1,15 @@
 # Аудит фактичної реалізації Django backend
 
 > [!IMPORTANT]
-> ### Поточний статус реалізації (Current Implementation Status — 2026-11-14)
+> ### Поточний статус реалізації (Current Implementation Status — 2026-11-16)
 > - **Phase 0 (Repository and Tooling):** `COMPLETE` (див. §L).
 > - **Phase 1 (Custom User, auth і permissions):** `COMPLETE` (A01–A08, відновлення пароля, UI; див. §M).
 > - **Phase 2 (Profile і WeightEntry):** `COMPLETE` (P01–P04, ProfileService, валідація віку, історія ваги; див. §N).
 > - **Phase 3 (Shared Catalog і Admin publication):** `COMPLETE` (C01–C04, моделі, atomic publication, seed_catalog; див. §O).
 > - **Phase 4 (Selection і персональний склад):** `COMPLETE` (G01–G06, Strategy, персональні копії; див. §P).
 > - **Phase 5 (Schedule, activation і reminder core):** `COMPLETE` (G07–G08, S01–S04, N01–N03; див. §Q).
-> - **Phases 6–7:** реалізовано; Business Decision Gate пройдено 14.11.2026 (D-2026-11-14). PostgreSQL-перевірка Phase 7 недоступна в sandbox.
-> - **Перша незавершена функціональна фаза:** **Phase 8**; перед її закриттям reviewer має виконати PostgreSQL suite Phase 7.
+> - **Phases 6–7:** реалізовано; Business Decision Gate пройдено 14.11.2026 (D-2026-11-14). PostgreSQL-перевірка недоступна в sandbox.
+> - **Phase 8:** `IMPLEMENTED / UNVERIFIED` — 10 read REST operations, 2 Django Admin reports, 3 query services і 15 collected PostgreSQL tests; reviewer має виконати DB suite.
 > *(Нижче збережено оригінальний історичний аудит-бейзлайн від старту робіт; останні підтверджені дані наведено в матриці §B, таблиці §D та розділах верифікації §L–§Q).*
 
 Дата аудиту: 2026-11-01. Обсяг: фактичний стан Phases 0–8; Phases 9–10 розглянуто окремо. Це огляд без змін коду, схеми, даних чи контракту. Статуси нижче стосуються перевіреної реалізації, а не наміру в документації.
@@ -36,7 +36,7 @@
 | 5 | Schedule, activation і reminder core | COMPLETE *(baseline: NOT_STARTED, див. §Q)* | policies/selectors/services, React schedule/notifications ✓ | 9/9 | planning.0003, 13/20 ERD tables ✓ | 225 backend ✓; frontend 61/61 ✓ | S05/G09/E01 не входять до Phase 5. |
 | 6 | Execution/Engagement persistence і required policies | UNVERIFIED | 7 моделей, policies, Observer handlers, admin ✓ | 3/3 H | execution.0001, engagement.0001–0004 ✓ | 25 pure tests PASS; DB tests NOT RUN через недоступний PostgreSQL | Реалізація завершена в коді; FK/UQ/CHECK, API/admin/rollback ще має підтвердити PostgreSQL runner. |
 | 7 | E01, S05 і G09 atomic scenarios | NOT_STARTED | — | 0/3 | — | — | Немає сервісів, транзакційних інваріантів і PostgreSQL race evidence; бізнес-gate не блокує старт. |
-| 8 | Read APIs, statistics, reports і leaderboard | NOT_STARTED | reporting shell | 0/10 REST + 2 Admin | — | — | Немає проєкцій, приватних звітів і custom Django Admin report views R02/R03; REST routes для R02/R03 не передбачені. |
+| 8 | Read APIs, statistics, reports і leaderboard | IMPLEMENTED / UNVERIFIED | reporting app, query services | 10/10 REST + 2 Admin | reporting.0001–0002 | 15 Phase 8 tests collected; PostgreSQL NOT RUN у sandbox | P05/E02–E03/M01–M04/H04/L01/R01 і permissioned R02/R03 реалізовано; R01 має continuous weekly activity, L01 виключає inactive; DB runtime evidence лишається reviewer gate. |
 
 Phase 9: React/Vite foundation існує (`frontend/vite.config.ts:6-25`), але наскрізні вертикальні сценарії на всіх API неможливі, бо backend Phases 2–8 ще відсутні. Це не аудит якості frontend. Phase 10: clean PostgreSQL migrate+seed, повні quality gates, E2E, concurrency, privacy та три звіти не доведені (`docs/implementation/implementation-plan.md:282-287`).
 
@@ -559,3 +559,10 @@ BR-008 (похідний missed, `reschedule_history JSONB`), BR-026 (минул
 ### Q.3. Межі
 
 Phase 5 не створює `CompletedSession` або `PointTransaction` і не може закрити програму. Тому S05, G09 і E01 лишаються `NOT_YET_IMPLEMENTED` до Phase 7; Observer і Template Method також не зараховано як реалізований код.
+## Phase 8 update (2026-11-16)
+
+Реалізовано P05, E02–E03, M01–M04, H04, L01 і R01 як session-authenticated owner-scoped GET-проєкції. `StatisticsQueryService`, `LeaderboardQueryService` і `ReportQueryService` читають `WeightEntry`, immutable execution snapshots і ledger без таблиці `Statistics`, збереженого balance чи записів у GET. Усі date periods проходять через `kyiv_date_range_to_utc`; L01 підтримує week/month/all і confirmed tie-break.
+
+R02 `/admin/reports/workout-popularity/` та R03 `/admin/reports/average-activity/` є custom read-only Django Admin views. Доступ вимагає active staff і `reporting.view_reports`, яке міграція `reporting.0002_administrator_report_permission` додає групі `Administrator`. Обидві сторінки мають required period filter, aggregate table, server-rendered inline SVG та CSV з UTF-8 BOM і захистом від spreadsheet formula injection; приватні факти User не показуються.
+
+Додано 15 PostgreSQL tests для порожніх періодів, continuous weekly activity, DST і кліпованих неповних тижнів, snapshots, owner 404, ledger/achievements/challenge history, leaderboard privacy/tie-break/inactive exclusion, strict params, report permissions/formulas/SVG/CSV. У sandbox вони лише успішно collected і позначені **NOT RUN** через недоступну PostgreSQL; system check, migration drift check і Ruff виконуються окремо.
