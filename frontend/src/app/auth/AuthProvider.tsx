@@ -51,7 +51,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
   }, []);
 
-  useEffect(() => { void refresh(); }, [refresh]);
+  useEffect(() => {
+    void refresh();
+  }, [refresh]);
 
   const setAccount = useCallback((next: Account | null) => {
     requestVersion.current += 1;
@@ -72,7 +74,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setAccount(null);
   }, [setAccount]);
 
-  const value = useMemo(() => ({ account, status, error, notice, setNotice, refresh, setAccount, signOut }), [account, status, error, notice, refresh, setAccount, signOut]);
+  const value = useMemo(
+    () => ({ account, status, error, notice, setNotice, refresh, setAccount, signOut }),
+    [account, status, error, notice, refresh, setAccount, signOut],
+  );
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }
 

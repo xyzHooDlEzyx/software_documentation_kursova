@@ -5,21 +5,56 @@ import App from "@/App";
 import { json, mockApi } from "@/test/mockApi";
 import { useVisiblePolling } from "./useVisiblePolling";
 
-beforeEach(() => { document.cookie = "csrftoken=token; path=/"; });
-afterEach(() => { vi.useRealTimers(); vi.restoreAllMocks(); vi.unstubAllGlobals(); });
+beforeEach(() => {
+  document.cookie = "csrftoken=token; path=/";
+});
+afterEach(() => {
+  vi.useRealTimers();
+  vi.restoreAllMocks();
+  vi.unstubAllGlobals();
+});
 
 test("notification is read only after the explicit action and unread badge uses N01 count", async () => {
   window.history.replaceState(null, "", "/notifications");
-  const item = { id: 9, scheduled_session_id: 92, type: "workout_reminder", visible_at: "2026-11-18T15:00:00Z", status: "pending", read_at: null, is_current: true };
-  const slot = { id: 92, scheduled_at: "2026-11-18T20:50:00Z", status: "planned", is_missed: false, user_program_id: null, user_program_workout_id: null, source_workout_id: 8, reschedule_history: [], completed_session_id: null, reminder: { id: 9, visible_at: item.visible_at, status: "pending", is_current: true } };
+  const item = {
+    id: 9,
+    scheduled_session_id: 92,
+    type: "workout_reminder",
+    visible_at: "2026-11-18T15:00:00Z",
+    status: "pending",
+    read_at: null,
+    is_current: true,
+  };
+  const slot = {
+    id: 92,
+    scheduled_at: "2026-11-18T20:50:00Z",
+    status: "planned",
+    is_missed: false,
+    user_program_id: null,
+    user_program_workout_id: null,
+    source_workout_id: 8,
+    reschedule_history: [],
+    completed_session_id: null,
+    reminder: { id: 9, visible_at: item.visible_at, status: "pending", is_current: true },
+  };
   const workout = { id: 8, name: "Силове тренування Б", description: "", category: "strength", exercises: [] };
   let read = false;
   const { calls } = mockApi({
-    "GET /api/v1/notifications/?page=1&page_size=10": () => json({ count: 1, next: null, previous: null, results: [read ? { ...item, status: "read", read_at: "2026-11-18T15:05:00Z" } : item] }),
-    "GET /api/v1/notifications/?status=pending&page=1&page_size=1": () => json({ count: read ? 0 : 1, next: null, previous: null, results: read ? [] : [item] }),
+    "GET /api/v1/notifications/?page=1&page_size=10": () =>
+      json({
+        count: 1,
+        next: null,
+        previous: null,
+        results: [read ? { ...item, status: "read", read_at: "2026-11-18T15:05:00Z" } : item],
+      }),
+    "GET /api/v1/notifications/?status=pending&page=1&page_size=1": () =>
+      json({ count: read ? 0 : 1, next: null, previous: null, results: read ? [] : [item] }),
     "GET /api/v1/scheduled-sessions/92/": () => json(slot),
     "GET /api/v1/workouts/8/": () => json(workout),
-    "POST /api/v1/notifications/9/read/": () => { read = true; return json({ ...item, status: "read", read_at: "2026-11-18T15:05:00Z" }); },
+    "POST /api/v1/notifications/9/read/": () => {
+      read = true;
+      return json({ ...item, status: "read", read_at: "2026-11-18T15:05:00Z" });
+    },
   });
   render(<App />);
   expect(await screen.findAllByRole("link", { name: "Сповіщення, непрочитаних: 1" })).toHaveLength(2);
@@ -35,12 +70,32 @@ test("notification is read only after the explicit action and unread badge uses 
 
 test("notification detail resolves workout and scheduled time without marking it read", async () => {
   window.history.replaceState(null, "", "/notifications/9");
-  const item = { id: 9, scheduled_session_id: 92, type: "workout_reminder", visible_at: "2026-11-18T15:00:00Z", status: "pending", read_at: null, is_current: true };
-  const slot = { id: 92, scheduled_at: "2026-11-18T20:50:00Z", status: "planned", is_missed: false, user_program_id: null, user_program_workout_id: null, source_workout_id: 8, reschedule_history: [], completed_session_id: null, reminder: { id: 9, visible_at: item.visible_at, status: "pending", is_current: true } };
+  const item = {
+    id: 9,
+    scheduled_session_id: 92,
+    type: "workout_reminder",
+    visible_at: "2026-11-18T15:00:00Z",
+    status: "pending",
+    read_at: null,
+    is_current: true,
+  };
+  const slot = {
+    id: 92,
+    scheduled_at: "2026-11-18T20:50:00Z",
+    status: "planned",
+    is_missed: false,
+    user_program_id: null,
+    user_program_workout_id: null,
+    source_workout_id: 8,
+    reschedule_history: [],
+    completed_session_id: null,
+    reminder: { id: 9, visible_at: item.visible_at, status: "pending", is_current: true },
+  };
   const { calls } = mockApi({
     "GET /api/v1/notifications/9/": () => json(item),
     "GET /api/v1/scheduled-sessions/92/": () => json(slot),
-    "GET /api/v1/workouts/8/": () => json({ id: 8, name: "Силове тренування Б", description: "", category: "strength", exercises: [] }),
+    "GET /api/v1/workouts/8/": () =>
+      json({ id: 8, name: "Силове тренування Б", description: "", category: "strength", exercises: [] }),
   });
   render(<App />);
   expect(await screen.findByRole("heading", { name: "Силове тренування Б" })).toBeInTheDocument();
@@ -63,7 +118,10 @@ test("polling refreshes on timer and focus, and stops while hidden or unmounted"
   act(() => vi.advanceTimersByTime(1000));
   expect(refresh).toHaveBeenCalledTimes(2);
   visibility = "hidden";
-  act(() => { vi.advanceTimersByTime(2000); window.dispatchEvent(new Event("focus")); });
+  act(() => {
+    vi.advanceTimersByTime(2000);
+    window.dispatchEvent(new Event("focus"));
+  });
   expect(refresh).toHaveBeenCalledTimes(2);
   visibility = "visible";
   act(() => document.dispatchEvent(new Event("visibilitychange")));

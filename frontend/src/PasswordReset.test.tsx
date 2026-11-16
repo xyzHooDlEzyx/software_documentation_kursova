@@ -11,12 +11,7 @@ function json(body: unknown, status = 200) {
   });
 }
 
-function apiError(
-  code: string,
-  status: number,
-  fields: Record<string, string[]> = {},
-  message = "Помилка запиту.",
-) {
+function apiError(code: string, status: number, fields: Record<string, string[]> = {}, message = "Помилка запиту.") {
   return json(
     {
       error: {
@@ -85,19 +80,13 @@ test("D02 validates email, submits password reset with CSRF, shows generic confi
     if (path === "/api/v1/auth/password-reset/" && init?.method === "POST") {
       resetRequests.push({ init });
       if (resetMode === "rate_limit") {
-        return apiError(
-          "rate_limit_exceeded",
-          429,
-          {},
-          "Забагато спроб відновлення пароля. Спробуйте пізніше.",
-        );
+        return apiError("rate_limit_exceeded", 429, {}, "Забагато спроб відновлення пароля. Спробуйте пізніше.");
       }
       if (resetMode === "network") {
         throw new TypeError("network down");
       }
       return json({
-        message:
-          "Якщо акаунт із такою адресою існує, ми надішлемо інструкції для відновлення пароля.",
+        message: "Якщо акаунт із такою адресою існує, ми надішлемо інструкції для відновлення пароля.",
       });
     }
     throw new Error(`Unexpected request ${path}`);
@@ -122,15 +111,11 @@ test("D02 validates email, submits password reset with CSRF, shows generic confi
   fireEvent.change(emailInput, { target: { value: "member@example.test" } });
   fireEvent.click(screen.getByRole("button", { name: "Надіслати інструкції" }));
 
-  await screen.findByText(
-    "Якщо акаунт із такою адресою існує, ми надішлемо інструкції для відновлення пароля.",
-  );
+  await screen.findByText("Якщо акаунт із такою адресою існує, ми надішлемо інструкції для відновлення пароля.");
   expect(screen.getByRole("button", { name: "Надіслати повторно" })).toBeInTheDocument();
   expect(resetRequests).toHaveLength(1);
   expect(resetRequests[0].init?.credentials).toBe("same-origin");
-  expect((resetRequests[0].init?.headers as Record<string, string>)["X-CSRFToken"]).toBe(
-    "csrf-d02",
-  );
+  expect((resetRequests[0].init?.headers as Record<string, string>)["X-CSRFToken"]).toBe("csrf-d02");
   expect(JSON.parse(String(resetRequests[0].init?.body))).toEqual({
     email: "member@example.test",
   });
@@ -177,9 +162,7 @@ test("D01 scrubs recovery token from URL immediately and never stores it in loca
   expect(document.cookie).not.toContain("secret-token-xyz");
   expect(document.cookie).not.toContain("uid-41");
 
-  expect(
-    screen.getByRole("heading", { name: "Встановлення нового пароля" }),
-  ).toBeInTheDocument();
+  expect(screen.getByRole("heading", { name: "Встановлення нового пароля" })).toBeInTheDocument();
   await waitFor(() => expect(fetchMock).toHaveBeenCalledTimes(2));
 });
 
@@ -202,9 +185,7 @@ test("D01 preserves form state on intentional browser refresh and renders invali
   const firstRender = render(<App />);
   await waitFor(() => expect(fetchMock).toHaveBeenCalledTimes(2));
   expect(window.location.pathname).toBe("/reset-password");
-  expect(
-    screen.getByRole("heading", { name: "Встановлення нового пароля" }),
-  ).toBeInTheDocument();
+  expect(screen.getByRole("heading", { name: "Встановлення нового пароля" })).toBeInTheDocument();
   firstRender.unmount();
 
   // Simulate browser refresh: in-memory variable is reset on page reload, but history.state persists
@@ -214,9 +195,7 @@ test("D01 preserves form state on intentional browser refresh and renders invali
 
   const refreshedRender = render(<App />);
   await waitFor(() => expect(fetchMock).toHaveBeenCalledTimes(4));
-  expect(
-    screen.getByRole("heading", { name: "Встановлення нового пароля" }),
-  ).toBeInTheDocument();
+  expect(screen.getByRole("heading", { name: "Встановлення нового пароля" })).toBeInTheDocument();
   expect(screen.getByLabelText("Новий пароль")).toBeInTheDocument();
   refreshedRender.unmount();
 
@@ -226,9 +205,7 @@ test("D01 preserves form state on intentional browser refresh and renders invali
 
   render(<App />);
   await waitFor(() => expect(fetchMock).toHaveBeenCalledTimes(6));
-  expect(
-    screen.getByText("Термін дії посилання вичерпано або посилання недійсне."),
-  ).toBeInTheDocument();
+  expect(screen.getByText("Термін дії посилання вичерпано або посилання недійсне.")).toBeInTheDocument();
 
   fireEvent.click(screen.getByRole("link", { name: "Запросити нове посилання" }));
   await screen.findByRole("heading", { name: "Відновлення пароля" });
@@ -287,9 +264,7 @@ test("D01 handles client validation, server field validation, expired token erro
   });
   fireEvent.click(screen.getByRole("button", { name: "Зберегти новий пароль" }));
 
-  expect(
-    screen.getByText("Пароль має містити щонайменше 12 символів."),
-  ).toBeInTheDocument();
+  expect(screen.getByText("Пароль має містити щонайменше 12 символів.")).toBeInTheDocument();
   expect(screen.getByText("Паролі не співпадають.")).toBeInTheDocument();
   expect(confirmCalls).toHaveLength(0);
 
@@ -317,9 +292,7 @@ test("D01 handles client validation, server field validation, expired token erro
   fireEvent.click(screen.getByRole("button", { name: "Зберегти новий пароль" }));
 
   await screen.findByRole("heading", { name: "Посилання недійсне" });
-  expect(
-    screen.getByText("Термін дії посилання вичерпано або посилання недійсне."),
-  ).toBeInTheDocument();
+  expect(screen.getByText("Термін дії посилання вичерпано або посилання недійсне.")).toBeInTheDocument();
   expect(window.history.state).toBeNull();
   firstRender.unmount();
 
@@ -341,9 +314,7 @@ test("D01 handles client validation, server field validation, expired token erro
   expect(confirmCalls).toHaveLength(3);
   const lastCall = confirmCalls[2];
   expect(lastCall.init?.credentials).toBe("same-origin");
-  expect((lastCall.init?.headers as Record<string, string>)["X-CSRFToken"]).toBe(
-    "csrf-confirm",
-  );
+  expect((lastCall.init?.headers as Record<string, string>)["X-CSRFToken"]).toBe("csrf-confirm");
   expect(JSON.parse(String(lastCall.init?.body))).toEqual({
     uid: "uid-99",
     token: "valid-token-abc",

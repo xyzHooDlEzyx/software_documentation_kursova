@@ -40,8 +40,5 @@ test("Button loading state disables submission and exposes its busy state", () =
 test("primary Button keeps foreground color and font size through class merging", () => {
   render(<Button>Продовжити</Button>);
 
-  expect(screen.getByRole("button", { name: "Продовжити" })).toHaveClass(
-    "text-primary-foreground",
-    "text-sm",
-  );
+  expect(screen.getByRole("button", { name: "Продовжити" })).toHaveClass("text-primary-foreground", "text-sm");
 });

@@ -4,8 +4,7 @@ import { Link } from "react-router";
 import { ApiError, requestPasswordReset } from "../app/api";
 import { Alert, Button, TextInput } from "../components/ui";
 
-const DEFAULT_SUCCESS_MESSAGE =
-  "Якщо акаунт із такою адресою існує, ми надішлемо інструкції для відновлення пароля.";
+const DEFAULT_SUCCESS_MESSAGE = "Якщо акаунт із такою адресою існує, ми надішлемо інструкції для відновлення пароля.";
 
 export function PasswordResetRequestPage() {
   const [email, setEmail] = useState("");
@@ -56,9 +55,7 @@ export function PasswordResetRequestPage() {
         <h1 className="m-0 text-title-large font-bold leading-[var(--line-height-title-large)] tracking-[var(--letter-spacing-heading)] text-foreground">
           Відновлення пароля
         </h1>
-        <p className="m-0 text-body text-muted-foreground">
-          Вкажіть електронну пошту, пов’язану з вашим акаунтом.
-        </p>
+        <p className="m-0 text-body text-muted-foreground">Вкажіть електронну пошту, пов’язану з вашим акаунтом.</p>
       </div>
       {successMessage && <Alert tone="success">{successMessage}</Alert>}
       {requestError && <Alert tone="error">{requestError}</Alert>}

@@ -27,13 +27,15 @@ export function createNotificationSessionResolver() {
     const uniqueIds = [...new Set(notifications.map((item) => item.scheduled_session_id))];
     const loaded = await Promise.all(uniqueIds.map(async (id) => [id, await session(id)] as const));
     const byId = new Map(loaded);
-    const available = loaded.flatMap(([, item]) => item ? [item] : []);
+    const available = loaded.flatMap(([, item]) => (item ? [item] : []));
     const names = await resolveSessionNames(available);
     const result = new Map<number, NotificationSessionContext>();
     for (const item of notifications) {
       const slot = byId.get(item.scheduled_session_id);
       result.set(item.id, {
-        workout: slot ? names.get(slot.id)?.workout ?? `Тренування #${slot.source_workout_id}` : `Тренування #${item.scheduled_session_id}`,
+        workout: slot
+          ? (names.get(slot.id)?.workout ?? `Тренування #${slot.source_workout_id}`)
+          : `Тренування #${item.scheduled_session_id}`,
         scheduledAt: slot?.scheduled_at ?? null,
       });
     }

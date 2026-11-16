@@ -10,7 +10,10 @@ function workoutName(id: number) {
   if (!pending) {
     pending = getWorkout(id).then(
       (item) => item.name,
-      () => { workoutCache.delete(id); return `Тренування #${id}`; },
+      () => {
+        workoutCache.delete(id);
+        return `Тренування #${id}`;
+      },
     );
     workoutCache.set(id, pending);
   }
@@ -22,7 +25,10 @@ function program(id: number) {
   if (!pending) {
     pending = getProgram(id).then(
       (item) => item,
-      () => { programCache.delete(id); return null; },
+      () => {
+        programCache.delete(id);
+        return null;
+      },
     );
     programCache.set(id, pending);
   }
@@ -33,14 +39,16 @@ export type SessionNames = { workout: string; program: string | null };
 
 export async function resolveSessionNames(items: ScheduledSession[]) {
   const result = new Map<number, SessionNames>();
-  await Promise.all(items.map(async (item) => {
-    const programData = item.user_program_id ? await program(item.user_program_id) : null;
-    const programWorkout = programData?.workouts.find((workout) => workout.entry_id === item.user_program_workout_id);
-    result.set(item.id, {
-      workout: programWorkout?.name ?? await workoutName(item.source_workout_id),
-      program: programData?.name ?? (item.user_program_id ? `Програма #${item.user_program_id}` : null),
-    });
-  }));
+  await Promise.all(
+    items.map(async (item) => {
+      const programData = item.user_program_id ? await program(item.user_program_id) : null;
+      const programWorkout = programData?.workouts.find((workout) => workout.entry_id === item.user_program_workout_id);
+      result.set(item.id, {
+        workout: programWorkout?.name ?? (await workoutName(item.source_workout_id)),
+        program: programData?.name ?? (item.user_program_id ? `Програма #${item.user_program_id}` : null),
+      });
+    }),
+  );
   return result;
 }
 

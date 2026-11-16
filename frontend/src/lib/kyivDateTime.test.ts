@@ -1,6 +1,13 @@
 import { expect, test } from "vitest";
 
-import { addIsoDays, kyivDateKey, kyivDateTimeInput, kyivLocalToUtcIso, kyivToday, kyivWeekMonday } from "./kyivDateTime";
+import {
+  addIsoDays,
+  kyivDateKey,
+  kyivDateTimeInput,
+  kyivLocalToUtcIso,
+  kyivToday,
+  kyivWeekMonday,
+} from "./kyivDateTime";
 
 test("converts winter and summer Kyiv wall times to UTC", () => {
   expect(kyivLocalToUtcIso("2026-01-15", "12:00")).toBe("2026-01-15T10:00:00Z");

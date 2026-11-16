@@ -10,13 +10,18 @@ export type Notification = {
   is_current: boolean;
 };
 
-export function listNotifications(query: { status?: string; isCurrent?: string; page?: number; pageSize?: number } = {}) {
-  return request<Paginated<Notification>>(withQuery("/api/v1/notifications/", {
-    status: query.status,
-    is_current: query.isCurrent,
-    page: query.page ?? 1,
-    page_size: query.pageSize,
-  }), "GET");
+export function listNotifications(
+  query: { status?: string; isCurrent?: string; page?: number; pageSize?: number } = {},
+) {
+  return request<Paginated<Notification>>(
+    withQuery("/api/v1/notifications/", {
+      status: query.status,
+      is_current: query.isCurrent,
+      page: query.page ?? 1,
+      page_size: query.pageSize,
+    }),
+    "GET",
+  );
 }
 
 export function getNotification(id: number) {

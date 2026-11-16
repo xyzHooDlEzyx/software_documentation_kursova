@@ -1,11 +1,31 @@
-import { useRef, type ChangeEvent, type ChangeEventHandler, type ComponentProps, type InputHTMLAttributes } from "react";
+import {
+  useRef,
+  type ChangeEvent,
+  type ChangeEventHandler,
+  type ComponentProps,
+  type InputHTMLAttributes,
+} from "react";
 import { Switch as BaseSwitch } from "@base-ui/react/switch";
 
 import { cn } from "@/lib/utils";
 
 type SwitchRootProps = ComponentProps<typeof BaseSwitch.Root>;
 
-export interface SwitchProps extends Omit<SwitchRootProps, "id" | "checked" | "defaultChecked" | "disabled" | "required" | "readOnly" | "name" | "value" | "form" | "inputRef" | "onCheckedChange" | "className"> {
+export interface SwitchProps extends Omit<
+  SwitchRootProps,
+  | "id"
+  | "checked"
+  | "defaultChecked"
+  | "disabled"
+  | "required"
+  | "readOnly"
+  | "name"
+  | "value"
+  | "form"
+  | "inputRef"
+  | "onCheckedChange"
+  | "className"
+> {
   id: string;
   label: string;
   error?: string;
@@ -21,7 +41,22 @@ export interface SwitchProps extends Omit<SwitchRootProps, "id" | "checked" | "d
   onChange?: ChangeEventHandler<HTMLInputElement>;
 }
 
-export function Switch({ id, label, error, className = "", checked, defaultChecked, disabled, required, readOnly, name, value, form, onChange, ...props }: SwitchProps) {
+export function Switch({
+  id,
+  label,
+  error,
+  className = "",
+  checked,
+  defaultChecked,
+  disabled,
+  required,
+  readOnly,
+  name,
+  value,
+  form,
+  onChange,
+  ...props
+}: SwitchProps) {
   const inputRef = useRef<HTMLInputElement>(null);
   const errorId = error ? `${id}-error` : undefined;
   const describedBy = [props["aria-describedby"], errorId].filter(Boolean).join(" ") || undefined;
@@ -54,12 +89,19 @@ export function Switch({ id, label, error, className = "", checked, defaultCheck
           aria-describedby={describedBy}
           aria-invalid={error ? true : props["aria-invalid"]}
           onCheckedChange={handleCheckedChange}
-          className={cn("inline-flex h-6 w-10 shrink-0 cursor-pointer items-center rounded-full border border-transparent bg-muted transition-colors data-[checked]:bg-secondary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:cursor-not-allowed disabled:opacity-50 aria-invalid:border-status-error", className)}
+          className={cn(
+            "inline-flex h-6 w-10 shrink-0 cursor-pointer items-center rounded-full border border-transparent bg-muted transition-colors data-[checked]:bg-secondary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:cursor-not-allowed disabled:opacity-50 aria-invalid:border-status-error",
+            className,
+          )}
         >
           <BaseSwitch.Thumb className="pointer-events-none block size-4 translate-x-0 rounded-full bg-card shadow-sm transition-transform data-[checked]:translate-x-4" />
         </BaseSwitch.Root>
       </div>
-      {error && <span className="text-xs text-status-error" id={errorId}>{error}</span>}
+      {error && (
+        <span className="text-xs text-status-error" id={errorId}>
+          {error}
+        </span>
+      )}
     </div>
   );
 }

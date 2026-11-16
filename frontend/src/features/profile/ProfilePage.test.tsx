@@ -28,7 +28,13 @@ test("missing profile shows the create form and posts all fitness fields", async
   const { calls } = mockApi({
     "GET /api/v1/profile/": () => apiError("profile_missing", 404),
     "POST /api/v1/profile/": () => json(profile, 201),
-    "GET /api/v1/weight-entries/?page=1&page_size=20": () => json({ count: 1, next: null, previous: null, results: [{ id: 1, measured_at: "2026-11-14T10:00:00Z", weight_kg: "68.0" }] }),
+    "GET /api/v1/weight-entries/?page=1&page_size=20": () =>
+      json({
+        count: 1,
+        next: null,
+        previous: null,
+        results: [{ id: 1, measured_at: "2026-11-14T10:00:00Z", weight_kg: "68.0" }],
+      }),
   });
   render(<App />);
   await screen.findByRole("heading", { name: "Створіть профіль" });

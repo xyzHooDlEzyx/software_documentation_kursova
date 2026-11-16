@@ -106,29 +106,30 @@ test("register, login, save alias, and logout use the rotated CSRF cookie", asyn
   fireEvent.click(screen.getByRole("button", { name: "Вийти" }));
   await screen.findByText("Ви вийшли з акаунта.");
   expect(window.location.pathname).toBe("/login");
-  expect(csrfHeaders).toEqual([
-    "before-login", "before-login", "after-login", "after-login",
-  ]);
+  expect(csrfHeaders).toEqual(["before-login", "before-login", "after-login", "after-login"]);
 });
 
 test("reload restores the server session and unauthorized settings returns to login", async () => {
   let authenticated = true;
-  vi.stubGlobal("fetch", vi.fn(async (input: RequestInfo | URL, init?: RequestInit) => {
-    const path = String(input);
-    if (path === "/api/v1/auth/csrf/") {
-      document.cookie = "csrftoken=current; path=/";
-      return json({ csrf_token: "current" });
-    }
-    if (path === "/api/v1/me/" && !init?.method) return json(account);
-    if (path === "/api/v1/me/" && init?.method === "GET") {
-      return authenticated ? json(account) : apiError("authentication_required", 401);
-    }
-    if (path === "/api/v1/me/" && init?.method === "PATCH") {
-      authenticated = false;
-      return apiError("authentication_required", 401);
-    }
-    throw new Error(`Unexpected request ${path}`);
-  }));
+  vi.stubGlobal(
+    "fetch",
+    vi.fn(async (input: RequestInfo | URL, init?: RequestInit) => {
+      const path = String(input);
+      if (path === "/api/v1/auth/csrf/") {
+        document.cookie = "csrftoken=current; path=/";
+        return json({ csrf_token: "current" });
+      }
+      if (path === "/api/v1/me/" && !init?.method) return json(account);
+      if (path === "/api/v1/me/" && init?.method === "GET") {
+        return authenticated ? json(account) : apiError("authentication_required", 401);
+      }
+      if (path === "/api/v1/me/" && init?.method === "PATCH") {
+        authenticated = false;
+        return apiError("authentication_required", 401);
+      }
+      throw new Error(`Unexpected request ${path}`);
+    }),
+  );
   render(<App />);
   await screen.findByText(account.email);
   fireEvent.click((await screen.findAllByRole("link", { name: "Налаштування" }))[0]);
@@ -140,14 +141,17 @@ test("reload restores the server session and unauthorized settings returns to lo
 
 test("direct settings URL redirects a guest to login", async () => {
   window.history.replaceState(null, "", "/settings");
-  vi.stubGlobal("fetch", vi.fn(async (input: RequestInfo | URL) => {
-    if (String(input) === "/api/v1/auth/csrf/") {
-      document.cookie = "csrftoken=guest; path=/";
-      return json({ csrf_token: "guest" });
-    }
-    if (String(input) === "/api/v1/me/") return apiError("authentication_required", 401);
-    throw new Error(`Unexpected request ${String(input)}`);
-  }));
+  vi.stubGlobal(
+    "fetch",
+    vi.fn(async (input: RequestInfo | URL) => {
+      if (String(input) === "/api/v1/auth/csrf/") {
+        document.cookie = "csrftoken=guest; path=/";
+        return json({ csrf_token: "guest" });
+      }
+      if (String(input) === "/api/v1/me/") return apiError("authentication_required", 401);
+      throw new Error(`Unexpected request ${String(input)}`);
+    }),
+  );
 
   render(<App />);
 
@@ -158,16 +162,19 @@ test("direct settings URL redirects a guest to login", async () => {
 
 test("session bootstrap network error can be retried", async () => {
   let csrfAttempts = 0;
-  vi.stubGlobal("fetch", vi.fn(async (input: RequestInfo | URL) => {
-    if (String(input) === "/api/v1/auth/csrf/") {
-      csrfAttempts += 1;
-      if (csrfAttempts === 1) throw new TypeError("disconnected");
-      document.cookie = "csrftoken=recovered; path=/";
-      return json({ csrf_token: "recovered" });
-    }
-    if (String(input) === "/api/v1/me/") return apiError("authentication_required", 401);
-    throw new Error(`Unexpected request ${String(input)}`);
-  }));
+  vi.stubGlobal(
+    "fetch",
+    vi.fn(async (input: RequestInfo | URL) => {
+      if (String(input) === "/api/v1/auth/csrf/") {
+        csrfAttempts += 1;
+        if (csrfAttempts === 1) throw new TypeError("disconnected");
+        document.cookie = "csrftoken=recovered; path=/";
+        return json({ csrf_token: "recovered" });
+      }
+      if (String(input) === "/api/v1/me/") return apiError("authentication_required", 401);
+      throw new Error(`Unexpected request ${String(input)}`);
+    }),
+  );
 
   render(<App />);
 
@@ -179,19 +186,22 @@ test("session bootstrap network error can be retried", async () => {
 
 test("invalid credentials and network failures are visible", async () => {
   let loginNetworkFailure = false;
-  vi.stubGlobal("fetch", vi.fn(async (input: RequestInfo | URL) => {
-    const path = String(input);
-    if (path === "/api/v1/auth/csrf/") {
-      document.cookie = "csrftoken=current; path=/";
-      return json({ csrf_token: "current" });
-    }
-    if (path === "/api/v1/me/") return apiError("authentication_required", 401);
-    if (path === "/api/v1/auth/login/") {
-      if (loginNetworkFailure) throw new Error("disconnected");
-      return apiError("invalid_credentials", 401);
-    }
-    throw new Error(`Unexpected request ${path}`);
-  }));
+  vi.stubGlobal(
+    "fetch",
+    vi.fn(async (input: RequestInfo | URL) => {
+      const path = String(input);
+      if (path === "/api/v1/auth/csrf/") {
+        document.cookie = "csrftoken=current; path=/";
+        return json({ csrf_token: "current" });
+      }
+      if (path === "/api/v1/me/") return apiError("authentication_required", 401);
+      if (path === "/api/v1/auth/login/") {
+        if (loginNetworkFailure) throw new Error("disconnected");
+        return apiError("invalid_credentials", 401);
+      }
+      throw new Error(`Unexpected request ${path}`);
+    }),
+  );
   render(<App />);
   await screen.findByRole("button", { name: "Увійти" });
   fireEvent.change(screen.getByLabelText("Email"), { target: { value: account.email } });

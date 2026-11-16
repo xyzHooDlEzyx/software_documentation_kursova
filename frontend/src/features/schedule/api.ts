@@ -1,7 +1,13 @@
 import { request, withQuery, type Paginated } from "@/app/api";
 
 export type SessionStatus = "planned" | "completed" | "cancelled";
-export type Reminder = { id: number; visible_at: string; status: "pending" | "read" | "cancelled"; read_at?: string | null; is_current: boolean };
+export type Reminder = {
+  id: number;
+  visible_at: string;
+  status: "pending" | "read" | "cancelled";
+  read_at?: string | null;
+  is_current: boolean;
+};
 export type ScheduledSession = {
   id: number;
   scheduled_at: string;
@@ -22,9 +28,15 @@ export async function listAllSessions(startDate: string, endDate: string) {
   let page = 1;
   let count = 0;
   do {
-    const response = await request<Paginated<ScheduledSession>>(withQuery("/api/v1/scheduled-sessions/", {
-      start_date: startDate, end_date: endDate, page, page_size: 100,
-    }), "GET");
+    const response = await request<Paginated<ScheduledSession>>(
+      withQuery("/api/v1/scheduled-sessions/", {
+        start_date: startDate,
+        end_date: endDate,
+        page,
+        page_size: 100,
+      }),
+      "GET",
+    );
     results.push(...response.results);
     count = response.count;
     page += 1;
@@ -32,7 +44,11 @@ export async function listAllSessions(startDate: string, endDate: string) {
   return results;
 }
 
-export function createSession(body: { scheduled_at: string; user_program_workout_id: number | null; source_workout_id: number | null }) {
+export function createSession(body: {
+  scheduled_at: string;
+  user_program_workout_id: number | null;
+  source_workout_id: number | null;
+}) {
   return request<ScheduledSessionDetail>("/api/v1/scheduled-sessions/", "POST", body);
 }
 
@@ -45,5 +61,9 @@ export function rescheduleSession(id: number, scheduled_at: string) {
 }
 
 export function cancelSession(id: number) {
-  return request<Pick<ScheduledSessionDetail, "id" | "status" | "reminder">>(`/api/v1/scheduled-sessions/${id}/cancel/`, "POST", {});
+  return request<Pick<ScheduledSessionDetail, "id" | "status" | "reminder">>(
+    `/api/v1/scheduled-sessions/${id}/cancel/`,
+    "POST",
+    {},
+  );
 }

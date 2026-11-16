@@ -23,5 +23,14 @@ const alertVariants = cva("rounded-field border px-space-4 py-space-3 text-base"
 
 export function Alert({ tone = "info", children, className = "", role, ...props }: AlertProps) {
   const liveRole = role ?? (tone === "error" || tone === "warning" ? "alert" : "status");
-  return <div {...props} className={cn(alertVariants({ tone }), className)} role={liveRole} aria-live={liveRole === "alert" ? "assertive" : "polite"}>{children}</div>;
+  return (
+    <div
+      {...props}
+      className={cn(alertVariants({ tone }), className)}
+      role={liveRole}
+      aria-live={liveRole === "alert" ? "assertive" : "polite"}
+    >
+      {children}
+    </div>
+  );
 }

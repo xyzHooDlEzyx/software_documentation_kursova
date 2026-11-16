@@ -53,7 +53,11 @@ export function ProfilePage() {
   if (missing) {
     return (
       <>
-        <PageHeader title="Створіть профіль" eyebrow="Профіль" description="Ці дані потрібні для добору програми тренувань і розрахунку статистики." />
+        <PageHeader
+          title="Створіть профіль"
+          eyebrow="Профіль"
+          description="Ці дані потрібні для добору програми тренувань і розрахунку статистики."
+        />
         <Card className="p-space-4 sm:p-space-6">
           <ProfileForm profile={null} onSaved={(next) => saved(next, "Профіль створено.")} />
         </Card>
@@ -62,7 +66,14 @@ export function ProfilePage() {
   }
 
   if (profile.status === "error" && !profile.data) {
-    return <div className="grid gap-space-3"><Alert tone="error">{errorMessage(profile.error)}</Alert><div><Button onClick={profile.reload}>Спробувати ще раз</Button></div></div>;
+    return (
+      <div className="grid gap-space-3">
+        <Alert tone="error">{errorMessage(profile.error)}</Alert>
+        <div>
+          <Button onClick={profile.reload}>Спробувати ще раз</Button>
+        </div>
+      </div>
+    );
   }
 
   const data = profile.data!;
@@ -70,14 +81,30 @@ export function ProfilePage() {
   return (
     <>
       <PageHeader title="Мій профіль" eyebrow="Профіль" description={fullName || "Ім’я не вказано"}>
-        {!editing && <Button variant="outlined" onClick={() => { setMessage(""); setEditing(true); }}>Редагувати</Button>}
+        {!editing && (
+          <Button
+            variant="outlined"
+            onClick={() => {
+              setMessage("");
+              setEditing(true);
+            }}
+          >
+            Редагувати
+          </Button>
+        )}
       </PageHeader>
       <div className="grid gap-space-6">
         {message && <Alert tone="success">{message}</Alert>}
         <Card className="p-space-4 sm:p-space-6">
-          {editing
-            ? <ProfileForm profile={data} onSaved={(next) => saved(next, "Зміни збережено.")} onCancel={() => setEditing(false)} />
-            : <ProfileOverview profile={data} />}
+          {editing ? (
+            <ProfileForm
+              profile={data}
+              onSaved={(next) => saved(next, "Зміни збережено.")}
+              onCancel={() => setEditing(false)}
+            />
+          ) : (
+            <ProfileOverview profile={data} />
+          )}
         </Card>
         <WeightHistory refreshKey={historyKey} />
       </div>

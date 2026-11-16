@@ -63,12 +63,7 @@ async function asApiError(response: Response): Promise<ApiError> {
   try {
     const body = (await response.json()) as ApiErrorBody;
     if (body.error && typeof body.error.code === "string") {
-      return new ApiError(
-        response.status,
-        body.error.code,
-        body.error.fields ?? {},
-        body.error.message,
-      );
+      return new ApiError(response.status, body.error.code, body.error.fields ?? {}, body.error.message);
     }
   } catch {
     // An HTML proxy error or interrupted response has no API envelope.
@@ -88,7 +83,10 @@ export function setUnauthorizedHandler(handler: (() => void) | null) {
 }
 
 /** Appends defined, non-empty query parameters to an API path. */
-export function withQuery(path: ApiPath, params: Record<string, string | number | boolean | null | undefined>): ApiPath {
+export function withQuery(
+  path: ApiPath,
+  params: Record<string, string | number | boolean | null | undefined>,
+): ApiPath {
   const query = new URLSearchParams();
   for (const [key, value] of Object.entries(params)) {
     if (value === undefined || value === null || value === "") continue;
@@ -102,7 +100,12 @@ export type RequestOptions = {
   headers?: Record<string, string>;
 };
 
-export async function request<T>(path: ApiPath, method: HttpMethod, body?: object, options: RequestOptions = {}): Promise<T> {
+export async function request<T>(
+  path: ApiPath,
+  method: HttpMethod,
+  body?: object,
+  options: RequestOptions = {},
+): Promise<T> {
   const unsafe = method !== "GET";
   if (unsafe && !csrfCookie()) {
     try {

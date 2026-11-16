@@ -17,10 +17,16 @@ export function useResource<T>(load: () => Promise<T>, deps: DependencyList) {
     let active = true;
     setState((previous) => ({ status: "loading", data: previous.data, error: null }));
     load().then(
-      (data) => { if (active) setState({ status: "ready", data, error: null }); },
-      (error: unknown) => { if (active) setState((previous) => ({ status: "error", data: previous.data, error })); },
+      (data) => {
+        if (active) setState({ status: "ready", data, error: null });
+      },
+      (error: unknown) => {
+        if (active) setState((previous) => ({ status: "error", data: previous.data, error }));
+      },
     );
-    return () => { active = false; };
+    return () => {
+      active = false;
+    };
     // `load` is recreated every render on purpose; `deps` lists what it reads.
   }, [...deps, version]);
 

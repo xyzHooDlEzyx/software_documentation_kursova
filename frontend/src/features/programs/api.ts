@@ -85,7 +85,11 @@ export function getRecommendation() {
   return request<Recommendation>("/api/v1/program-recommendation/", "GET");
 }
 
-export function listPrograms({ status, archived = false, page = 1 }: { status?: string; archived?: boolean; page?: number } = {}) {
+export function listPrograms({
+  status,
+  archived = false,
+  page = 1,
+}: { status?: string; archived?: boolean; page?: number } = {}) {
   return request<Paginated<UserProgramSummary>>(withQuery("/api/v1/user-programs/", { status, archived, page }), "GET");
 }
 
@@ -99,11 +103,19 @@ export function getProgram(id: number) {
 }
 
 export function updateProgram(id: number, changes: { name?: string; description?: string }) {
-  return request<Pick<UserProgramDetail, "id" | "name" | "description" | "status" | "is_archived">>(`/api/v1/user-programs/${id}/`, "PATCH", changes);
+  return request<Pick<UserProgramDetail, "id" | "name" | "description" | "status" | "is_archived">>(
+    `/api/v1/user-programs/${id}/`,
+    "PATCH",
+    changes,
+  );
 }
 
 export function activateProgram(id: number) {
-  return request<Pick<UserProgramDetail, "id" | "status" | "is_archived" | "bonus_target_sessions" | "progress"> & { activated_at: string }>(`/api/v1/user-programs/${id}/activate/`, "POST", {});
+  return request<
+    Pick<UserProgramDetail, "id" | "status" | "is_archived" | "bonus_target_sessions" | "progress"> & {
+      activated_at: string;
+    }
+  >(`/api/v1/user-programs/${id}/activate/`, "POST", {});
 }
 
 export function getProgramProgress(id: number) {
@@ -111,7 +123,11 @@ export function getProgramProgress(id: number) {
 }
 
 export function archiveProgram(id: number) {
-  return request<Pick<UserProgramDetail, "id" | "status" | "is_archived" | "bonus_earned">>(`/api/v1/user-programs/${id}/archive/`, "POST", {});
+  return request<Pick<UserProgramDetail, "id" | "status" | "is_archived" | "bonus_earned">>(
+    `/api/v1/user-programs/${id}/archive/`,
+    "POST",
+    {},
+  );
 }
 
 /** G06: replaces the whole personal composition of one workout occurrence. */

@@ -3,12 +3,16 @@ import { useCallback, useEffect, useRef } from "react";
 export function useVisiblePolling(refresh: () => void | Promise<void>, intervalMs = 60_000) {
   const refreshRef = useRef(refresh);
   refreshRef.current = refresh;
-  const run = useCallback(() => { if (document.visibilityState === "visible") void refreshRef.current(); }, []);
+  const run = useCallback(() => {
+    if (document.visibilityState === "visible") void refreshRef.current();
+  }, []);
 
   useEffect(() => {
     run();
     const timer = window.setInterval(run, intervalMs);
-    const visibility = () => { if (document.visibilityState === "visible") run(); };
+    const visibility = () => {
+      if (document.visibilityState === "visible") run();
+    };
     window.addEventListener("focus", run);
     document.addEventListener("visibilitychange", visibility);
     return () => {

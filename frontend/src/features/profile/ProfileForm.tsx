@@ -54,7 +54,8 @@ function changedFields(initial: Profile, next: ProfileInput): Partial<ProfileInp
   for (const key of Object.keys(next) as (keyof ProfileInput)[]) {
     const before = initial[key];
     const after = next[key];
-    const same = key === "weight_kg" || key === "height_cm" ? Number(before) === Number(after) : String(before) === String(after);
+    const same =
+      key === "weight_kg" || key === "height_cm" ? Number(before) === Number(after) : String(before) === String(after);
     if (!same) Object.assign(changes, { [key]: after });
   }
   return changes;
@@ -64,7 +65,15 @@ function localToday() {
   return format(new Date(), "yyyy-MM-dd");
 }
 
-export function ProfileForm({ profile, onSaved, onCancel }: { profile: Profile | null; onSaved: (profile: Profile) => void; onCancel?: () => void }) {
+export function ProfileForm({
+  profile,
+  onSaved,
+  onCancel,
+}: {
+  profile: Profile | null;
+  onSaved: (profile: Profile) => void;
+  onCancel?: () => void;
+}) {
   const [values, setValues] = useState<FormValues>(profile ? toValues(profile) : EMPTY);
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [formError, setFormError] = useState("");
@@ -94,7 +103,10 @@ export function ProfileForm({ profile, onSaved, onCancel }: { profile: Profile |
     if (Object.keys(clientErrors).length) return;
     if (profile) {
       const changes = changedFields(profile, input);
-      if (!Object.keys(changes).length) { onCancel?.(); return; }
+      if (!Object.keys(changes).length) {
+        onCancel?.();
+        return;
+      }
     }
     setBusy(true);
     try {
@@ -112,19 +124,102 @@ export function ProfileForm({ profile, onSaved, onCancel }: { profile: Profile |
     <form className="grid gap-space-5" onSubmit={(event) => void submit(event)} noValidate>
       {formError && <Alert tone="error">{formError}</Alert>}
       <div className="grid gap-space-4 sm:grid-cols-2">
-        <TextInput id="first-name" label="Ім’я (необов’язково)" value={values.first_name} maxLength={150} onChange={(e) => set("first_name", e.target.value)} error={errors.first_name} />
-        <TextInput id="last-name" label="Прізвище (необов’язково)" value={values.last_name} maxLength={150} onChange={(e) => set("last_name", e.target.value)} error={errors.last_name} />
-        <TextInput id="date-of-birth" label="Дата народження" type="date" max={localToday()} value={values.date_of_birth} onChange={(e) => set("date_of_birth", e.target.value)} error={errors.date_of_birth} hint="Вік на момент створення профілю — від 19 до 59 років." />
-        <Select id="gender" label="Стать" placeholder="Оберіть…" options={options(genderLabels)} value={values.gender} onChange={(e) => set("gender", e.target.value)} error={errors.gender} />
-        <TextInput id="weight" label="Вага, кг" type="number" inputMode="decimal" step="0.1" min="20" max="500" value={values.weight_kg} onChange={(e) => set("weight_kg", e.target.value)} error={errors.weight_kg} hint={profile ? "Зміна ваги додає запис в історію." : undefined} />
-        <TextInput id="height" label="Зріст, см" type="number" inputMode="decimal" step="0.1" min="100" max="250" value={values.height_cm} onChange={(e) => set("height_cm", e.target.value)} error={errors.height_cm} />
-        <Select id="fitness-goal" label="Ціль" placeholder="Оберіть…" options={options(goalLabels)} value={values.fitness_goal} onChange={(e) => set("fitness_goal", e.target.value)} error={errors.fitness_goal} />
-        <Select id="experience-level" label="Рівень підготовки" placeholder="Оберіть…" options={options(levelLabels)} value={values.experience_level} onChange={(e) => set("experience_level", e.target.value)} error={errors.experience_level} />
-        <Select id="workouts-per-week" label="Тренувань на тиждень" options={[1, 2, 3, 4, 5, 6, 7].map((n) => ({ value: String(n), label: String(n) }))} value={values.workouts_per_week} onChange={(e) => set("workouts_per_week", e.target.value)} error={errors.workouts_per_week} />
+        <TextInput
+          id="first-name"
+          label="Ім’я (необов’язково)"
+          value={values.first_name}
+          maxLength={150}
+          onChange={(e) => set("first_name", e.target.value)}
+          error={errors.first_name}
+        />
+        <TextInput
+          id="last-name"
+          label="Прізвище (необов’язково)"
+          value={values.last_name}
+          maxLength={150}
+          onChange={(e) => set("last_name", e.target.value)}
+          error={errors.last_name}
+        />
+        <TextInput
+          id="date-of-birth"
+          label="Дата народження"
+          type="date"
+          max={localToday()}
+          value={values.date_of_birth}
+          onChange={(e) => set("date_of_birth", e.target.value)}
+          error={errors.date_of_birth}
+          hint="Вік на момент створення профілю — від 19 до 59 років."
+        />
+        <Select
+          id="gender"
+          label="Стать"
+          placeholder="Оберіть…"
+          options={options(genderLabels)}
+          value={values.gender}
+          onChange={(e) => set("gender", e.target.value)}
+          error={errors.gender}
+        />
+        <TextInput
+          id="weight"
+          label="Вага, кг"
+          type="number"
+          inputMode="decimal"
+          step="0.1"
+          min="20"
+          max="500"
+          value={values.weight_kg}
+          onChange={(e) => set("weight_kg", e.target.value)}
+          error={errors.weight_kg}
+          hint={profile ? "Зміна ваги додає запис в історію." : undefined}
+        />
+        <TextInput
+          id="height"
+          label="Зріст, см"
+          type="number"
+          inputMode="decimal"
+          step="0.1"
+          min="100"
+          max="250"
+          value={values.height_cm}
+          onChange={(e) => set("height_cm", e.target.value)}
+          error={errors.height_cm}
+        />
+        <Select
+          id="fitness-goal"
+          label="Ціль"
+          placeholder="Оберіть…"
+          options={options(goalLabels)}
+          value={values.fitness_goal}
+          onChange={(e) => set("fitness_goal", e.target.value)}
+          error={errors.fitness_goal}
+        />
+        <Select
+          id="experience-level"
+          label="Рівень підготовки"
+          placeholder="Оберіть…"
+          options={options(levelLabels)}
+          value={values.experience_level}
+          onChange={(e) => set("experience_level", e.target.value)}
+          error={errors.experience_level}
+        />
+        <Select
+          id="workouts-per-week"
+          label="Тренувань на тиждень"
+          options={[1, 2, 3, 4, 5, 6, 7].map((n) => ({ value: String(n), label: String(n) }))}
+          value={values.workouts_per_week}
+          onChange={(e) => set("workouts_per_week", e.target.value)}
+          error={errors.workouts_per_week}
+        />
       </div>
       <div className="flex flex-wrap gap-space-2">
-        <Button type="submit" loading={busy}>{profile ? "Зберегти зміни" : "Створити профіль"}</Button>
-        {onCancel && <Button variant="outlined" onClick={onCancel} disabled={busy}>Скасувати</Button>}
+        <Button type="submit" loading={busy}>
+          {profile ? "Зберегти зміни" : "Створити профіль"}
+        </Button>
+        {onCancel && (
+          <Button variant="outlined" onClick={onCancel} disabled={busy}>
+            Скасувати
+          </Button>
+        )}
       </div>
     </form>
   );

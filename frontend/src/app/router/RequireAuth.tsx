@@ -13,8 +13,15 @@ export function RequireAuth() {
   const completedLogout = useRef(false);
 
   if (status === "loading") return <LoadingState text="Перевіряємо сесію…" />;
-  if (status === "error") return <div className="route-state"><Alert tone="error">{error}</Alert><Button onClick={() => void refresh()}>Спробувати ще раз</Button></div>;
-  if (!account || status === "guest") return <Navigate to="/login" replace state={completedLogout.current ? { loggedOut: true } : { from: location }} />;
+  if (status === "error")
+    return (
+      <div className="route-state">
+        <Alert tone="error">{error}</Alert>
+        <Button onClick={() => void refresh()}>Спробувати ще раз</Button>
+      </div>
+    );
+  if (!account || status === "guest")
+    return <Navigate to="/login" replace state={completedLogout.current ? { loggedOut: true } : { from: location }} />;
 
   async function onLogout() {
     setLogoutBusy(true);
@@ -29,7 +36,9 @@ export function RequireAuth() {
         completedLogout.current = false;
         setNotice(reason instanceof ApiError ? reason.message : "Не вдалося вийти з акаунта. Спробуйте ще раз.");
       }
-    } finally { setLogoutBusy(false); }
+    } finally {
+      setLogoutBusy(false);
+    }
   }
 
   return <AuthenticatedLayout account={account} onLogout={() => void onLogout()} logoutBusy={logoutBusy} />;

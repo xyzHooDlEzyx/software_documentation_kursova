@@ -42,20 +42,44 @@ export function SettingsPage() {
         }
       }
       setError(reason instanceof ApiError ? reason.message : "Не вдалося виконати запит. Спробуйте ще раз.");
-    } finally { setBusy(false); }
+    } finally {
+      setBusy(false);
+    }
   }
 
   return (
     <>
-      <PageHeader title="Налаштування" eyebrow="Акаунт" description="Керуйте ім’ям, яке бачать інші учасники рейтингу." />
+      <PageHeader
+        title="Налаштування"
+        eyebrow="Акаунт"
+        description="Керуйте ім’ям, яке бачать інші учасники рейтингу."
+      />
       <Card className="grid gap-space-4 p-space-4 sm:p-space-6">
         {notice && <Alert tone="error">{notice}</Alert>}
         {message && <Alert tone="success">{message}</Alert>}
         {error && <Alert tone="error">{error}</Alert>}
         <form className="grid gap-space-5" onSubmit={(event) => void submit(event)}>
-          <TextInput id="public-alias" label="Псевдонім" value={alias} maxLength={80} onChange={(event) => setAlias(event.target.value)} error={fieldError} hint="Псевдонім обов’язковий, якщо ви вмикаєте показ у рейтингу." />
-          <Switch id="leaderboard-opt-in" label="Показувати мене в рейтингу" checked={optIn} onChange={(event) => { setOptIn(event.target.checked); if (!event.target.checked) setFieldError(""); }} />
-          <Button type="submit" loading={busy}>Зберегти</Button>
+          <TextInput
+            id="public-alias"
+            label="Псевдонім"
+            value={alias}
+            maxLength={80}
+            onChange={(event) => setAlias(event.target.value)}
+            error={fieldError}
+            hint="Псевдонім обов’язковий, якщо ви вмикаєте показ у рейтингу."
+          />
+          <Switch
+            id="leaderboard-opt-in"
+            label="Показувати мене в рейтингу"
+            checked={optIn}
+            onChange={(event) => {
+              setOptIn(event.target.checked);
+              if (!event.target.checked) setFieldError("");
+            }}
+          />
+          <Button type="submit" loading={busy}>
+            Зберегти
+          </Button>
         </form>
       </Card>
     </>
