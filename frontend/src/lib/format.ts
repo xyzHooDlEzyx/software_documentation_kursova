@@ -22,7 +22,10 @@ export function formatTime(isoDateTime: string) {
 
 export function formatWeekday(isoDate: string, width: "short" | "long") {
   const [year, month, day] = isoDate.split("-").map(Number);
-  const text = format(new TZDate(year, month - 1, day, KYIV), width === "short" ? "EEEEEE" : "EEEE", { in: inKyiv, locale: uk });
+  const text = format(new TZDate(year, month - 1, day, KYIV), width === "short" ? "EEEEEE" : "EEEE", {
+    in: inKyiv,
+    locale: uk,
+  });
   return text.charAt(0).toLocaleUpperCase("uk-UA") + text.slice(1);
 }
 
@@ -38,11 +41,13 @@ export function formatDecimal(value: string | null | undefined, unit = "") {
 export function plural(count: number, [one, few, many]: [string, string, string]) {
   const mod10 = count % 10;
   const mod100 = count % 100;
-  const word = mod10 === 1 && mod100 !== 11 ? one : mod10 >= 2 && mod10 <= 4 && (mod100 < 12 || mod100 > 14) ? few : many;
+  const word =
+    mod10 === 1 && mod100 !== 11 ? one : mod10 >= 2 && mod10 <= 4 && (mod100 < 12 || mod100 > 14) ? few : many;
   return `${count} ${word}`;
 }
 
 export const EXERCISE_WORDS: [string, string, string] = ["вправа", "вправи", "вправ"];
+export const POINT_WORDS: [string, string, string] = ["бал", "бали", "балів"];
 
 /** Decimal string from the API ("20.00") -> value for an input field ("20"). */
 export function decimalInput(value: string | null | undefined) {

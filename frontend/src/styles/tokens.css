@@ -40,6 +40,12 @@
   --color-info: #3b82f6;
   --color-info-container: #e8fef6;
 
+  /* Charts consume semantic tokens so Recharts never hardcodes palette values. */
+  --color-chart-primary: var(--color-brand-secondary);
+  --color-chart-secondary: var(--color-brand-primary);
+  --color-chart-grid: var(--color-border);
+  --color-chart-label: var(--color-text-muted);
+
   --font-family-base: "Manrope", "Segoe UI", sans-serif;
   --font-weight-regular: 400;
   --font-weight-medium: 500;
@@ -102,4 +108,11 @@
   --layout-content-max-width: 90rem;
   --layout-page-gutter: 2rem;
   --layout-grid-gutter: 1.5rem;
+}
+
+[data-theme="dark"] {
+  --color-chart-primary: #76d7b6;
+  --color-chart-secondary: var(--color-brand-accent);
+  --color-chart-grid: #717976;
+  --color-chart-label: #e1e6e3;
 }

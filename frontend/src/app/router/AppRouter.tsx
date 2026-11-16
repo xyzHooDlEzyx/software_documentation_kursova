@@ -11,59 +11,125 @@ import { PasswordResetRequestPage } from "../../pages/PasswordResetRequestPage";
 import { SettingsPage } from "../../pages/SettingsPage";
 import { CatalogPage } from "../../features/catalog/CatalogPage";
 import { WorkoutDetailPage } from "../../features/catalog/WorkoutDetailPage";
-import { ProfilePage } from "../../features/profile/ProfilePage";
 import { ProgramDetailPage } from "../../features/programs/ProgramDetailPage";
 import { ProgramsPage } from "../../features/programs/ProgramsPage";
 import { RecommendationPage } from "../../features/programs/RecommendationPage";
 import { Alert, Button, LoadingState } from "../../components/ui";
 import { RequireAuth } from "./RequireAuth";
 
-const CompositionEditorPage = lazy(() => import("../../features/programs/CompositionEditorPage").then((module) => ({ default: module.CompositionEditorPage })));
-const CalendarPage = lazy(() => import("../../features/schedule/CalendarPage").then((module) => ({ default: module.CalendarPage })));
-const SessionDetailPage = lazy(() => import("../../features/schedule/SessionDetailPage").then((module) => ({ default: module.SessionDetailPage })));
-const NotificationsPage = lazy(() => import("../../features/notifications/NotificationsPage").then((module) => ({ default: module.NotificationsPage })));
-const NotificationDetailPage = lazy(() => import("../../features/notifications/NotificationDetailPage").then((module) => ({ default: module.NotificationDetailPage })));
-const CompletionFormPage = lazy(() => import("../../features/execution/CompletionFormPage").then((module) => ({ default: module.CompletionFormPage })));
-const CompletionResultPage = lazy(() => import("../../features/execution/CompletionResultPage").then((module) => ({ default: module.CompletionResultPage })));
+const CompositionEditorPage = lazy(() =>
+  import("../../features/programs/CompositionEditorPage").then((module) => ({ default: module.CompositionEditorPage })),
+);
+const CalendarPage = lazy(() =>
+  import("../../features/schedule/CalendarPage").then((module) => ({ default: module.CalendarPage })),
+);
+const SessionDetailPage = lazy(() =>
+  import("../../features/schedule/SessionDetailPage").then((module) => ({ default: module.SessionDetailPage })),
+);
+const NotificationsPage = lazy(() =>
+  import("../../features/notifications/NotificationsPage").then((module) => ({ default: module.NotificationsPage })),
+);
+const NotificationDetailPage = lazy(() =>
+  import("../../features/notifications/NotificationDetailPage").then((module) => ({
+    default: module.NotificationDetailPage,
+  })),
+);
+const CompletionFormPage = lazy(() =>
+  import("../../features/execution/CompletionFormPage").then((module) => ({ default: module.CompletionFormPage })),
+);
+const CompletionResultPage = lazy(() =>
+  import("../../features/execution/CompletionResultPage").then((module) => ({ default: module.CompletionResultPage })),
+);
+const ProfilePage = lazy(() =>
+  import("../../features/profile/ProfilePage").then((module) => ({ default: module.ProfilePage })),
+);
+const ProgressHubPage = lazy(() =>
+  import("../../features/progress/ProgressHubPage").then((module) => ({ default: module.ProgressHubPage })),
+);
+const MorePage = lazy(() =>
+  import("../../features/progress/MorePage").then((module) => ({ default: module.MorePage })),
+);
+const StatisticsPage = lazy(() =>
+  import("../../features/progress/StatisticsPage").then((module) => ({ default: module.StatisticsPage })),
+);
+const HistoryPage = lazy(() =>
+  import("../../features/progress/HistoryPage").then((module) => ({ default: module.HistoryPage })),
+);
+const HistoryDetailPage = lazy(() =>
+  import("../../features/progress/HistoryDetailPage").then((module) => ({ default: module.HistoryDetailPage })),
+);
+const PointsPage = lazy(() =>
+  import("../../features/progress/PointsPage").then((module) => ({ default: module.PointsPage })),
+);
+const AchievementsPage = lazy(() =>
+  import("../../features/progress/AchievementsPage").then((module) => ({ default: module.AchievementsPage })),
+);
+const ChallengesPage = lazy(() =>
+  import("../../features/progress/ChallengesPage").then((module) => ({ default: module.ChallengesPage })),
+);
+const ChallengeDetailPage = lazy(() =>
+  import("../../features/progress/ChallengeDetailPage").then((module) => ({ default: module.ChallengeDetailPage })),
+);
+const LeaderboardPage = lazy(() =>
+  import("../../features/progress/LeaderboardPage").then((module) => ({ default: module.LeaderboardPage })),
+);
 
 function PublicOnly({ mode }: { mode: "login" | "register" }) {
   const { account, status, error, refresh } = useAuth();
   if (status === "authenticated" && account) return <Navigate to="/" replace />;
   if (status === "loading") return <LoadingState text="Перевіряємо сесію…" />;
-  if (status === "error") return <><Alert tone="error">{error}</Alert><Button onClick={() => void refresh()}>Спробувати ще раз</Button></>;
+  if (status === "error")
+    return (
+      <>
+        <Alert tone="error">{error}</Alert>
+        <Button onClick={() => void refresh()}>Спробувати ще раз</Button>
+      </>
+    );
   return <AuthPage mode={mode} />;
 }
 
 export function AppRouter() {
   return (
-    <Suspense fallback={<LoadingState text="Завантажуємо сторінку…" />}><Routes>
-      <Route element={<PublicLayout />}>
-        <Route path="/login" element={<PublicOnly mode="login" />} />
-        <Route path="/register" element={<PublicOnly mode="register" />} />
-        <Route path="/forgot-password" element={<PasswordResetRequestPage />} />
-        <Route path="/password-reset" element={<PasswordResetRequestPage />} />
-        <Route path="/reset-password/:uid/:token" element={<PasswordResetConfirmPage />} />
-        <Route path="/reset-password" element={<PasswordResetConfirmPage />} />
-      </Route>
-      <Route element={<RequireAuth />}>
-        <Route path="/" element={<HomePage />} />
-        <Route path="/profile" element={<ProfilePage />} />
-        <Route path="/catalog" element={<CatalogPage />} />
-        <Route path="/catalog/workouts/:id" element={<WorkoutDetailPage />} />
-        <Route path="/catalog/workouts/:id/complete" element={<CompletionFormPage />} />
-        <Route path="/programs" element={<ProgramsPage />} />
-        <Route path="/programs/recommendation" element={<RecommendationPage />} />
-        <Route path="/programs/:id" element={<ProgramDetailPage />} />
-        <Route path="/programs/:id/workouts/:entryId" element={<CompositionEditorPage />} />
-        <Route path="/schedule" element={<CalendarPage />} />
-        <Route path="/schedule/:id" element={<SessionDetailPage />} />
-        <Route path="/schedule/:id/complete" element={<CompletionFormPage />} />
-        <Route path="/completed/:id" element={<CompletionResultPage />} />
-        <Route path="/notifications" element={<NotificationsPage />} />
-        <Route path="/notifications/:id" element={<NotificationDetailPage />} />
-        <Route path="/settings" element={<SettingsPage />} />
-      </Route>
-      <Route path="*" element={<NotFoundPage />} />
-    </Routes></Suspense>
+    <Suspense fallback={<LoadingState text="Завантажуємо сторінку…" />}>
+      <Routes>
+        <Route element={<PublicLayout />}>
+          <Route path="/login" element={<PublicOnly mode="login" />} />
+          <Route path="/register" element={<PublicOnly mode="register" />} />
+          <Route path="/forgot-password" element={<PasswordResetRequestPage />} />
+          <Route path="/password-reset" element={<PasswordResetRequestPage />} />
+          <Route path="/reset-password/:uid/:token" element={<PasswordResetConfirmPage />} />
+          <Route path="/reset-password" element={<PasswordResetConfirmPage />} />
+        </Route>
+        <Route element={<RequireAuth />}>
+          <Route path="/" element={<HomePage />} />
+          <Route path="/profile" element={<ProfilePage />} />
+          <Route path="/catalog" element={<CatalogPage />} />
+          <Route path="/catalog/workouts/:id" element={<WorkoutDetailPage />} />
+          <Route path="/catalog/workouts/:id/complete" element={<CompletionFormPage />} />
+          <Route path="/programs" element={<ProgramsPage />} />
+          <Route path="/programs/recommendation" element={<RecommendationPage />} />
+          <Route path="/programs/:id" element={<ProgramDetailPage />} />
+          <Route path="/programs/:id/workouts/:entryId" element={<CompositionEditorPage />} />
+          <Route path="/schedule" element={<CalendarPage />} />
+          <Route path="/schedule/:id" element={<SessionDetailPage />} />
+          <Route path="/schedule/:id/complete" element={<CompletionFormPage />} />
+          <Route path="/completed/:id" element={<CompletionResultPage />} />
+          <Route path="/progress" element={<ProgressHubPage />} />
+          <Route path="/stats" element={<StatisticsPage />} />
+          <Route path="/history" element={<HistoryPage />} />
+          <Route path="/history/:id" element={<HistoryDetailPage />} />
+          <Route path="/points" element={<PointsPage />} />
+          <Route path="/achievements" element={<AchievementsPage />} />
+          <Route path="/challenges" element={<ChallengesPage />} />
+          <Route path="/challenges/:id" element={<ChallengeDetailPage />} />
+          <Route path="/leaderboard" element={<LeaderboardPage />} />
+          <Route path="/more" element={<MorePage />} />
+          <Route path="/notifications" element={<NotificationsPage />} />
+          <Route path="/notifications/:id" element={<NotificationDetailPage />} />
+          <Route path="/settings" element={<SettingsPage />} />
+        </Route>
+        <Route path="*" element={<NotFoundPage />} />
+      </Routes>
+    </Suspense>
   );
 }

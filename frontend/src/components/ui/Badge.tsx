@@ -9,6 +9,7 @@ const badgeVariants = cva("inline-flex items-center rounded-chip px-space-2 py-0
       neutral: "bg-muted text-foreground",
       brand: "bg-brand text-primary-foreground",
       accent: "bg-accent text-accent-foreground",
+      success: "bg-muted text-foreground ring-1 ring-status-success",
       outline: "border border-input-border text-muted-foreground",
     },
   },
@@ -16,7 +17,7 @@ const badgeVariants = cva("inline-flex items-center rounded-chip px-space-2 py-0
 });
 
 export interface BadgeProps extends HTMLAttributes<HTMLSpanElement> {
-  tone?: "neutral" | "brand" | "accent" | "outline";
+  tone?: "neutral" | "brand" | "accent" | "outline" | "success";
 }
 
 export function Badge({ tone, className = "", ...props }: BadgeProps) {
