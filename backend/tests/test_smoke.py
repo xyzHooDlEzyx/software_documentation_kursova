@@ -16,7 +16,9 @@ def test_django_project_initializes_without_database() -> None:
     assert {"accounts", "catalog", "planning", "execution", "engagement"} <= {
         app.label for app in apps.get_app_configs()
     }
-    assert "reporting" not in {app.label for app in apps.get_app_configs()}
+    # reporting is installed only for the permission-only model behind the
+    # Django Admin reports R02/R03 (D-2026-11-14).
+    assert "reporting" in {app.label for app in apps.get_app_configs()}
     assert any(
         str(pattern.pattern) == "api/v1/" for pattern in get_resolver().url_patterns
     )

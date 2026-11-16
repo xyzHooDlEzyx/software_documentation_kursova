@@ -1,0 +1,46 @@
+{% extends "admin/base_site.html" %}
+
+{% block breadcrumbs %}
+<div class="breadcrumbs"><a href="{% url 'admin:index' %}">Головна</a> &rsaquo; {{ report_id }} — {{ title }}</div>
+{% endblock %}
+
+{% block content %}
+<div id="content-main">
+  <form method="get" class="module aligned">
+    {{ form.as_p }}
+    <button type="submit" class="button">Сформувати</button>
+  </form>
+
+  {% if rows != None %}
+    <p><a class="button" href="?{{ csv_query }}{% if csv_query %}&amp;{% endif %}format=csv">CSV</a></p>
+    {% if rows %}
+      <div class="module">
+        <h2>Діаграма</h2>
+        <svg viewBox="0 0 900 {{ rows|length|add:1 }}00" role="img" aria-label="{{ title }}" style="max-width:900px;width:100%;height:auto">
+          {% for row in chart_rows %}
+            {% if kind == 'popularity' %}
+              <text x="5" y="{{ forloop.counter0 }}00" dy="25">{{ row.source_workout__name }}</text>
+              <rect x="260" y="{{ forloop.counter0 }}00" width="{% widthratio row.completed_count chart_max 600 %}" height="35" fill="#417690"></rect>
+              <text x="870" y="{{ forloop.counter0 }}00" dy="25" text-anchor="end">{{ row.completed_count }}</text>
+            {% else %}
+              <text x="5" y="{{ forloop.counter0 }}00" dy="25">{{ row.0 }}</text>
+              <rect x="260" y="{{ forloop.counter0 }}00" width="{% widthratio row.1 chart_max 600 %}" height="35" fill="#417690"></rect>
+              <text x="870" y="{{ forloop.counter0 }}00" dy="25" text-anchor="end">{{ row.1 }}</text>
+            {% endif %}
+          {% endfor %}
+        </svg>
+      </div>
+    {% endif %}
+
+    <table id="result_list">
+      {% if kind == 'popularity' %}
+      <thead><tr><th>ID</th><th>Назва</th><th>Архівне</th><th>Завершення</th></tr></thead>
+      <tbody>{% for row in rows %}<tr><td>{{ row.source_workout_id }}</td><td>{{ row.source_workout__name }}</td><td>{{ row.source_workout__is_archived|yesno:"так,ні" }}</td><td>{{ row.completed_count }}</td></tr>{% empty %}<tr><td colspan="4">Немає даних.</td></tr>{% endfor %}</tbody>
+      {% else %}
+      <thead><tr><th>Показник</th><th>Значення</th></tr></thead>
+      <tbody>{% for row in rows %}<tr><td>{{ row.0 }}</td><td>{{ row.1 }}</td></tr>{% endfor %}</tbody>
+      {% endif %}
+    </table>
+  {% endif %}
+</div>
+{% endblock %}

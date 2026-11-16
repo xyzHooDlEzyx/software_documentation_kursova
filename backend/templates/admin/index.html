@@ -1,0 +1,23 @@
+{% extends "admin/base_site.html" %}
+{% load i18n static %}
+
+{% block extrastyle %}{{ block.super }}<link rel="stylesheet" href="{% static 'admin/css/dashboard.css' %}">{% endblock %}
+{% block coltype %}colMS{% endblock %}
+{% block bodyclass %}{{ block.super }} dashboard{% endblock %}
+{% block nav-breadcrumbs %}{% endblock %}
+{% block nav-sidebar %}{% endblock %}
+
+{% block content %}
+<div id="content-main" class="app-list">
+  {% include "admin/app_list.html" with app_list=app_list show_changelinks=True %}
+  {% if perms.reporting.view_reports %}
+  <div class="app-reporting module">
+    <table>
+      <caption><span class="section">Агреговані звіти</span></caption>
+      <tr><th scope="row"><a href="{% url 'admin-workout-popularity-report' %}">R02 — Популярність тренувань</a></th></tr>
+      <tr><th scope="row"><a href="{% url 'admin-average-activity-report' %}">R03 — Середня активність</a></th></tr>
+    </table>
+  </div>
+  {% endif %}
+</div>
+{% endblock %}
