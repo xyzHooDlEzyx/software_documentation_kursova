@@ -11,7 +11,7 @@
 | Адмін-частина | Django Admin: каталог, деактивація, челенджі, view-only досягнення та агреговані R02/R03 з period filter, таблицею, inline SVG і CSV | — |
 | Frontend | реєстрація, вхід, вихід, відновлення пароля, налаштування рейтингу; профіль та історія ваги (P01–P04), каталог тренувань і вправ (C01–C04), рекомендація, персональні програми, активація й прогрес (G01–G08), тижневий розклад і планування (S01–S04), нагадування з непрочитаним badge (N01–N03) | скасування слотів і архівація програм (S05/G09), виконання тренувань, статистика, соціальні функції, звіти |
 
-Документація: [вимоги](docs/analysis/requirements.md), [Use Case діаграма](docs/analysis/use-case-diagram.md), [бізнес-правила](docs/analysis/business-rules.md), [доменна модель](docs/architecture/domain-model.md), [ERD](docs/architecture/erd.md), [REST API](docs/architecture/rest-api.md), [принципи й GoF](docs/architecture/design-principles.md), [діаграма класів](docs/diagrams/class-diagram.drawio), [рев'ю стану](docs/review/senior-review-2026-11-14.md).
+Документація: [вимоги](docs/analysis/requirements.md), [Use Case діаграма](docs/analysis/use-case-diagram.md), [бізнес-правила](docs/analysis/business-rules.md), [доменна модель](docs/architecture/domain-model.md), [ERD](docs/architecture/erd.md), [REST API](docs/architecture/rest-api.md), [принципи й GoF](docs/architecture/design-principles.md), [діаграма класів](docs/diagrams/class-diagram.drawio) (PNG: [огляд](docs/diagrams/class-diagram-overview.png), [каталог і планування](docs/diagrams/class-diagram-catalog-planning.png), [виконання й залучення](docs/diagrams/class-diagram-execution-engagement.png), [сервіси та GoF](docs/diagrams/class-diagram-services-gof.png)), [рев'ю стану](docs/review/senior-review-2026-11-14.md).
 
 ## Передумови та версії
 
@@ -171,6 +171,8 @@ npm run lint
 npm test
 npm run build
 npm run format:check
+cd ..
+python3 docs/diagrams/tools/check_class_diagram.py
 ```
 
 Frontend-код форматує Prettier (`frontend/.prettierrc.json`, `.prettierignore`): `npm run format -- <файли>` або `npx prettier --write .` у `frontend/`.
